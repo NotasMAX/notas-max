@@ -17,6 +17,7 @@ export default class TurmasController {
             return res.status(422).json({ message: "Já existe uma turma cadastrada com essa série e ano." });
         }
 
+        console.log(req.body);
         const turma = new Turmas({
             serie,
             ano
