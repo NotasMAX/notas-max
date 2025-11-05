@@ -1,16 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import TurmasList from "../pages/TurmasCadastro";
-
+import Style from "./styles/App.module.css";
+import TurmasCadastrar from "../pages/TurmasCadastrar";
 
 function App() {
   return (
-
-    <div className="container mx-auto p-4">
+    <div className={Style.MainContainer}>
       <Routes>
-        <Route path="Turmas/Cadastrar" element={<TurmasList />} />
+  <Route path="Turmas/Cadastrar" element={<TurmasCadastrar />} />
       </Routes>
     </div>
-
   );
 }
 
