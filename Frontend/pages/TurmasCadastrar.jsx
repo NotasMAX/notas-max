@@ -2,8 +2,14 @@
 import { useNavigate } from 'react-router-dom';
 import TurmasForm from '../components/TurmasForm';
 import { cadastrarTurma } from '../api/turmasapi';
+import { useEffect } from 'react';
 
-export default function CadastrarTurma() {
+export default function TurmasCadastrar() {
+
+    useEffect(() => {
+        document.title = 'NotasMAX - Cadastrar Turma';
+    }, []);
+
     const navigate = useNavigate();
 
     const handleCreate = async (formData) => {
