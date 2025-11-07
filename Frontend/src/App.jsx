@@ -1,14 +1,19 @@
 import { Routes, Route } from "react-router-dom";
-import Style from "./styles/App.module.css";
+import Layout from "../components/Layout";
 import TurmasCadastrar from "../pages/TurmasCadastrar";
+
 
 function App() {
   return (
-    <div className={Style.MainContainer}>
       <Routes>
-  <Route path="Turmas/Cadastrar" element={<TurmasCadastrar />} />
+        <Route path="/" element={<div>Página Inicial</div>} />
+        <Route path="Turmas" element={<TurmasCadastrar/>} />
+        <Route path="Turmas/Cadastrar" element={
+          <Layout>
+            <TurmasCadastrar />
+          </Layout>
+        } />
       </Routes>
-    </div>
   );
 }
 
