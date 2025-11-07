@@ -1,0 +1,60 @@
+
+  .header {
+    @apply flex text-white h-20 min-w-full items-center border-b border-solid rounded-none border-gray-200 justify-between;
+  }
+
+  .headerLink {
+    @apply flex text-black font-medium items-center font-space-grotesk uppercase text-lg tracking-widest w-56 justify-center border-b border-r h-20 border-solid rounded-none border-gray-200;
+  }
+
+  .headerLogo {
+    @apply h-16 w-auto;
+  }
+
+  .headerElements {
+    @apply flex space-x-4 items-center mr-8;
+  }
+
+  .headerNotification {
+    @apply border border-gray-200 border-solid rounded h-10 w-10 flex items-center justify-center;
+  }
+
+  .headerNotificationIcon {
+    @apply h-6 w-6 fill-gray-800;
+  }
+
+  .headerNotification:hover {
+    @apply bg-blue-600;
+  }
+
+  .headerNotification:hover .headerNotificationIcon {
+    @apply fill-white;
+  }
+
+  .headerUserName {
+    @apply text-gray-800 font-medium font-inter;
+  }
+
+  .headerLogout {
+    @apply flex items-center justify-center w-10 h-10;
+  }
+
+  .headerLogoutIcon {
+    @apply h-6 w-6;
+  }
+
+  .headerLogoutIconDoor {
+    @apply stroke-gray-800;
+  }
+
+  .headerLogoutIconArrow {
+    @apply fill-gray-800;
+  }
+
+  .headerLogout:hover .headerLogoutIconDoor {
+    @apply stroke-red-600;
+  }
+
+  .headerLogout:hover .headerLogoutIconArrow {
+    @apply fill-red-600;
+  }
