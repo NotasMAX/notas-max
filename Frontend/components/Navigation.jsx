@@ -1,33 +1,48 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import Style from "../src/styles/Navigation.module.css";
 
 export default function Navigation({ }) {
+    const navButtonRef = useRef(null);
+    const navRef = useRef(null);
+    const [isNavOpen, setIsNavOpen] = useState(true);
 
-    const navButton = document.getElementById("navButton");
-    const nav = document.getElementById("nav");
-    let isNavOpen = true;
+    useEffect(() => {
+        const navButton = navButtonRef.current;
+        const nav = navRef.current;
 
-    if (navButton) {
-        navButton.onclick = function () {
-            if (isNavOpen) {
-                nav.style.display = "none";
-                navButton.style.transform = "scaleX(1)";
-            } else {
-                nav.style.display = "flex";
-                navButton.style.transform = "scaleX(-1)";
-            }
-            isNavOpen = !isNavOpen;
-        }
-    }
+        if (!navButton || !nav) return;
+
+        const handleClick = () => {
+            setIsNavOpen(prev => {
+                const newState = !prev;
+                
+                if (!newState) {
+                    nav.style.width = "0";
+                    nav.style.overflow = "hidden";
+                    navButton.style.transform = "scaleX(1)";
+                } else {
+                    nav.style.width = "14rem";
+                    nav.style.overflow = "auto";
+                    navButton.style.transform = "scaleX(-1)";
+                }
+                
+                return newState;
+            });
+        };
+
+        navButton.addEventListener("click", handleClick);
+
+        return () => navButton.removeEventListener("click", handleClick);
+    }, []);
 
     return (
         <div className='relative'>
-                    <div id="navButton" className={Style.navButton}>
+                    <div ref={navButtonRef} className={Style.navButton}>
                 <svg className={Style.navButtonIcon} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5.36 19l5.763-5.763a1.738 1.738 0 0 0 0-2.474L5.36 5m7 14l5.763-5.763a1.738 1.738 0 0 0 0-2.474L12.36 5"/></svg>
             </div>
  
-        <nav id="nav" className={Style.nav}>
+        <nav ref={navRef} className={Style.nav}>
     
             <NavLink className={({ isActive }) => isActive ? Style.navLinkActive : Style.navLink}
                 to="/">

@@ -1,9 +1,9 @@
 .nav {
-    @apply border-r border-solid rounded-none border-[#D5D5D5] flex flex-col justify-start items-center w-56 min-h-full bg-[#F9F9F9] pt-4 relative;
+    @apply border-r border-solid rounded-none border-[#D5D5D5] flex flex-col justify-start items-center w-56 min-h-full bg-[#F9F9F9] pt-4 relative transition-all duration-300 ease-in-out;
 }
 
 .navButton {
-    @apply cursor-pointer absolute top-6 right-[-23px] w-[1.5rem] h-[2.5rem] flex items-center justify-center border border-gray-300 border-solid rounded bg-[#F9F9F9] scale-x-[-1] duration-100 z-20;
+    @apply cursor-pointer absolute top-6 right-[-23px] w-[1.5rem] h-[2.5rem] flex items-center justify-center border border-gray-300 border-solid rounded bg-[#F9F9F9] scale-x-[-1] z-50 transition-all duration-300 ease-in-out;
 }
 
 .navButton:hover {
