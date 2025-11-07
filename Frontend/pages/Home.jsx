@@ -11,6 +11,10 @@ export default function Home() {
     const navigate = useNavigate();
 
     return (
-        <h2>Bem-vindo à Página Inicial</h2>
+        <div>
+            <h2>Bem-vindo à Página Inicial</h2>
+            <a href="/Turmas/Cadastrar">Cadastrar Turma</a>
+
+        </div>
     );
 }

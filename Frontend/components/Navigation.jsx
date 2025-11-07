@@ -19,32 +19,40 @@ export default function Navigation({ }) {
 
 
         if (isFirstRender.current) {
+            nav.style.transition = "none";
+            navButton.style.transition = "none";
+
             if (!isNavOpen) {
-                nav.style.display = "none";
+
                 nav.style.overflow = "hidden";
                 nav.style.width = "0";
                 navButton.style.transform = "scaleX(1)";
-                nav.style.display = "flex";
+
             } else {
                 nav.style.width = "14rem";
                 nav.style.overflow = "auto";
                 navButton.style.transform = "scaleX(-1)";
             }
-
+            setTimeout(2000);
             isFirstRender.current = false;
             return;
         }
+        else {
+            setTimeout(() => {
+                nav.style.transition = "all 0.3s ease-in-out";
+                navButton.style.transition = "all 0.3s ease-in-out";
+            }, 100); // Espera 100ms
 
-        if (!isNavOpen) {
-            nav.style.width = "0";
-            nav.style.overflow = "hidden";
-            navButton.style.transform = "scaleX(1)";
-        } else {
-            nav.style.width = "14rem";
-            nav.style.overflow = "auto";
-            navButton.style.transform = "scaleX(-1)";
+            if (!isNavOpen) {
+                nav.style.width = "0";
+                nav.style.overflow = "hidden";
+                navButton.style.transform = "scaleX(1)";
+            } else {
+                nav.style.width = "14rem";
+                nav.style.overflow = "auto";
+                navButton.style.transform = "scaleX(-1)";
+            }
         }
-
         const handleClick = () => {
             setIsNavOpen(prev => {
                 const newState = !prev;
