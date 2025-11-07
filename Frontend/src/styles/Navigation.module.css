@@ -1,3 +1,40 @@
-.nav{
-      @apply bg-gray-300 w-56 min-h-full;
+.nav {
+    @apply border-r border-solid rounded-none border-[#D5D5D5] flex flex-col justify-start items-center w-56 min-h-full bg-[#F9F9F9] pt-4;
+}
+
+.navLink {
+    @apply flex flex-row items-center mt-2 p-3 w-5/6 border-solid border border-[#F9F9F9] rounded-lg hover:no-underline;
+}
+
+.navLink:hover {
+    @apply bg-gray-200;
+}
+
+.navIconFill {
+    @apply h-auto w-6 fill-[#5B5B5B] flex items-center justify-center;
+}
+
+.navIconStroke {
+    @apply h-auto w-6 stroke-[#5B5B5B];
+}
+
+.navLinkText {
+    @apply text-[#5B5B5B] font-medium font-inter pl-3 text-gray-600;
+}
+
+.navLinkActive {
+    @apply flex flex-row items-center mt-2 p-3 w-5/6 border-solid border border-white rounded-lg bg-[#15538E] border-[#99CDFF] border-2;
+}
+
+.navLinkActive .navIconFill {
+    @apply fill-white;
+}
+
+
+.navLinkActive .navIconStroke {
+    @apply stroke-white;
+}
+
+.navLinkActive .navLinkText {
+    @apply text-white;
 }
