@@ -19,20 +19,28 @@ export default function Navigation({ }) {
                 </div>
             </NavLink>
             <NavLink className={({ isActive }) => isActive ? Style.navLinkActive : Style.navLink} to="/Simulados">
-                <svg className={Style.navIconStroke} width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.246 20.25h-6a1.5 1.5 0 0 1-1.5-1.5V2.25a1.5 1.5 0 0 1 1.5-1.5h15a1.5 1.5 0 0 1 1.5 1.5V9m-10.5-3.75h6m-9 4.5h9m-9 4.5h7.5m9.881.62L15 22.5l-3.75.75l.75-3.75l7.631-7.63a2.115 2.115 0 0 1 2.991 0l.009.008a2.115 2.115 0 0 1-.004 2.992" /></svg>
+                <svg className={Style.navIconStroke} width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8.246 20.25h-6a1.5 1.5 0 0 1-1.5-1.5V2.25a1.5 1.5 0 0 1 1.5-1.5h15a1.5 1.5 0 0 1 1.5 1.5V9m-10.5-3.75h6m-9 4.5h9m-9 4.5h7.5m9.881.62L15 22.5l-3.75.75l.75-3.75l7.631-7.63a2.115 2.115 0 0 1 2.991 0l.009.008a2.115 2.115 0 0 1-.004 2.992" /></svg>
 
                 <div className={Style.navLinkText}>
                     Simulados
                 </div>
             </NavLink>
+            <NavLink className={({ isActive }) => isActive ? Style.navLinkActive : Style.navLink} to="/Materias">
+                <svg className={Style.navIconFill} width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                    <path  fillRule="evenodd" d="M7.65 14a.5.5 0 0 1-.258.01a.6.6 0 0 1-.178-.069l-.022-.013c-.184-.11-1.51-.907-3.2-.907c-1.81 0-3.21.91-3.22.92c-.15.1-.35.11-.51.02s-.26-.26-.26-.44v-10a.51.51 0 0 1 .24-.432c.2-.123 1.73-1.07 3.76-1.07c1.64 0 2.95.614 3.5.916c.552-.303 1.86-.916 3.5-.916c2.03 0 3.56.944 3.76 1.07l.02.012c.14.09.22.25.22.42v10c0 .18-.1.35-.26.44c-.07.04-.16.06-.24.06h-.01c-.1 0-.19-.03-.28-.08l-.022-.012c-.184-.11-1.51-.907-3.2-.907c-1.66 0-2.98.765-3.19.9a.5.5 0 0 1-.154.079zm.354-1.31a7.3 7.3 0 0 1 2.99-.666c1.26 0 2.32.36 3 .67v-8.88c-.46-.25-1.61-.79-3-.79c-1.38 0-2.52.522-2.99.784v8.88zm-1.01.005c-.68-.31-1.74-.67-3-.67s-2.32.36-3 .67v-8.88c.46-.26 1.61-.79 3-.79s2.54.54 3 .79z" clipRule="evenodd" />
+                </svg>
+                <div className={Style.navLinkText}>
+                    Materias
+                </div>
+            </NavLink>
             <NavLink className={({ isActive }) => isActive ? Style.navLinkActive : Style.navLink} to="/Professores">
-                <svg className={Style.navIconStroke} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="#000000"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M2 2h14c1.886 0 2.828 0 3.414.586S20 4.114 20 6v6c0 1.886 0 2.828-.586 3.414S17.886 16 16 16H9m1-9.5h6M2 17v-4c0-.943 0-1.414.293-1.707S3.057 11 4 11h2m-4 6h4m-4 0v5m4-5v-6m0 6v5m0-11h6" /><path d="M6 6.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0" /></g></svg>
+                <svg className={Style.navIconStroke} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="#000000"><g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M2 2h14c1.886 0 2.828 0 3.414.586S20 4.114 20 6v6c0 1.886 0 2.828-.586 3.414S17.886 16 16 16H9m1-9.5h6M2 17v-4c0-.943 0-1.414.293-1.707S3.057 11 4 11h2m-4 6h4m-4 0v5m4-5v-6m0 6v5m0-11h6" /><path d="M6 6.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0" /></g></svg>
                 <div className={Style.navLinkText}>
                     Professores
                 </div>
             </NavLink>
             <NavLink className={({ isActive }) => isActive ? Style.navLinkActive : Style.navLink} to="/Alunos">
-                <svg className={Style.navIconStroke} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" ><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M14 3.5c3.771 0 5.657 0 6.828 1.245S22 7.993 22 12s0 6.01-1.172 7.255S17.771 20.5 14 20.5h-4c-3.771 0-5.657 0-6.828-1.245S2 16.007 2 12s0-6.01 1.172-7.255S6.229 3.5 10 3.5z"/><path d="M5 15.5c1.609-2.137 5.354-2.254 7 0m-1.751-5.25a1.75 1.75 0 1 1-3.5 0a1.75 1.75 0 0 1 3.5 0M15 9.5h4m-4 4h2"/></g></svg>
+                <svg className={Style.navIconStroke} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" ><g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M14 3.5c3.771 0 5.657 0 6.828 1.245S22 7.993 22 12s0 6.01-1.172 7.255S17.771 20.5 14 20.5h-4c-3.771 0-5.657 0-6.828-1.245S2 16.007 2 12s0-6.01 1.172-7.255S6.229 3.5 10 3.5z" /><path d="M5 15.5c1.609-2.137 5.354-2.254 7 0m-1.751-5.25a1.75 1.75 0 1 1-3.5 0a1.75 1.75 0 0 1 3.5 0M15 9.5h4m-4 4h2" /></g></svg>
                 <div className={Style.navLinkText}>
                     Alunos
                 </div>
