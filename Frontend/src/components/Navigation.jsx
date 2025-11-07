@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
-import Style from "../src/styles/Navigation.module.css";
+import Style from "../styles/Navigation.module.css";
 
 export default function Navigation({ }) {
     const navButtonRef = useRef(null);

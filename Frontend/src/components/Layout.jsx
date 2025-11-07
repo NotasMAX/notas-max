@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './Header.jsx';
 import Navigation from './Navigation.jsx';
-import Style from "../src/styles/Layout.module.css";
+import Style from "../styles/Layout.module.css";
 
 export default function Layout({ children }) {
     return (

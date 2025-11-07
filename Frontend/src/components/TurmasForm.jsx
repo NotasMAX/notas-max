@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Style from "../src/styles/TurmasForm.module.css";
+import Style from "../styles/TurmasForm.module.css";
 
 export default function TurmasForm({ initialData, onSubmit }) {
     const [formData, setFormData] = useState(initialData || {

@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "../components/Layout";
-import TurmasCadastrar from "../pages/TurmasCadastrar";
-import Home from "../pages/Home";
+import Layout from "./components/Layout";
+import TurmasCadastrar from "./pages/TurmasCadastrar";
+import Home from "./pages/Home";
 
 
 function App() {
