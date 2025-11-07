@@ -20,7 +20,7 @@ export default function TurmasForm({ initialData, onSubmit }) {
         const { name, value } = e.target;
         if (formData.serie > 0) {
             const serieError = document.getElementById("serieError");
-            serieError.textContent = " ";   
+            serieError.textContent = " ";
         }
         setFormData(prevData => ({ ...prevData, [name]: value }));
     };
@@ -38,7 +38,7 @@ export default function TurmasForm({ initialData, onSubmit }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className={Style.formContainer}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <label className={Style.formLabel}>Série:</label>
                 <select name="serie" value={formData.serie} onChange={handleChange} className={Style.formInput}>
@@ -48,9 +48,9 @@ export default function TurmasForm({ initialData, onSubmit }) {
                     <option value="3">3º EM</option>
                 </select>
             </div>
-            <span className={Style.spanError} id="serieError"></span>
+            <span className="spanError" id="serieError"></span>
             <div>
-                <label className={Style.formLabel}>Ano:</label>
+                <label className="formLabel">Ano:</label>
                 <input
                     type="number"
                     required
@@ -67,8 +67,7 @@ export default function TurmasForm({ initialData, onSubmit }) {
                 <button
                     type="button"
                     className={Style.buttonSecondary}
-                    onClick={() => navigate(-1)}
-                >
+                    onClick={() => navigate(-1)}>
                     Cancelar
                 </button>
             </div>

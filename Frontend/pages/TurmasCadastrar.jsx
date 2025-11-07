@@ -17,7 +17,7 @@ export default function CadastrarTurma() {
     };
 
     return (
-        <div>
+        <div className="p-4 bg-white">
             <h2>Nova Turma</h2>
             <TurmasForm onSubmit={handleCreate} />
         </div>
