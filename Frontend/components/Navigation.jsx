@@ -3,8 +3,32 @@ import { NavLink } from 'react-router-dom';
 import Style from "../src/styles/Navigation.module.css";
 
 export default function Navigation({ }) {
+
+    const navButton = document.getElementById("navButton");
+    const nav = document.getElementById("nav");
+    let isNavOpen = true;
+
+    if (navButton) {
+        navButton.onclick = function () {
+            if (isNavOpen) {
+                nav.style.display = "none";
+                navButton.style.transform = "scaleX(1)";
+            } else {
+                nav.style.display = "flex";
+                navButton.style.transform = "scaleX(-1)";
+            }
+            isNavOpen = !isNavOpen;
+        }
+    }
+
     return (
-        <nav className={Style.nav}>
+        <div className='relative'>
+                    <div id="navButton" className={Style.navButton}>
+                <svg className={Style.navButtonIcon} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5.36 19l5.763-5.763a1.738 1.738 0 0 0 0-2.474L5.36 5m7 14l5.763-5.763a1.738 1.738 0 0 0 0-2.474L12.36 5"/></svg>
+            </div>
+ 
+        <nav id="nav" className={Style.nav}>
+    
             <NavLink className={({ isActive }) => isActive ? Style.navLinkActive : Style.navLink}
                 to="/">
                 <svg className={Style.navIconFill} xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path d="M10.55 2.532a2.25 2.25 0 0 1 2.9 0l6.75 5.692c.507.428.8 1.057.8 1.72v9.31a1.75 1.75 0 0 1-1.75 1.75h-3.5a1.75 1.75 0 0 1-1.75-1.75v-5.007a.25.25 0 0 0-.25-.25h-3.5a.25.25 0 0 0-.25.25v5.007a1.75 1.75 0 0 1-1.75 1.75h-3.5A1.75 1.75 0 0 1 3 19.254v-9.31c0-.663.293-1.292.8-1.72l6.75-5.692Zm1.933 1.147a.75.75 0 0 0-.966 0L4.767 9.37a.75.75 0 0 0-.267.573v9.31c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-5.007c0-.967.784-1.75 1.75-1.75h3.5c.966 0 1.75.783 1.75 1.75v5.007c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-9.31a.75.75 0 0 0-.267-.573l-6.75-5.692Z" /></svg>
@@ -47,5 +71,6 @@ export default function Navigation({ }) {
             </NavLink>
 
         </nav >
+               </div>
     )
 }
