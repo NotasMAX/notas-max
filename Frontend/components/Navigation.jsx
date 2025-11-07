@@ -33,16 +33,14 @@ export default function Navigation({ }) {
                 nav.style.overflow = "auto";
                 navButton.style.transform = "scaleX(-1)";
             }
-            setTimeout(2000);
+             setTimeout(() => {
+                nav.style.transition = "all 0.3s ease-in-out";
+                navButton.style.transition = "all 0.3s ease-in-out";
+            }, 100);
             isFirstRender.current = false;
             return;
         }
         else {
-            setTimeout(() => {
-                nav.style.transition = "all 0.3s ease-in-out";
-                navButton.style.transition = "all 0.3s ease-in-out";
-            }, 100); // Espera 100ms
-
             if (!isNavOpen) {
                 nav.style.width = "0";
                 nav.style.overflow = "hidden";
