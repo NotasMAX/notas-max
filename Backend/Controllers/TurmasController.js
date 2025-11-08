@@ -70,7 +70,7 @@ export default class TurmasController {
                 return res.status(404).json({ message: "Nenhuma turma encontrada para o ano especificado." });
             }
 
-            return res.status(200).json(turmas);
+            return res.status(200).json({ turmas });
 
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar as Turmas", error });
