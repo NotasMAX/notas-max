@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../styles/Turmas.module.css';
+import Style from '../styles/Turmas.module.css';
 import TurmasPesquisarForm from '../components/TurmasPesquisarForm';
 import TurmaItem from '../components/TurmaItem';
 
@@ -40,30 +40,27 @@ export default function Turmas() {
 
     return (
         <div>
-            <div>
-                <h2>Turmas</h2>
-                <br />
-                <TurmasPesquisarForm onSubmit={handleSearch} />
-                {loading && <p>Carregando resultados...</p>}
-                {Turmas && (
-                    <div >
-                        {Turmas.length === 0 ? (
-                            <p>Nenhuma turma encontrada para o ano fornecido.</p>
-                        ) : (
-                            <div className="flex justify-start align-middle sm:flex-col  lg:space-x-8 lg:flex-row">
-                                {Turmas.map(Turma => (
-                                    console.log(position),
-                                    <TurmaItem
-                                        key={Turma._id}
-                                        turma={Turma}
-                                        position={position++}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
+            <h2 className={Style.TurmasHeader}>Turmas</h2>
+            <TurmasPesquisarForm onSubmit={handleSearch} />
+            {loading && <p>Carregando resultados...</p>}
+            {Turmas && (
+                <div >
+                    {Turmas.length === 0 ? (
+                        <p>Nenhuma turma encontrada para o ano fornecido.</p>
+                    ) : (
+                        <div className="flex justify-start align-middle sm:flex-col  lg:space-x-8 lg:flex-row">
+                            {Turmas.map(Turma => (
+                                console.log(position),
+                                <TurmaItem
+                                    key={Turma._id}
+                                    turma={Turma}
+                                    position={position++}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>  
+            )}
         </div>
     );
 }

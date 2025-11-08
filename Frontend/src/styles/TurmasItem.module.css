@@ -19,5 +19,5 @@
 }
 
 .TurmaContainerSerie{
-    @apply text-[3rem]  font-bold font-inter;
+    @apply text-[3rem] font-bold font-inter;
 }
