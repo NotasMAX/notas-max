@@ -32,6 +32,7 @@ export default function Turmas() {
     };
 
     useEffect(() => {
+        document.title = `NotasMAX - Turmas ${ano}`;
         if (ano) {
             fetch(ano);
         }
