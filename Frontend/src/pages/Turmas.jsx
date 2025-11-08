@@ -45,7 +45,7 @@ export default function Turmas() {
             {Turmas && (
                 <div >
                     {Turmas.length === 0 ? (
-                        <p>Nenhuma turma encontrada para o ano fornecido.</p>
+                        <p className={Style.TurmasAlert}>Nenhuma turma encontrada para o ano fornecido.</p>
                     ) : (
                         <div className={Style.TurmasList}>
                             {Turmas.map(Turma => (

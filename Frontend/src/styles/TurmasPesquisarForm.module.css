@@ -1,5 +1,5 @@
 .formContainer {
-    @apply flex flex-col justify-between mb-[2.625rem] lg:flex-row;
+    @apply flex flex-col justify-between mb-[2rem] lg:flex-row;
 }
 
 .formSelectContainer {
