@@ -50,7 +50,6 @@ export default function Turmas() {
                     ) : (
                         <div className="flex justify-start align-middle sm:flex-col  lg:space-x-8 lg:flex-row">
                             {Turmas.map(Turma => (
-                                console.log(position),
                                 <TurmaItem
                                     key={Turma._id}
                                     turma={Turma}
