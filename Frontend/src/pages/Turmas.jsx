@@ -42,7 +42,6 @@ export default function Turmas() {
         <div>
             <h2 className={Style.TurmasHeader}>Turmas</h2>
             <TurmasPesquisarForm onSubmit={handleSearch} />
-            {loading && <p>Carregando resultados...</p>}
             {Turmas && (
                 <div >
                     {Turmas.length === 0 ? (

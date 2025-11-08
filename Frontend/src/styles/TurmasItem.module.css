@@ -1,5 +1,5 @@
 .TurmaContainer {
-    @apply w-[21.87rem] h-[12.25rem] border border-solid rounded-[1.25rem] border-gray-300 shadow-md bg-white m-2;
+    @apply w-[21.87rem] h-[12.25rem] border border-solid rounded-[1.25rem] border-gray-300 shadow-md bg-white;
 }
 
 .TurmaContainerHeaderYellow {
