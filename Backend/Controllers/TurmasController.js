@@ -22,7 +22,7 @@ export default class TurmasController {
             serie,
             ano
         });
-        
+
         try {
             const novaTurma = await turma.save();
             res.status(200).json({ message: "Turma inserida com sucesso!", novaTurma });
@@ -58,6 +58,23 @@ export default class TurmasController {
             res.status(500).json({ message: "Erro ao buscar a Turma", error });
         }
     }
-    
+
+    static async getByAno(req, res) {
+
+        const ano = req.params.ano;
+
+        try {
+            const turmas = await Turmas.find().where({ ano: ano });
+
+            if (!turmas || turmas.length === 0) {
+                return res.status(404).json({ message: "Nenhuma turma encontrada para o ano especificado." });
+            }
+
+            return res.status(200).json(turmas);
+
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar as Turmas", error });
+        }
+    }
 }
 
