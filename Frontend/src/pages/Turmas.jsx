@@ -10,6 +10,7 @@ export default function Turmas() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [ano, setAno] = useState(new Date().getFullYear());
+    let position = 0;
 
     const fetch = async (anoPesquisar) => {
         try {
@@ -45,15 +46,17 @@ export default function Turmas() {
                 <TurmasPesquisarForm onSubmit={handleSearch} />
                 {loading && <p>Carregando resultados...</p>}
                 {Turmas && (
-                    <div>
+                    <div >
                         {Turmas.length === 0 ? (
                             <p>Nenhuma turma encontrada para o ano fornecido.</p>
                         ) : (
-                            <div className={styles.container}>
+                            <div className="flex justify-start align-middle sm:flex-col  lg:space-x-8 lg:flex-row">
                                 {Turmas.map(Turma => (
+                                    console.log(position),
                                     <TurmaItem
                                         key={Turma._id}
                                         turma={Turma}
+                                        position={position++}
                                     />
                                 ))}
                             </div>
