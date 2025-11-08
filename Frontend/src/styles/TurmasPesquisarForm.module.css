@@ -1,0 +1,6 @@
+.formContainer{
+    @apply bg-gray-800 flex justify-end;
+}
+.formSelect{
+    @apply ml-2 rounded-md p-2 mr-[2.5rem];
+}

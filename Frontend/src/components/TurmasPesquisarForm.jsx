@@ -40,13 +40,11 @@ export default function TurmasPesquisaForm({ initialData, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit} className={Style.formContainer}>
-            <div>
-                <label className={Style.formLabel}>Selecione o ano</label>
-                <select
+                <select 
                     required
                     name="ano"
                     value={String(formData.ano)}
-                    className={Style.formInput}
+                    className={Style.formSelect}
                     onChange={handleChange}
                 >
                     {gerarAnos().map(ano => (
@@ -55,7 +53,6 @@ export default function TurmasPesquisaForm({ initialData, onSubmit }) {
                         </option>
                     ))}
                 </select>
-            </div>
         </form>
     );
 }
