@@ -47,7 +47,7 @@ export default function Turmas() {
                     {Turmas.length === 0 ? (
                         <p>Nenhuma turma encontrada para o ano fornecido.</p>
                     ) : (
-                        <div className="flex justify-start align-middle sm:flex-col  lg:space-x-8 lg:flex-row">
+                        <div className={Style.TurmasList}>
                             {Turmas.map(Turma => (
                                 <TurmaItem
                                     key={Turma._id}

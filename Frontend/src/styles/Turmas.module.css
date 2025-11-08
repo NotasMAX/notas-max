@@ -1,3 +1,7 @@
 .TurmasHeader {
      @apply text-[2.125rem] font-bold font-inter mb-6;
 }
+
+.TurmasList{
+     @apply flex justify-start align-middle sm:flex-col  lg:space-x-8 lg:flex-row;
+}
