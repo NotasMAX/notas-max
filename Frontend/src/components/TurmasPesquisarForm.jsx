@@ -28,9 +28,10 @@ export default function TurmasPesquisaForm({ initialData, onSubmit }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const novoAno = Number(value);
-        setFormData(prevData => ({ ...prevData, [name]: novoAno }));
-        onSubmit(novoAno);
+        const ano = Number(value);
+        const turma = { ano: ano };
+        setFormData(prevData => ({ ...prevData, [name]: ano }));
+        onSubmit(turma);
     };
 
 

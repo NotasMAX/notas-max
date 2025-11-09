@@ -26,9 +26,9 @@ export default function Turmas() {
         }
     };
 
-    const handleSearch = (anoSelecionado) => {
-        setAno(anoSelecionado);
-        fetch(anoSelecionado);
+    const handleSearch = (turma) => {
+        setAno(turma.ano);
+        fetch(turma.ano);
     };
 
     useEffect(() => {
