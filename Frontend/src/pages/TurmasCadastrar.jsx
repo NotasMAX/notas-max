@@ -2,7 +2,8 @@
 import { useNavigate } from 'react-router-dom';
 import TurmasForm from '../components/TurmasForm';
 import { cadastrarTurma } from '../api/turmasapi';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import Style from '../styles/TurmasCadastrar.module.css';
 
 export default function TurmasCadastrar() {
 
@@ -11,21 +12,21 @@ export default function TurmasCadastrar() {
     }, []);
 
     const navigate = useNavigate();
+    const [response, setResponse] = useState(null);
 
     const handleCreate = async (formData) => {
+
         try {
-            await cadastrarTurma(formData);
-            navigate('/');
+            const result = await cadastrarTurma(formData);
         } catch (error) {
-            console.error("Erro ao criar a turma:", error);
-            alert("Erro ao criar a turma.");
+            setResponse(error.response.data);
         }
     };
 
     return (
-        <div className="p-4 bg-white">
-            <h2>Nova Turma</h2>
-            <TurmasForm onSubmit={handleCreate} />
+        <div className={Style.TurmasCadastrarContainer}>
+            <h2 className={Style.TurmasCadastrarTitle} >Cadastrar Nova Turma</h2>
+            <TurmasForm onSubmit={handleCreate} response={response} />
         </div>
     );
 }
