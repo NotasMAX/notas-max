@@ -29,7 +29,7 @@ export default class TurmasController {
 
         const turmaExists = await Turmas.findOne({ serie, ano });
         if (turmaExists) {
-            return res.status(422).json({ message: "Já existe uma turma cadastrada com essa série e ano.", campo: "geral" });
+            return res.status(422).json({ message: `Já existe uma turma ${serie}º EM de ${ano}.`, campo: "geral" });
         }
 
         console.log(req.body);
@@ -79,7 +79,7 @@ export default class TurmasController {
         const ano = req.params.ano;
 
         try {
-            const turmas = await Turmas.find().where({ ano: ano });
+            const turmas = await Turmas.find().where({ ano: ano }).sort("serie");
 
             if (!turmas || turmas.length === 0) {
                 return res.status(404).json({ message: "Nenhuma turma encontrada para o ano especificado." });
