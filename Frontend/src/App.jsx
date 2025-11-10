@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import TurmasCadastrar from "./pages/TurmasCadastrar";
-import Turmas from "./pages/Turmas";  
+import TurmasEditar from "./pages/TurmasEditar";
+import Turmas from "./pages/Turmas";
 import Home from "./pages/Home";
 
 
@@ -26,9 +27,15 @@ function App() {
           <Turmas />
         </Layout>
       } />
+
+      <Route path="Turmas/Editar/:id" element={
+        <Layout>
+          <TurmasEditar />
+        </Layout>
+      } />
     </Routes >
 
-    
+
   );
 }
 

@@ -3,7 +3,7 @@ import Style from "../styles/TurmasItem.module.css";
 
 export default function TurmaItem({ turma, position }) {
     return (
-        <a href='#' className={Style.TurmaContainer}>
+        <a href={`/Turmas/Editar/${turma._id}`} className={Style.TurmaContainer}>
             <div className={(position === 1) ? Style.TurmaContainerHeaderYellow : Style.TurmaContainerHeaderBlue}>
                 <svg className={Style.TurmaContainerEditIcon} width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M11.0834 6.33329C8.46006 6.33329 6.33341 8.45994 6.33341 11.0833V26.9166C6.33341 29.54 8.46006 31.6666 11.0834 31.6666H26.9167C29.5401 31.6666 31.6667 29.54 31.6667 26.9166V17.4166C31.6667 16.5422 32.3756 15.8333 33.2501 15.8333C34.1245 15.8333 34.8334 16.5422 34.8334 17.4166V26.9166C34.8334 31.2889 31.289 34.8333 26.9167 34.8333H11.0834C6.71116 34.8333 3.16675 31.2889 3.16675 26.9166V11.0833C3.16675 6.71104 6.71116 3.16663 11.0834 3.16663H20.5834C21.4579 3.16663 22.1667 3.87551 22.1667 4.74996C22.1667 5.62441 21.4579 6.33329 20.5834 6.33329H11.0834Z" />

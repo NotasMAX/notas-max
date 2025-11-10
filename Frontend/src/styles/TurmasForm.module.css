@@ -28,7 +28,7 @@
 }
 
 .buttonPrimary{
-  @apply bg-[#1C86EB] text-white px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-solid;  
+  @apply bg-[#1C86EB] text-white px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-solid text-[1.25rem];  
 }
 
 .buttonPrimary:hover{
@@ -36,7 +36,7 @@
 }
 
 .buttonSecondary{
-  @apply bg-transparent text-[#404040] px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-2 border-solid;
+  @apply bg-transparent text-[#404040] px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-2 border-solid text-[1.25rem];
 }
 
 .buttonSecondary:hover{
