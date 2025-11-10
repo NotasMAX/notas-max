@@ -6,15 +6,30 @@ export default class TurmasController {
         const { serie, ano } = req.body;
 
         if (!serie) {
-            return res.status(422).json({ message: "Preencha a série da turma." });
+            return res.status(422).json({ message: "Preencha a série da turma.", campo: "serie" });
         }
+        if (isNaN(serie)) {
+            return res.status(422).json({ message: "A série deve ser um número.", campo: "serie" });
+        }
+        if (serie.toString().length != 1) {
+            return res.status(422).json({ message: "A série deve ter apenas 1 dígito.", campo: "serie" });
+        }
+
+
         if (!ano) {
-            return res.status(422).json({ message: "Preencha o ano da turma." });
+            return res.status(422).json({ message: "Preencha o ano da turma.", campo: "ano" });
+        }
+        if (isNaN(ano)) {
+            return res.status(422).json({ message: "O ano deve ser um número.", campo: "ano" });
+        }
+        const currentYear = new Date().getFullYear();
+        if (ano < currentYear - 50 || ano > currentYear + 1) {
+            return res.status(422).json({ message: `Insira um ano entre ${currentYear - 50} e ${currentYear + 1}.`, campo: "ano" });
         }
 
         const turmaExists = await Turmas.findOne({ serie, ano });
         if (turmaExists) {
-            return res.status(422).json({ message: "Já existe uma turma cadastrada com essa série e ano." });
+            return res.status(422).json({ message: "Já existe uma turma cadastrada com essa série e ano.", campo: "geral" });
         }
 
         console.log(req.body);
