@@ -1,11 +1,13 @@
 import React from 'react'
 import Style from "../styles/Header.module.css";
+import logo from "../imgs/logo.svg";
 
 export default function Header({ userName }) {
     return (
         <header className={Style.header}>
             <a className={Style.headerLink} href="/">
-                <img src="../src/imgs/logo.svg" alt="Logo" className={Style.headerLogo} /> NotasMax
+                <img src={logo} alt="Logo" className={Style.headerLogo} /> 
+                NotasMax
             </a>
             <div className={Style.headerElements}>
                 <a href='#' className={Style.headerNotification}>
