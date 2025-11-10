@@ -7,7 +7,7 @@ export default function TurmasPesquisaForm({ initialData, onSubmit }) {
     const anoAtual = new Date().getFullYear();
 
     const [formData, setFormData] = useState(initialData || {
-        ano: anoAtual,
+        ano: 0,
     });
 
     const gerarAnos = () => {

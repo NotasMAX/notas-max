@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Style from '../styles/Turmas.module.css';
 import TurmasPesquisarForm from '../components/TurmasPesquisarForm';
 import TurmaItem from '../components/TurmaItem';
@@ -6,10 +7,13 @@ import TurmaItem from '../components/TurmaItem';
 import { getTurmasPorAno } from '../api/turmasapi';
 
 export default function Turmas() {
+    const { ano: anoURL } = useParams();
+    const navigate = useNavigate();
     const [Turmas, setTurmas] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [ano, setAno] = useState(new Date().getFullYear());
+    const anoAtual = new Date().getFullYear();
+    const [ano, setAno] = useState(() => anoURL ? parseInt(anoURL) : anoAtual);
     let position = 0;
 
     const fetch = async (anoPesquisar) => {
@@ -32,17 +36,20 @@ export default function Turmas() {
     };
 
     useEffect(() => {
-        document.title = `NotasMAX - Turmas ${ano}`;
         if (ano) {
-            fetch(ano);
+            navigate(`/Turmas/${ano}`, { replace: true });
         }
     }, [ano]);
 
+    useEffect(() => {
+        document.title = `NotasMAX - Turmas ${ano}`;
+        fetch(ano);
+    }, [navigate]);
 
     return (
         <div>
             <h2 className={Style.TurmasHeader}>Turmas</h2>
-            <TurmasPesquisarForm onSubmit={handleSearch} />
+            <TurmasPesquisarForm onSubmit={handleSearch} initialData={{ ano }} />
             {Turmas && (
                 <div >
                     {Turmas.length === 0 ? (
@@ -58,7 +65,7 @@ export default function Turmas() {
                             ))}
                         </div>
                     )}
-                </div>  
+                </div>
             )}
         </div>
     );

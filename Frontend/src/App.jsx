@@ -28,6 +28,12 @@ function App() {
         </Layout>
       } />
 
+      <Route path="Turmas/:ano" element={
+        <Layout>
+          <Turmas />
+        </Layout>
+      } />
+
       <Route path="Turmas/Editar/:id" element={
         <Layout>
           <TurmasEditar />
