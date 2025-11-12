@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Style from '../styles/Turmas.module.css';
 import TurmasPesquisarForm from '../components/TurmasPesquisarForm';
 import TurmaItem from '../components/TurmaItem';
+import { Skeleton } from 'primereact/skeleton';
+
 
 import { getTurmasPorAno } from '../api/turmasapi';
 
@@ -50,22 +52,31 @@ export default function Turmas() {
         <div>
             <h2 className={Style.TurmasHeader}>Turmas</h2>
             <TurmasPesquisarForm onSubmit={handleSearch} initialData={{ ano }} />
-            {Turmas && (
-                <div >
-                    {Turmas.length === 0 ? (
-                        <p className={Style.TurmasAlert}>Nenhuma turma encontrada para o ano fornecido.</p>
-                    ) : (
-                        <div className={Style.TurmasList}>
-                            {Turmas.map(Turma => (
-                                <TurmaItem
-                                    key={Turma._id}
-                                    turma={Turma}
-                                    position={position++}
-                                />
-                            ))}
-                        </div>
-                    )}
+
+            {loading ? (
+                <div className={Style.TurmasList}>
+                    <Skeleton className="mb-2" width='21.87rem' height='12.25rem'></Skeleton>
+                    <Skeleton className="mb-2" width='21.87rem' height='12.25rem'></Skeleton>
+                    <Skeleton className="mb-2" width='21.87rem' height='12.25rem'></Skeleton>
                 </div>
+            ) : (
+                Turmas && (
+                    <div>
+                        {Turmas.length === 0 ? (
+                            <p className={Style.TurmasAlert}>Nenhuma turma encontrada para o ano fornecido.</p>
+                        ) : (
+                            <div className={Style.TurmasList}>
+                                {Turmas.map(Turma => (
+                                    <TurmaItem
+                                        key={Turma._id}
+                                        turma={Turma}
+                                        position={position++}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )
             )}
         </div>
     );

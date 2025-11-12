@@ -9,3 +9,7 @@
 .TurmasList {
      @apply flex justify-start align-middle sm:flex-col lg:space-x-8 lg:flex-row;
 }
+
+.TurmaItemSkeleton {
+    @apply w-[21.87rem] h-[12.25rem] ;
+}
