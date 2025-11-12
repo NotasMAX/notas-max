@@ -34,7 +34,7 @@ function App() {
         </Layout>
       } />
 
-      <Route path="Turmas/Editar/:id" element={
+      <Route path="Turma/Editar/:id" element={
         <Layout>
           <TurmasEditar />
         </Layout>
