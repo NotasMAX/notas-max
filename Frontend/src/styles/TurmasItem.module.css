@@ -1,5 +1,5 @@
 .TurmaContainer {
-    @apply w-[21.87rem] h-[12.25rem] border border-solid rounded-[1.25rem] border-gray-300 shadow-md bg-white mb-6 transition-transform duration-200 cursor-pointer;
+    @apply w-[21.87rem] h-[12.25rem] border border-solid rounded-[1.25rem] border-gray-300 shadow-md bg-white mb-6 transition-transform duration-200 cursor-pointer relative
 }
 
 .TurmaContainer:hover{
@@ -15,7 +15,7 @@
 }
 
 .TurmaContainerEditIcon{
-    @apply h-[2.375rem] w-auto fill-white pr-[1.25rem] cursor-pointer  hover:scale-x-110 hover:scale-y-110;
+    @apply h-[2.375rem] w-auto fill-white pr-[1.25rem] cursor-pointer  hover:scale-x-110 hover:scale-y-110 absolute right-0 top-[1.3125rem];
 }
 
 .TurmaContainerBody{
