@@ -11,7 +11,7 @@ routes.post("/Turmas/Cadastrar", TurmasController.create);
 
 routes.post("/Usuarios/CadastrarAluno", UsuariosController.createAluno); //Somente para testes
 routes.get("/Usuarios/Alunos", UsuariosController.getAllAlunos); 
-routes.get("/Usuarios/Aluno/:id", UsuariosController.getOne);
+routes.get("/Usuarios/:id", UsuariosController.getOne);
 
 
 export default routes;
