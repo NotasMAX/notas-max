@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "../styles/Login.module.css";
 import logo from "../imgs/logo.png";
+import { Link } from 'react-router-dom'; 
+
 
 
 const LoginForm = () => {
@@ -26,7 +28,7 @@ const LoginForm = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={styles.input}
-            placeholder="Meuemailinstitucional@gmail.com"
+            placeholder="Exemplo@gmail.com"
           required/>
           <label className={styles.label}>Senha</label>
           <input
@@ -36,9 +38,11 @@ const LoginForm = () => {
             className={styles.input}
             placeholder="••••••••"
             required/>
-          <div className={styles.recover}>
-            <a href="#recuperar-senha">Recuperar senha</a>
-          </div>
+
+<div className={styles.recover}>
+  <Link to="/recuperar-senha">Recuperar senha</Link>
+</div>
+
           <button type="submit" className={styles.button}>
             Entrar
           </button>

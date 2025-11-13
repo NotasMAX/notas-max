@@ -3,7 +3,7 @@ import Layout from "./components/Layout";
 import TurmasCadastrar from "./pages/TurmasCadastrar";
 import Home from "./pages/Home";
 import Login from "./pages/LoginPage";
-
+import RecuperarSenha from "./pages/RecuperarSenha";
 
 function App() {
   return (
@@ -19,7 +19,8 @@ function App() {
         </Layout>
       } />
 
-
+    <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+    
       <Route path="Turmas/Cadastrar" element={
         <Layout>
           <TurmasCadastrar />
