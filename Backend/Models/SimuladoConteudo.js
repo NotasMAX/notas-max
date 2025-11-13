@@ -6,19 +6,23 @@ const { Schema } = mongoose;
 const SimuladoConteudoSchema = new Schema({
     materia_id: {
         type: Schema.Types.ObjectId,
-        ref: "Materias"
+        ref: "Materias",
+        required: true,
     },
     professor_id: {
         type: Schema.Types.ObjectId,
-        ref: "Usuarios"
+        ref: "Usuarios",
+        required: true,
     },
     quantidade_questoes: {
         type: Number,
         default: 0,
+        required: true,
     },
     peso: {
         type: Number,
-        default: 1.0
+        default: 1.0,
+        required: true,
     },
     simulado_id: {
         type: Schema.Types.ObjectId,
