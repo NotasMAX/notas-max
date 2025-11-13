@@ -15,7 +15,6 @@ export default class TurmasController {
             return res.status(422).json({ message: "A série deve ter apenas 1 dígito.", campo: "serie" });
         }
 
-
         if (!ano) {
             return res.status(422).json({ message: "Preencha o ano da turma.", campo: "ano" });
         }
@@ -32,7 +31,6 @@ export default class TurmasController {
             return res.status(422).json({ message: `Já existe uma turma ${serie}º EM de ${ano}.`, campo: "geral" });
         }
 
-        console.log(req.body);
         const turma = new Turmas({
             serie,
             ano
@@ -80,13 +78,10 @@ export default class TurmasController {
 
         try {
             const turmas = await Turmas.find().where({ ano: ano }).sort("serie");
-
             if (!turmas || turmas.length === 0) {
                 return res.status(404).json({ message: "Nenhuma turma encontrada para o ano especificado." });
             }
-
             return res.status(200).json({ turmas });
-
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar as Turmas", error });
         }
