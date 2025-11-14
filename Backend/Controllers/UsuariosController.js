@@ -74,8 +74,8 @@ export default class UsuariosController {
         }
     }
 
-    static async findAlunoById(alunoId) {
-       return await Usuarios.findById(alunoId);
+    static async findUsuarioById(id) {
+        return await Usuarios.findById(id);
     }
 
 }

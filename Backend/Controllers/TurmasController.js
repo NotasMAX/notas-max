@@ -1,6 +1,6 @@
 import Turmas from "../Models/Turma.js";
+import SimuladosController from "./SimuladosController.js";
 import UsuariosController from "./UsuariosController.js";
-import Simulado from "../Models/Simulado.js";
 import { Types } from "mongoose";
 
 export default class TurmasController {
@@ -30,7 +30,7 @@ export default class TurmasController {
         try {
             const turmaExists = await Turmas.findOne({ serie, ano });
             if (turmaExists) {
-                return res.status(422).json({ message: `Já existe uma turma ${serie}º EM de ${ano}.`, campo: "geral" });
+                return res.status(422).json({ message: `Já existe uma turma ${serie}º EM de ${ano}.` });
             }
 
             const turma = new Turmas({
@@ -146,8 +146,8 @@ export default class TurmasController {
                 return res.status(422).json({ message: `Aluno já está matriculado em outra turma no ano ${turma.ano}.` });
             }
 
-            const aluno = await UsuariosController.findAlunoById(alunoId);
-            
+            const aluno = await UsuariosController.findUsuarioById(alunoId);
+
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
@@ -181,10 +181,7 @@ export default class TurmasController {
                 return res.status(422).json({ message: "Aluno não está nesta turma." });
             }
 
-            const simuladosComAluno = await Simulado.find({
-                "conteudos.resultados.aluno_id": aluno_id
-            });
-
+            const simuladosComAluno = await SimuladosController.findSimuladoByAlunoId(aluno_id);
             if (!simuladosComAluno || simuladosComAluno.length > 0) {
                 return res.status(422).json({
                     message: "Não é possível remover o aluno pois ele possui resultados em simulados."
