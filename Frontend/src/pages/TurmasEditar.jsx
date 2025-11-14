@@ -54,7 +54,7 @@ export default function TurmasEditar() {
         if (toast && toast.current) {
             toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message || 'Operação realizada com sucesso', life: 3000 });
         } else {
-            console.log("Toast não disponível");
+            alert(message || 'Operação realizada com sucesso');
         }
         fetch();
     }
