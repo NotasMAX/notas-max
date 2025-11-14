@@ -101,7 +101,7 @@ export default function TurmaAlunoForm({ initialData, onSubmit, response, turma 
             <div className={Style.TurmasAlunoFormList}>
                 {loading ? (<p>Carregando alunos...</p>) : (
                     !Alunos || Alunos.length === 0 ? (
-                        <p>Nenhum aluno encontrado.</p>
+                        <span className={Style.TurmasAlunoFormAlert} >Nenhum aluno encontrado.</span>
                     ) : (
                         Alunos.map(aluno => (
                             <div key={aluno._id} className={Style.TurmasAlunoFormListItem} onClick={() => handleClick(aluno)}>
