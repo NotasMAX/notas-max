@@ -62,15 +62,12 @@ export default class UsuariosController {
 
 
     static async getAlunoByNameOrEmail(req, res) {
-        const { text } = req.body;
-        if (!text) {
+        const { text } = req.query;
+        if (!text || typeof text !== 'string' || text.trim() === '') {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
             const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" });
-            if (!alunos) {
-                return res.status(404).json({ message: "Aluno não encontrado." });
-            }
             res.status(200).json({ alunos });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar o Aluno", error });

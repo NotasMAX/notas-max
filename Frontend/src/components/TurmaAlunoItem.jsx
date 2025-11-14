@@ -2,7 +2,7 @@ import React from 'react'
 import Style from "../styles/TurmasRowItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
 
-export default function TurmaAlunoItem({ aluno, toast }) {
+export default function TurmaAlunoItem({ aluno, toast, onClick }) {
 
     const confirm = () => {
         confirmDialog({

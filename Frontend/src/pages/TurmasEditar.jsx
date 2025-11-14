@@ -50,9 +50,8 @@ export default function TurmasEditar() {
     //     }
     // };
 
-    const handleAddAluno = async () => {
+    const handleFetch = async () => {
         fetch();
-        alert('Aluno adicionado com sucesso!');
     }
 
     if (loading) return <p>Carregando...</p>;
@@ -63,7 +62,7 @@ export default function TurmasEditar() {
             <ConfirmDialog />
             <Toast ref={toast} />
             <OverlayPanel ref={opAluno} dismissable >
-                <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleAddAluno} />
+                <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleFetch} />
             </OverlayPanel>
             <OverlayPanel ref={opDisciplina} dismissable>
     // Content Disciplinas
@@ -98,7 +97,7 @@ export default function TurmasEditar() {
                         <p>Nenhum aluno encontrado.</p>
                     ) : (
                         turma.alunos.map(aluno => (
-                            <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} />
+                            <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} onClick={handleFetch} />
                         ))
                     ))}
             </div>
