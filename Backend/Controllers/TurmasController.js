@@ -1,5 +1,5 @@
 import Turmas from "../Models/Turma.js";
-import Usuarios from "../Models/Usuario.js";
+import UsuariosController from "./UsuariosController.js";
 import Simulado from "../Models/Simulado.js";
 import { Types } from "mongoose";
 
@@ -8,20 +8,20 @@ export default class TurmasController {
         const { serie, ano } = req.body;
 
         if (!serie) {
-            return res.status(422).json({ message: "Preencha a série da turma.", campo: "serie" });
+            return res.status(422).json({ message: "Preencha a série da turma." });
         }
         if (isNaN(serie)) {
-            return res.status(422).json({ message: "A série deve ser um número.", campo: "serie" });
+            return res.status(422).json({ message: "A série deve ser um número." });
         }
         if (serie.toString().length != 1) {
-            return res.status(422).json({ message: "A série deve ter apenas 1 dígito.", campo: "serie" });
+            return res.status(422).json({ message: "A série deve ter apenas 1 dígito." });
         }
 
         if (!ano) {
-            return res.status(422).json({ message: "Preencha o ano da turma.", campo: "ano" });
+            return res.status(422).json({ message: "Preencha o ano da turma." });
         }
         if (isNaN(ano)) {
-            return res.status(422).json({ message: "O ano deve ser um número.", campo: "ano" });
+            return res.status(422).json({ message: "O ano deve ser um número." });
         }
         const currentYear = new Date().getFullYear();
         if (ano < currentYear - 50 || ano > currentYear + 1) {
@@ -136,17 +136,18 @@ export default class TurmasController {
                 return res.status(422).json({ message: "Aluno já está na turma." });
             }
 
-            // Verificar se o aluno já está em outra turma no mesmo ano
             const turmaComAluno = await Turmas.findOne({
                 ano: turma.ano,
                 alunos: alunoId,
-                _id: { $ne: turmaId } // Excluir a própria turma
+                _id: { $ne: turmaId }
             });
+
             if (turmaComAluno) {
                 return res.status(422).json({ message: `Aluno já está matriculado em outra turma no ano ${turma.ano}.` });
             }
 
-            const aluno = await Usuarios.findById(alunoId);
+            const aluno = await UsuariosController.findAlunoById(alunoId);
+            
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
