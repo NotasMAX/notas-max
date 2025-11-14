@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL:"http://localhost:5000/NotasMax",
-    headers:{
-        "Content-Type":"application/json"
+    baseURL: "http://localhost:5000/NotasMax",
+    headers: {
+        "Content-Type": "application/json"
     }
 })
 
-export const cadastrarTurma = (payload)=>api.post("/Turmas/Cadastrar", payload);
+export const cadastrarTurma = (payload) => api.post("/Turmas/Cadastrar", payload);
+export const getOne = (id) => api.get(`/Turma/${id}`);
 
 export default api;
