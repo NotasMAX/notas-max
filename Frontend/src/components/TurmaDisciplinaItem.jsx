@@ -1,11 +1,8 @@
-import React, { useRef, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
 import Style from "../styles/TurmasRowItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
 
 export default function TurmaDisciplinaItem({ disciplina, toast }) {
-    const [visible, setVisible] = useState(false);
 
     const confirm = () => {
         confirmDialog({
@@ -35,7 +32,6 @@ export default function TurmaDisciplinaItem({ disciplina, toast }) {
             toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Exclusão cancelada', life: 3000 });
         }
     }
-
 
     return (
         <div className={Style.TurmaContainerRow}>

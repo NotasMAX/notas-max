@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Style from "../styles/TurmasItem.module.css";
 
 export default function TurmaItem({ turma, position }) {

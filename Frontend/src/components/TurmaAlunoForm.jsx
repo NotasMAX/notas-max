@@ -1,12 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import Style from "../styles/TurmasAlunoForm.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { getAlunos, addAluno, buscarAlunosPorNomeOuEmail } from '../api/turmasapi';
-
-
 
 export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) {
     const [formData, setFormData] = useState(initialData || {
@@ -28,7 +24,6 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
             setFormData(initialData);
         }
     }, [initialData]);
-
 
     const handleChange = async (event) => {
         const { name, value } = event.target;

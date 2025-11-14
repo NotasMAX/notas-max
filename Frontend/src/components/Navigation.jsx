@@ -33,7 +33,7 @@ export default function Navigation({ }) {
                 nav.style.overflow = "auto";
                 navButton.style.transform = "scaleX(-1)";
             }
-             setTimeout(() => {
+            setTimeout(() => {
                 nav.style.transition = "all 0.3s ease-in-out";
                 navButton.style.transition = "all 0.3s ease-in-out";
             }, 100);
@@ -123,7 +123,6 @@ export default function Navigation({ }) {
                         Alunos
                     </div>
                 </NavLink>
-
             </nav >
         </div>
     )

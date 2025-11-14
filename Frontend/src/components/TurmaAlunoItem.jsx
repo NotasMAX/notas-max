@@ -1,17 +1,14 @@
-import React, { useRef, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import React from 'react'
 import Style from "../styles/TurmasRowItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
 
 export default function TurmaAlunoItem({ aluno, toast }) {
-    const [visible, setVisible] = useState(false);
 
     const confirm = () => {
         confirmDialog({
             message: 'Deseja excluir este aluno da turma?',
             header: 'Exclusão',
-            icon: <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none"><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M12 7v6"/><circle cx="12" cy="16" r="1" fill="#ee4544"/><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M9.216 3c1.18-.667 1.954-1 2.784-1c1.114 0 2.128.6 4.157 1.802l.686.406c2.029 1.202 3.043 1.803 3.6 2.792c.557.99.557 2.19.557 4.594v.812c0 2.403 0 3.605-.557 4.594c-.557.99-1.571 1.59-3.6 2.791l-.686.407C14.128 21.399 13.114 22 12 22c-1.114 0-2.128-.6-4.157-1.802l-.686-.407c-2.029-1.2-3.043-1.802-3.6-2.791C3 16.01 3 14.81 3 12.406v-.812C3 9.19 3 7.989 3.557 7C3.996 6.22 4.719 5.682 6 4.9"/></g></svg>,
+            icon: <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none"><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M12 7v6" /><circle cx="12" cy="16" r="1" fill="#ee4544" /><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M9.216 3c1.18-.667 1.954-1 2.784-1c1.114 0 2.128.6 4.157 1.802l.686.406c2.029 1.202 3.043 1.803 3.6 2.792c.557.99.557 2.19.557 4.594v.812c0 2.403 0 3.605-.557 4.594c-.557.99-1.571 1.59-3.6 2.791l-.686.407C14.128 21.399 13.114 22 12 22c-1.114 0-2.128-.6-4.157-1.802l-.686-.407c-2.029-1.2-3.043-1.802-3.6-2.791C3 16.01 3 14.81 3 12.406v-.812C3 9.19 3 7.989 3.557 7C3.996 6.22 4.719 5.682 6 4.9" /></g></svg>,
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Sim',
             rejectLabel: 'Não',
@@ -35,7 +32,6 @@ export default function TurmaAlunoItem({ aluno, toast }) {
             toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Exclusão cancelada', life: 3000 });
         }
     }
-
 
     return (
         <div className={Style.TurmaContainerRow}>

@@ -7,9 +7,7 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
         serie: 0,
         ano: 0
     });
-
     const navigate = useNavigate();
-    const error = document.getElementById("error");
 
     useEffect(() => {
         if (initialData) {
