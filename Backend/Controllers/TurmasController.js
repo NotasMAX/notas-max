@@ -81,7 +81,12 @@ export default class TurmasController {
                         as: 'disciplinas'
                     }
                 },
-                { $unwind: { path: "$disciplinas", preserveNullAndEmptyArrays: true } },
+                {
+                    $unwind: {
+                        path: '$disciplinas',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
                 {
                     $lookup: {
                         from: 'usuarios',
@@ -98,79 +103,57 @@ export default class TurmasController {
                         as: 'disciplinas.materia'
                     }
                 },
-                { $unwind: { path: "$disciplinas.professor", preserveNullAndEmptyArrays: true } },
-                { $unwind: { path: "$disciplinas.materia", preserveNullAndEmptyArrays: true } },
+                {
+                    $unwind: {
+                        path: '$disciplinas.professor',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$disciplinas.materia',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
                 {
                     $group: {
-                        _id: "$_id",
-                        serie: { $first: "$serie" },
-                        ano: { $first: "$ano" },
-                        alunos: { $first: "$alunos" },
-                        disciplinas: { $push: "$disciplinas" }
+                        _id: '$_id',
+                        serie: { $first: '$serie' },
+                        ano: { $first: '$ano' },
+                        alunos: { $first: '$alunos' },
+                        disciplinas: { $push: '$disciplinas' }
                     }
                 },
                 {
                     $project: {
+                        _id: 1,
                         serie: 1,
                         ano: 1,
-                        alunos: { _id: 1, nome: 1, email: 1 },
+                        alunos: {
+                            $map: {
+                                input: '$alunos',
+                                as: 'aluno',
+                                in: { _id: '$$aluno._id', nome: '$$aluno.nome', email: '$$aluno.email' }
+                            }
+                        },
                         disciplinas: {
-                            $filter: {
-                                input: "$disciplinas",
-                                cond: { $and: [
-                                    { $ne: ["$$this._id", null] },
-                                    { $ne: ["$$this", null] }
-                                ]}
+                            $map: {
+                                input: '$disciplinas',
+                                as: 'disc',
+                                in: {
+                                    _id: '$$disc._id',
+                                    professor: { _id: '$$disc.professor._id', nome: '$$disc.professor.nome', email: '$$disc.professor.email' },
+                                    materia: { _id: '$$disc.materia._id', nome: '$$disc.materia.nome' }
+                                }
                             }
                         }
                     }
-                },
-                {
-                    $project: {
-                        serie: 1,
-                        ano: 1,
-                        alunos: { _id: 1, nome: 1, email: 1 },
-                        disciplinas: {
-                            $cond: {
-                                if: { $gt: [{ $size: "$disciplinas" }, 0] },
-                                then: {
-                                    $map: {
-                                        input: "$disciplinas",
-                                        as: "disc",
-                                        in: {
-                                            _id: "$$disc._id",
-                                            professor: { _id: "$$disc.professor._id", nome: "$$disc.professor.nome", email: "$$disc.professor.email" },
-                                            materia: { _id: "$$disc.materia._id", nome: "$$disc.materia.nome" }
-                                        }
-                                    }
-                                },
-                                else: "$$REMOVE"
-                            }
-                        }
-                    }
-                },
-                { $sort: { "alunos.nome": 1 } }
+                }
             ]);
-            console.log(turma);
             if (!turma || turma.length === 0) {
                 return res.status(404).json({ message: "Turma não encontrada." });
             }
-
-            // Remove disciplinas se estiver vazio ou com valores inválidos
             const turmaData = turma[0];
-            
-            if (turmaData.disciplinas) {
-                const disciplinasValidas = turmaData.disciplinas.filter(d => 
-                    d._id && d.professor && d.professor._id && d.materia && d.materia._id
-                );
-                
-                if (disciplinasValidas.length > 0) {
-                    turmaData.disciplinas = disciplinasValidas;
-                } else {
-                    delete turmaData.disciplinas;
-                }
-            }
-
             res.status(200).json({ turma: turmaData });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar a Turma", error });

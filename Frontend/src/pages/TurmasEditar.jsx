@@ -26,7 +26,6 @@ export default function TurmasEditar() {
         try {
             setLoading(true);
             const res = await getTurmaById(id);
-            console.log(res.data.turma);
             setTurma(res.data.turma);
         } catch (err) {
             setError(err.message || 'Erro ao buscar turma');
@@ -42,15 +41,6 @@ export default function TurmasEditar() {
             fetch();
         }
     }, [id]);
-
-    // const handleEdit = async (formData) => {
-    //     try {
-    //         await editarTurma(id, formData);
-    //         alert('Turma editada com sucesso!');
-    //     } catch (err) {
-    //         setError(err.message || 'Erro ao editar turma');
-    //     }
-    // };
 
     const handleSuccess = () => {
         fetch();
@@ -119,10 +109,10 @@ export default function TurmasEditar() {
                         </div>
                     </div>
                     <div className={Style.TurmaContainerDados}>
-                        {!turma.disciplinas || turma.disciplinas.length === 0 ? (
+                        {!turma.disciplinas[0]._id || turma.disciplinas.length === 0 ? (
                             <p>Nenhuma disciplina encontrada.</p>
                         ) : (
-                        turma.disciplinas.map(disciplina => (
+                        turma.disciplinas.sort((a, b) => a.materia.nome.localeCompare(b.materia.nome)).map(disciplina => (
                             <TurmaDisciplinaItem key={disciplina._id} toast={toast} disciplina={disciplina} onClick={handleSuccess} />
                         ))
                         )}
