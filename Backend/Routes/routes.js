@@ -2,6 +2,7 @@ import { Router } from "express";
 import TurmasController from "../Controllers/TurmasController.js";
 import TurmaDisciplinasController from "../Controllers/TurmaDisciplinasController.js";
 import UsuariosController from "../Controllers/UsuariosController.js";
+import MateriasController from "../Controllers/MateriasController.js";
 
 const routes = Router();
 
@@ -15,7 +16,16 @@ routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
 
 routes.post("/Usuarios/CadastrarAluno", UsuariosController.createAluno); //Somente para testes
 routes.get("/Usuarios/Buscar/Alunos", UsuariosController.getAlunoByNameOrEmail);
+routes.get("/Usuarios/Buscar/Professores", UsuariosController.getProfessorByNameOrEmail);
 routes.get("/Usuarios/Alunos", UsuariosController.getAllAlunos); 
+routes.get("/Usuarios/Professores", UsuariosController.getAllProfessores);
 routes.get("/Usuarios/:id", UsuariosController.getOne);
+
+routes.post("/Materias/Cadastrar", MateriasController.create); //Somente para testes
+routes.get("/Materias", MateriasController.getAll);
+routes.get("/Materia/:id", MateriasController.getOne);
+routes.get("/Materias/Buscar", MateriasController.getMateriaByName);
+
+routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
 
 export default routes;

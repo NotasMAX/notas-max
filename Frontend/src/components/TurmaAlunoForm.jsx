@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Style from "../styles/TurmasAlunoForm.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
 import { InputText } from 'primereact/inputtext';
-import { getAlunos, addAluno, buscarAlunosPorNomeOuEmail } from '../api/turmasapi';
-
+import { getAlunos,  buscarAlunosPorNomeOuEmail } from '../api/usuariosapi';
+import { addAluno } from '../api/turmasapi';
 export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) {
     const [formData, setFormData] = useState(initialData || {
         text: ""

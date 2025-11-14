@@ -63,7 +63,6 @@ export default class TurmasController {
             return res.status(422).json({ message: "Id da turma inválido" });
         }
         try {
-
             const turma = await Turmas.aggregate([
                 { $match: { _id: new Types.ObjectId(id) } },
                 {
@@ -75,15 +74,52 @@ export default class TurmasController {
                     }
                 },
                 {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: '_id',
+                        foreignField: 'turma_id',
+                        as: 'disciplinas'
+                    }
+                },
+                { $unwind: { path: "$disciplinas", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'disciplinas.professor_id',
+                        foreignField: '_id',
+                        as: 'disciplinas.professor'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'disciplinas.materia_id',
+                        foreignField: '_id',
+                        as: 'disciplinas.materia'
+                    }
+                },
+                { $unwind: { path: "$disciplinas.professor", preserveNullAndEmptyArrays: true } },
+                { $unwind: { path: "$disciplinas.materia", preserveNullAndEmptyArrays: true } },
+                {
+                    $group: {
+                        _id: "$_id",
+                        serie: { $first: "$serie" },
+                        ano: { $first: "$ano" },
+                        alunos: { $first: "$alunos" },
+                        disciplinas: { $push: "$disciplinas" }
+                    }
+                },
+                {
                     $project: {
-                        nome: 1,
                         serie: 1,
                         ano: 1,
-                        alunos: { _id: 1, nome: 1, email: 1 }
+                        alunos: { _id: 1, nome: 1, email: 1 },
+                        disciplinas: { _id: 1, professor: { _id: 1, nome: 1, email: 1 }, materia: { _id: 1, nome: 1 } }
                     }
                 },
                 { $sort: { "alunos.nome": 1 } }
             ]);
+            console.log(turma);
             if (!turma || turma.length === 0) {
                 return res.status(404).json({ message: "Turma não encontrada." });
             }
@@ -150,6 +186,10 @@ export default class TurmasController {
 
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
+            }
+
+            if (aluno.tipo_usuario !== "aluno") {
+                return res.status(422).json({ message: "O usuário informado não é um aluno." });
             }
 
             turma.alunos.push(alunoId);

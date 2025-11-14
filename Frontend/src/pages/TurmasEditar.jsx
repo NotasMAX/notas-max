@@ -7,6 +7,7 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import Style from '../styles/TurmasEditar.module.css';
 import TurmaAlunoForm from '../components/TurmaAlunoForm';
 import TurmaAlunoItem from '../components/TurmaAlunoItem';
+import TurmaDisciplinaForm from '../components/TurmaDisciplinaForm';
 import TurmaDisciplinaItem from '../components/TurmaDisciplinaItem';
 import { Toast } from 'primereact/toast';
 
@@ -68,7 +69,7 @@ export default function TurmasEditar() {
                         <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleSuccess} />
                     </OverlayPanel>
                     <OverlayPanel ref={opDisciplina} dismissable>
-                        {/* Content Disciplinas */}
+                        <TurmaDisciplinaForm turma={turma} toast={toast} onSubmit={handleSuccess} overlayRef={opDisciplina} />
                     </OverlayPanel>
                     <h2 className={Style.TurmasEditarHeader}>
                         Editar Turma - {turma.serie}º EM
@@ -117,10 +118,13 @@ export default function TurmasEditar() {
                         </div>
                     </div>
                     <div className={Style.TurmaContainerDados}>
-                        <TurmaDisciplinaItem toast={toast} disciplina={{
-                            professor: "Nome do Professor",
-                            materia: "Nome da Matéria"
-                        }} />
+                        {turma.disciplinas.length === 0 ? (
+                            <p>Nenhuma disciplina encontrada.</p>
+                        ) : (
+                        turma.disciplinas.map(disciplina => (
+                            <TurmaDisciplinaItem key={disciplina._id} toast={toast} disciplina={disciplina} />
+                        ))
+                        )}
                     </div>
                     <button
                         type="button"

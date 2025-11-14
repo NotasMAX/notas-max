@@ -36,10 +36,10 @@ export default function TurmaDisciplinaItem({ disciplina, toast }) {
     return (
         <div className={Style.TurmaContainerRow}>
             <div className={Style.TurmaContainerCol}>
-                {disciplina.materia}
+                {disciplina.materia.nome}
             </div>
             <div className={Style.TurmaContainerCol}>
-                {disciplina.professor}
+                {disciplina.professor.nome}
             </div>
             <button
                 onClick={confirm}

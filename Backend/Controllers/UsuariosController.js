@@ -32,13 +32,25 @@ export default class UsuariosController {
 
     static async getAllAlunos(req, res) {
         try {
-            const alunos = await Usuarios.find({}).where({ tipo_usuario: "aluno" }).sort("-createdAt");
+            const alunos = await Usuarios.find({}).where({ tipo_usuario: "aluno" }).sort("nome");
             if (!alunos || alunos.length === 0) {
                 return res.status(404).json({ message: "Nenhum aluno encontrado." });
             }
             res.status(200).json({ alunos });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar todos os alunos", error });
+        }
+    }
+
+    static async getAllProfessores(req, res) {
+        try {
+            const professores = await Usuarios.find({}).where({ tipo_usuario: "professor" }).sort("nome");
+            if (!professores || professores.length === 0) {
+                return res.status(404).json({ message: "Nenhum professor encontrado." });
+            }
+            res.status(200).json({ professores });
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar todos os professores", error });
         }
     }
 
@@ -67,12 +79,26 @@ export default class UsuariosController {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
-            const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" });
+            const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" }).sort("nome")  ;
             res.status(200).json({ alunos });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar o Aluno", error });
         }
     }
+
+    static async getProfessorByNameOrEmail(req, res) {
+        const { text } = req.query;
+        if (!text || typeof text !== 'string' || text.trim() === '') {
+            return res.status(422).json({ message: "Texto de busca inválido" });
+        }
+        try {
+            const professores = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "professor" }).sort("nome");
+            res.status(200).json({ professores });
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar o Professor", error });
+        }
+    }
+
 
     static async findUsuarioById(id) {
         return await Usuarios.findById(id);
