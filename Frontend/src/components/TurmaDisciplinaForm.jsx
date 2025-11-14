@@ -62,7 +62,7 @@ export default function TurmaDisciplinaForm({ initialData, onSubmit, toast, turm
             }).catch(error => {
                 console.error("Erro ao buscar professores:", error);
             });
-        }       
+        }
     }
 
     const handleChangeMateria = async (event) => {
@@ -101,11 +101,11 @@ export default function TurmaDisciplinaForm({ initialData, onSubmit, toast, turm
             reject: () => { reject(); }
         });
     }
-    
+
     const accept = async (materia) => {
+        overlayRef.current.hide();
         try {
             const res = await addDisciplina({ turma_id: turma._id, professor_id: ProfessorSelecionado._id, materia_id: materia._id });
-            overlayRef.current.hide();
             if (toast && toast.current) {
                 toast.current.show({ severity: 'success', summary: 'Sucesso', detail: res.data.message || "Disciplina adicionada com sucesso", life: 3000 });
             }

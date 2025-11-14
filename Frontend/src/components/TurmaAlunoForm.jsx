@@ -41,6 +41,13 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
                     }
                 });
         }
+        else {
+            getAlunos().then(response => {
+                setAlunos(response.data.alunos);
+            }).catch(error => {
+                console.error("Erro ao buscar alunos:", error);
+            });
+        }
     }
 
     const handleClick = (e) => {
