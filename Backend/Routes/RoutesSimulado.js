@@ -1,5 +1,5 @@
 import { Router } from "express";
-import SimuladoController from '../Controllers/SimuladoController.js';
+import SimuladoController from '../Controllers/simuladoController.js';
 
 const routes = Router();
 
