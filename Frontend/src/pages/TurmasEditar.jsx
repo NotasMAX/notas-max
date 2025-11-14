@@ -50,12 +50,7 @@ export default function TurmasEditar() {
     //     }
     // };
 
-    const handleSuccess = async (message) => {
-        if (toast && toast.current) {
-            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message || 'Operação realizada com sucesso', life: 3000 });
-        } else {
-            alert(message || 'Operação realizada com sucesso');
-        }
+    const handleSuccess = () => {
         fetch();
     }
 

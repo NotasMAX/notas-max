@@ -58,8 +58,10 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
     const accept = async (e) => {
         try {
             const res = await addAluno({ turmaId: turma._id, alunoId: e._id });
-
-            onSubmit(res.data.message);
+            if (toast && toast.current) {
+                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: res.data.message || "Aluno adicionado com sucesso", life: 3000 });
+            }
+            onSubmit();
         } catch (error) {
             if (toast && toast.current) {
                 toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao adicionar aluno"}`, life: 3000 });
