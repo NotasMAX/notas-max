@@ -97,7 +97,7 @@ export default function TurmasEditar() {
                         <p>Nenhum aluno encontrado.</p>
                     ) : (
                         turma.alunos.map(aluno => (
-                            <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} onClick={handleFetch} />
+                            <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} turma_id={turma._id} onClick={handleFetch} />
                         ))
                     ))}
             </div>

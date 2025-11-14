@@ -136,6 +136,16 @@ export default class TurmasController {
                 return res.status(422).json({ message: "Aluno já está na turma." });
             }
 
+            // Verificar se o aluno já está em outra turma no mesmo ano
+            const turmaComAluno = await Turmas.findOne({
+                ano: turma.ano,
+                alunos: alunoId,
+                _id: { $ne: turmaId } // Excluir a própria turma
+            });
+            if (turmaComAluno) {
+                return res.status(422).json({ message: `Aluno já está matriculado em outra turma no ano ${turma.ano}.` });
+            }
+
             const aluno = await Usuarios.findById(alunoId);
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
@@ -150,7 +160,8 @@ export default class TurmasController {
         }
     }
     static async removeAluno(req, res) {
-        const { aluno_id, turma_id } = req.body;
+        const { aluno_id, turma_id } = req.query;
+
         const ObjectId = Types.ObjectId;
         if (!ObjectId.isValid(turma_id)) {
             return res.status(422).json({ message: "Id da turma inválido" });

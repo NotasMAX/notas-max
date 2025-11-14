@@ -1,8 +1,9 @@
 import React from 'react'
 import Style from "../styles/TurmasRowItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
+import { removeAluno } from '../api/turmasapi';
 
-export default function TurmaAlunoItem({ aluno, toast, onClick }) {
+export default function TurmaAlunoItem({ turma_id, aluno, toast, onClick }) {
 
     const confirm = () => {
         confirmDialog({
@@ -17,14 +18,18 @@ export default function TurmaAlunoItem({ aluno, toast, onClick }) {
         });
     }
 
-    const accept = () => {
-        if (toast && toast.current) {
-            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Aluno excluído com sucesso', life: 3000 });
+    const accept = async () => {
+        try {
+            await removeAluno(turma_id, aluno._id);
+            onClick();
+            if (toast && toast.current) {
+                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Aluno excluído com sucesso', life: 3000 });
+            }
+        } catch (error) {
+            if (toast && toast.current) {
+                toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao excluir aluno"}`, life: 3000 });
+            }
         }
-        if (toast && toast.current) {
-            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Falha ao excluir aluno', life: 3000 });
-        }
-
     }
 
     const reject = () => {
