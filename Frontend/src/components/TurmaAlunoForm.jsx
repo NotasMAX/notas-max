@@ -31,15 +31,15 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
         if (event.target.value.trim() !== "") {
             await buscarAlunosPorNomeOuEmail(event.target.value).then(response => {
                 setAlunos(response.data.alunos);
-             })
-             .catch(error => {
-                if (toast && toast.current) {
-                    toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao buscar aluno"}`, life: 3000 });
-                }
-                else {
-                    alert("Erro ao buscar aluno.");
-                }
-            });
+            })
+                .catch(error => {
+                    if (toast && toast.current) {
+                        toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao buscar aluno"}`, life: 3000 });
+                    }
+                    else {
+                        alert("Erro ao buscar aluno.");
+                    }
+                });
         }
     }
 
@@ -58,11 +58,8 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
     const accept = async (e) => {
         try {
             const res = await addAluno({ turmaId: turma._id, alunoId: e._id });
-            onSubmit();
-            if (toast && toast.current) {
-                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Aluno adicionado com sucesso', life: 3000 });
-            }
 
+            onSubmit(res.data.message);
         } catch (error) {
             if (toast && toast.current) {
                 toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao adicionar aluno"}`, life: 3000 });

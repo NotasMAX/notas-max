@@ -50,82 +50,91 @@ export default function TurmasEditar() {
     //     }
     // };
 
-    const handleFetch = async () => {
+    const handleSuccess = async (message) => {
+        if (toast && toast.current) {
+            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message || 'Operação realizada com sucesso', life: 3000 });
+        } else {
+            console.log("Toast não disponível");
+        }
         fetch();
     }
 
-    if (loading) return <p>Carregando...</p>;
     if (error) return <p>Erro: {error}</p>;
 
     return (
         <div>
-            <ConfirmDialog />
             <Toast ref={toast} />
-            <OverlayPanel ref={opAluno} dismissable >
-                <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleFetch} />
-            </OverlayPanel>
-            <OverlayPanel ref={opDisciplina} dismissable>
-    // Content Disciplinas
-            </OverlayPanel>
-            <h2 className={Style.TurmasEditarHeader}>
-                Editar Turma - {turma.serie}º EM
-            </h2>
-            <div className={Style.TurmaDadosContainer}>
-                <div className={Style.TurmaDados}>
-                    {turma.serie}º EM
-                </div>
-                <div className={Style.TurmaDados}>
-                    {turma.ano}
-                </div>
-            </div>
-            <div className={Style.TurmaContainer}>
-                <div className={Style.TurmaContainerHeader}>
-                    <h3 className={Style.TurmaContainerTitle}>
-                        Alunos
-                    </h3>
-                    <button className={Style.TurmaContainerButton} onClick={(e) => opAluno.current.toggle(e)} >
-                        <svg className={Style.TurmaContainerButtonIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />
-                            <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13L13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />
-                        </svg>
+            {loading ? (
+                <p>Carregando turma...</p>
+            ) : (
+                <div>
+                    <ConfirmDialog />
+                    <OverlayPanel ref={opAluno} dismissable>
+                        <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleSuccess} />
+                    </OverlayPanel>
+                    <OverlayPanel ref={opDisciplina} dismissable>
+                        {/* Content Disciplinas */}
+                    </OverlayPanel>
+                    <h2 className={Style.TurmasEditarHeader}>
+                        Editar Turma - {turma.serie}º EM
+                    </h2>
+                    <div className={Style.TurmaDadosContainer}>
+                        <div className={Style.TurmaDados}>
+                            {turma.serie}º EM
+                        </div>
+                        <div className={Style.TurmaDados}>
+                            {turma.ano}
+                        </div>
+                    </div>
+                    <div className={Style.TurmaContainer}>
+                        <div className={Style.TurmaContainerHeader}>
+                            <h3 className={Style.TurmaContainerTitle}>
+                                Alunos
+                            </h3>
+                            <button className={Style.TurmaContainerButton} onClick={(e) => opAluno.current.toggle(e)}>
+                                <svg className={Style.TurmaContainerButtonIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13L13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={Style.TurmaContainerDados}>
+                        {turma.alunos.length === 0 ? (
+                            <p>Nenhum aluno encontrado.</p>
+                        ) : (
+                            turma.alunos.map(aluno => (
+                                <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} turma_id={turma._id} onClick={handleSuccess} />
+                            ))
+                        )}
+                    </div>
+                    <div className={Style.TurmaContainer}>
+                        <div className={Style.TurmaContainerHeader}>
+                            <h3 className={Style.TurmaContainerTitle}>
+                                Disciplinas
+                            </h3>
+                            <button className={Style.TurmaContainerButton} onClick={(e) => opDisciplina.current.toggle(e)}>
+                                <svg className={Style.TurmaContainerButtonIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13L13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={Style.TurmaContainerDados}>
+                        <TurmaDisciplinaItem toast={toast} disciplina={{
+                            professor: "Nome do Professor",
+                            materia: "Nome da Matéria"
+                        }} />
+                    </div>
+                    <button
+                        type="button"
+                        className={Style.buttonBack}
+                        onClick={() => navigate(-1)}>
+                        Voltar
                     </button>
                 </div>
-            </div>
-            <div className={Style.TurmaContainerDados}>
-                {loading ? (<p>Carregando alunos...</p>) : (
-                    turma.alunos.length === 0 ? (
-                        <p>Nenhum aluno encontrado.</p>
-                    ) : (
-                        turma.alunos.map(aluno => (
-                            <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} turma_id={turma._id} onClick={handleFetch} />
-                        ))
-                    ))}
-            </div>
-            <div className={Style.TurmaContainer}>
-                <div className={Style.TurmaContainerHeader}>
-                    <h3 className={Style.TurmaContainerTitle}>
-                        Disciplinas
-                    </h3>
-                    <button className={Style.TurmaContainerButton} onClick={(e) => opDisciplina.current.toggle(e)}>
-                        <svg className={Style.TurmaContainerButtonIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />
-                            <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13L13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />
-                        </svg>
-
-                    </button>
-                </div>
-            </div>
-            <div className={Style.TurmaContainerDados}>
-                <TurmaDisciplinaItem toast={toast} disciplina={
-                    { professor: "Nome do Professor", materia: "Nome da Matéria" }
-                }></TurmaDisciplinaItem>
-            </div>
-            <button
-                type="button"
-                className={Style.buttonBack}
-                onClick={() => navigate(-1)}>
-                Voltar
-            </button>
-        </div >
+            )}
+        </div>
     );
 }

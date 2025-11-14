@@ -20,11 +20,8 @@ export default function TurmaAlunoItem({ turma_id, aluno, toast, onClick }) {
 
     const accept = async () => {
         try {
-            await removeAluno(turma_id, aluno._id);
-            onClick();
-            if (toast && toast.current) {
-                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Aluno excluído com sucesso', life: 3000 });
-            }
+            const res = await removeAluno(turma_id, aluno._id);
+            onClick(res.data.message);
         } catch (error) {
             if (toast && toast.current) {
                 toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao excluir aluno"}`, life: 3000 });
