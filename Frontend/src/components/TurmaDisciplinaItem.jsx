@@ -4,9 +4,8 @@ import Style from "../styles/TurmasRowItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 
-export default function TurmaDisciplinaItem({ disciplina }) {
+export default function TurmaDisciplinaItem({ disciplina, toast }) {
     const [visible, setVisible] = useState(false);
-    const toast = useRef(null);
 
     const confirm = () => {
         confirmDialog({
@@ -40,7 +39,6 @@ export default function TurmaDisciplinaItem({ disciplina }) {
 
     return (
         <div className={Style.TurmaContainerRow}>
-            <Toast ref={toast} />
             <div className={Style.TurmaContainerCol}>
                 {disciplina.materia}
             </div>

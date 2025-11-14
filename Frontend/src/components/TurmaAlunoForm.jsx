@@ -8,14 +8,12 @@ import { getAlunos, addAluno, buscarAlunosPorNomeOuEmail } from '../api/turmasap
 
 
 
-export default function TurmaAlunoForm({ initialData, onSubmit, response, turma }) {
+export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) {
     const [formData, setFormData] = useState(initialData || {
         text: ""
     });
     const [Alunos, setAlunos] = useState([]);
     const [loading, setLoading] = useState(false);
-    const toast = useRef(null);
-
 
     useEffect(() => {
         setLoading(true);
@@ -71,7 +69,6 @@ export default function TurmaAlunoForm({ initialData, onSubmit, response, turma 
 
         } catch (error) {
             if (toast && toast.current) {
-                console.log(error);
                 toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao adicionar aluno"}`, life: 3000 });
             }
             else {
@@ -88,7 +85,6 @@ export default function TurmaAlunoForm({ initialData, onSubmit, response, turma 
 
     return (
         <form className={Style.TurmasAlunoForm} onSubmit={(e) => e.preventDefault()}>
-            <Toast ref={toast} />
             <h2 className={Style.TurmasAlunoFormHeader}>Adicionar aluno na turma {turma.nome}</h2>
             <InputText
                 type="text"

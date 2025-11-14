@@ -20,7 +20,7 @@ export default function TurmasEditar() {
     const opAluno = useRef(null);
     const opDisciplina = useRef(null);
     const [response, setResponse] = useState(null);
-
+    const toast = useRef(null);
 
     const fetch = async () => {
         try {
@@ -62,8 +62,9 @@ export default function TurmasEditar() {
     return (
         <div>
             <ConfirmDialog />
+            <Toast ref={toast} />
             <OverlayPanel ref={opAluno} dismissable >
-                <TurmaAlunoForm turma={turma} onSubmit={handleAddAluno} />
+                <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleAddAluno} />
             </OverlayPanel>
             <OverlayPanel ref={opDisciplina} dismissable>
     // Content Disciplinas
@@ -98,7 +99,7 @@ export default function TurmasEditar() {
                         <p>Nenhum aluno encontrado.</p>
                     ) : (
                         turma.alunos.map(aluno => (
-                            <TurmaAlunoItem key={aluno._id} aluno={aluno} />
+                            <TurmaAlunoItem key={aluno._id} aluno={aluno} toast={toast} />
                         ))
                     ))}
             </div>
@@ -117,7 +118,7 @@ export default function TurmasEditar() {
                 </div>
             </div>
             <div className={Style.TurmaContainerDados}>
-                <TurmaDisciplinaItem disciplina={
+                <TurmaDisciplinaItem toast={toast} disciplina={
                     { professor: "Nome do Professor", materia: "Nome da Matéria" }
                 }></TurmaDisciplinaItem>
             </div>
