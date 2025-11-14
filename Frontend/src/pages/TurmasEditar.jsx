@@ -19,14 +19,13 @@ export default function TurmasEditar() {
     const navigate = useNavigate();
     const opAluno = useRef(null);
     const opDisciplina = useRef(null);
-    const [response, setResponse] = useState(null);
     const toast = useRef(null);
 
     const fetch = async () => {
         try {
             setLoading(true);
             const res = await getTurmaById(id);
-            setTurma(res.data);
+            setTurma(res.data.turma);
         } catch (err) {
             setError(err.message || 'Erro ao buscar turma');
         } finally {

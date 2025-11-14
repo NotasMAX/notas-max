@@ -63,14 +63,31 @@ export default class TurmasController {
             return res.status(422).json({ message: "Id da turma inválido" });
         }
         try {
-            const turma = await Turmas.findById(id);
-            if (!turma) {
+
+            const turma = await Turmas.aggregate([
+                { $match: { _id: new Types.ObjectId(id) } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'alunos',
+                        foreignField: '_id',
+                        as: 'alunos'
+                    }
+                },
+                {
+                    $project: {
+                        nome: 1,
+                        serie: 1,
+                        ano: 1,
+                        alunos: { _id: 1, nome: 1, email: 1 }
+                    }
+                },
+                { $sort: { "alunos.nome": 1 } }
+            ]);
+            if (!turma || turma.length === 0) {
                 return res.status(404).json({ message: "Turma não encontrada." });
             }
-
-            const turmaWithAlunos = await Turmas.findById(id).populate('alunos');
-
-            res.status(200).json(turmaWithAlunos);
+            res.status(200).json({ turma: turma[0] });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar a Turma", error });
         }
