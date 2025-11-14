@@ -50,7 +50,7 @@ export default function Turmas() {
 
     return (
         <div>
-            <h2 className={Style.TurmasHeader}>Turmas</h2>
+            <h2 className={Style.TurmasHeader}>Alunos</h2>
             <TurmasPesquisarForm onSubmit={handleSearch} initialData={{ ano }} />
 
             {loading ? (

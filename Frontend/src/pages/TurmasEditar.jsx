@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, use } from 'react';
 import { useParams } from 'react-router-dom';
-import Style from '../styles/TurmasEditar.module.css';
-// import TurmasForm from '../components/TurmasForm';
-import TurmaAlunoItem from '../components/TurmaAlunoItem';
-import TurmaDisciplinaItem from '../components/TurmaDisciplinaItem';
 import { getTurmaById } from '../api/turmasapi';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmDialog } from 'primereact/confirmdialog';
+import { OverlayPanel } from 'primereact/overlaypanel';
+import Style from '../styles/TurmasEditar.module.css';
+import TurmaAlunoForm from '../components/TurmaAlunoForm';
+import TurmaAlunoItem from '../components/TurmaAlunoItem';
+import TurmaDisciplinaItem from '../components/TurmaDisciplinaItem';
+import { Toast } from 'primereact/toast';
+
 
 export default function TurmasEditar() {
     const { id } = useParams();
@@ -14,6 +17,10 @@ export default function TurmasEditar() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const opAluno = useRef(null);
+    const opDisciplina = useRef(null);
+    const [response, setResponse] = useState(null);
+
 
     const fetch = async () => {
         try {
@@ -44,12 +51,23 @@ export default function TurmasEditar() {
     //     }
     // };
 
+    const handleAddAluno = async () => {
+        fetch();
+        alert('Aluno adicionado com sucesso!');
+    }
+
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>Erro: {error}</p>;
 
     return (
         <div>
             <ConfirmDialog />
+            <OverlayPanel ref={opAluno} dismissable >
+                <TurmaAlunoForm turma={turma} onSubmit={handleAddAluno} />
+            </OverlayPanel>
+            <OverlayPanel ref={opDisciplina} dismissable>
+    // Content Disciplinas
+            </OverlayPanel>
             <h2 className={Style.TurmasEditarHeader}>
                 Editar Turma - {turma.serie}º EM
             </h2>
@@ -66,26 +84,30 @@ export default function TurmasEditar() {
                     <h3 className={Style.TurmaContainerTitle}>
                         Alunos
                     </h3>
-                    <button className={Style.TurmaContainerButton}>
+                    <button className={Style.TurmaContainerButton} onClick={(e) => opAluno.current.toggle(e)} >
                         <svg className={Style.TurmaContainerButtonIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />
                             <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13L13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />
                         </svg>
-
                     </button>
                 </div>
             </div>
             <div className={Style.TurmaContainerDados}>
-                <TurmaAlunoItem aluno={
-                    { nome: "Nome do Aluno", email: "email@exemplo.com" }
-                }></TurmaAlunoItem>
+                {loading ? (<p>Carregando alunos...</p>) : (
+                    turma.alunos.length === 0 ? (
+                        <p>Nenhum aluno encontrado.</p>
+                    ) : (
+                        turma.alunos.map(aluno => (
+                            <TurmaAlunoItem key={aluno._id} aluno={aluno} />
+                        ))
+                    ))}
             </div>
             <div className={Style.TurmaContainer}>
                 <div className={Style.TurmaContainerHeader}>
                     <h3 className={Style.TurmaContainerTitle}>
                         Disciplinas
                     </h3>
-                    <button className={Style.TurmaContainerButton}>
+                    <button className={Style.TurmaContainerButton} onClick={(e) => opDisciplina.current.toggle(e)}>
                         <svg className={Style.TurmaContainerButtonIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />
                             <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13L13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />

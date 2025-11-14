@@ -1,4 +1,5 @@
 import Turmas from "../Models/Turma.js";
+import Usuarios from "../Models/Usuario.js";
 import { Types } from "mongoose";
 
 export default class TurmasController {
@@ -66,7 +67,10 @@ export default class TurmasController {
             if (!turma) {
                 return res.status(404).json({ message: "Turma não encontrada." });
             }
-            res.status(200).json(turma);
+
+            const turmaWithAlunos = await Turmas.findById(id).populate('alunos');
+
+            res.status(200).json(turmaWithAlunos);
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar a Turma", error });
         }
@@ -86,5 +90,46 @@ export default class TurmasController {
             res.status(500).json({ message: "Erro ao buscar as Turmas", error });
         }
     }
-}
 
+    static async addAluno(req, res) {
+        try {
+            const
+                { turmaId, alunoId } = req.body;
+
+            if (!turmaId) {
+                return res.status(422).json({ message: "Id da turma é obrigatório." });
+            }
+            if (!alunoId) {
+                return res.status(422).json({ message: "Id do aluno é obrigatório." });
+            }
+
+            const ObjectId = Types.ObjectId;
+            if (!ObjectId.isValid(turmaId)) {
+                return res.status(422).json({ message: "Id da turma inválido" });
+            }
+            if (!ObjectId.isValid(alunoId)) {
+                return res.status(422).json({ message: "Id do aluno inválido" });
+            }
+
+            const turma = await Turmas.findById(turmaId);
+            if (!turma) {
+                return res.status(404).json({ message: "Turma não encontrada." });
+            }
+            if (turma.alunos.includes(alunoId)) {
+                return res.status(422).json({ message: "Aluno já está na turma." });
+            }
+
+            const aluno = await Usuarios.findById(alunoId);
+            if (!aluno) {
+                return res.status(404).json({ message: "Aluno não encontrado." });
+            }
+
+            turma.alunos.push(alunoId);
+            await turma.save();
+
+            res.status(200).json({ message: "Aluno adicionado com sucesso", turma });
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao adicionar aluno na turma", error });
+        }
+    }
+}

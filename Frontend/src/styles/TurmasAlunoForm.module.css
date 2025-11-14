@@ -1,0 +1,19 @@
+.TurmasAlunoForm {
+    @apply w-[35rem] h-[19.49rem];
+}
+
+.TurmasAlunoFormHeader {
+    @apply text-xl font-bold font-inter mb-4;
+}
+
+.TurmasAlunoFormInput {
+    @apply w-full;
+}
+
+.TurmasAlunoFormList {
+    @apply overflow-y-auto mt-3 overflow-x-hidden h-[13rem] border border-gray-300 rounded;
+}
+
+.TurmasAlunoFormListItem {
+    @apply p-2 border-b border-gray-300 hover:bg-gray-100 cursor-pointer;
+}
