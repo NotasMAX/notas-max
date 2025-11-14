@@ -57,7 +57,7 @@ export default function TurmasEditar() {
                 <div>
                     <ConfirmDialog />
                     <OverlayPanel ref={opAluno} dismissable>
-                        <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleSuccess} />
+                        <TurmaAlunoForm turma={turma} toast={toast} onSubmit={handleSuccess}  overlayRef={opAluno} />
                     </OverlayPanel>
                     <OverlayPanel ref={opDisciplina} dismissable>
                         <TurmaDisciplinaForm turma={turma} toast={toast} onSubmit={handleSuccess} overlayRef={opDisciplina} />

@@ -4,7 +4,7 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import { InputText } from 'primereact/inputtext';
 import { getAlunos,  buscarAlunosPorNomeOuEmail } from '../api/usuariosapi';
 import { addAluno } from '../api/turmasapi';
-export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) {
+export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma, overlayRef }) {
     const [formData, setFormData] = useState(initialData || {
         text: ""
     });
@@ -63,6 +63,7 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
     }
 
     const accept = async (e) => {
+        overlayRef.current.hide();
         try {
             const res = await addAluno({ turmaId: turma._id, alunoId: e._id });
             if (toast && toast.current) {
@@ -80,6 +81,7 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma }) 
     }
 
     const reject = () => {
+        overlayRef.current.hide();
         if (toast && toast.current) {
             toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Adição cancelada', life: 3000 });
         }
