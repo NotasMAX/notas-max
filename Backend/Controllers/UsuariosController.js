@@ -3,13 +3,13 @@ import { Types } from "mongoose";
 
 export default class UsuariosController {
     static async createAluno(req, res) { //Somente para testes
-        const { 
-            nome, 
+        const {
+            nome,
             email,
             telefone_contato,
             senha,
             tipo_usuario,
-            telefone_responsavel 
+            telefone_responsavel
         } = req.body;
 
         const usuario = new Usuarios({
@@ -59,5 +59,23 @@ export default class UsuariosController {
             res.status(500).json({ message: "Erro ao buscar o Aluno", error });
         }
     }
+
+
+    static async getAlunoByNameOrEmail(req, res) {
+        const { text } = req.body;
+        if (!text) {
+            return res.status(422).json({ message: "Texto de busca inválido" });
+        }
+        try {
+            const aluno = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" });
+            if (!aluno || aluno.length === 0) {
+                return res.status(404).json({ message: "Aluno não encontrado." });
+            }
+            res.status(200).json(aluno);
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar o Aluno", error });
+        }
+    }
+
 }
 
