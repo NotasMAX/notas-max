@@ -17,6 +17,7 @@ export default function Turmas() {
     const anoAtual = new Date().getFullYear();
     const [ano, setAno] = useState(() => anoURL ? parseInt(anoURL) : anoAtual);
     const toast = useRef(null);
+    const toastShown = useRef(false);
     const navigate = useNavigate();
     const location = useLocation();
     let position = 0;
@@ -49,11 +50,12 @@ export default function Turmas() {
     useEffect(() => {
         document.title = `NotasMAX - Turmas ${ano}`;
         fetch(ano);
-        if (location.state) {
+        if (location.state && !toastShown.current) {
             const { message, type } = location.state;
             if (message && type === 'success') {
                 if (toast && toast.current) {
                     toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message, life: 3000 });
+                    toastShown.current = true;
                 }
             }
             window.history.replaceState({}, '')
@@ -62,7 +64,7 @@ export default function Turmas() {
 
     return (
         <div>
-            <h2 className={Style.TurmasHeader}>Alunos</h2>
+            <h2 className={Style.TurmasHeader}>Turmas - {ano}</h2>
             <TurmasPesquisarForm onSubmit={handleSearch} initialData={{ ano }} />
             <Toast ref={toast} />
             {loading ? (
