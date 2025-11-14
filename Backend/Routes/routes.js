@@ -27,5 +27,6 @@ routes.get("/Materia/:id", MateriasController.getOne);
 routes.get("/Materias/Buscar", MateriasController.getMateriaByName);
 
 routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
+routes.delete("/Turmas/Remover/Disciplina", TurmaDisciplinasController.remove);
 
 export default routes;

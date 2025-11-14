@@ -26,6 +26,7 @@ export default function TurmasEditar() {
         try {
             setLoading(true);
             const res = await getTurmaById(id);
+            console.log(res.data.turma);
             setTurma(res.data.turma);
         } catch (err) {
             setError(err.message || 'Erro ao buscar turma');
@@ -118,11 +119,11 @@ export default function TurmasEditar() {
                         </div>
                     </div>
                     <div className={Style.TurmaContainerDados}>
-                        {turma.disciplinas.length === 0 ? (
+                        {!turma.disciplinas || turma.disciplinas.length === 0 ? (
                             <p>Nenhuma disciplina encontrada.</p>
                         ) : (
                         turma.disciplinas.map(disciplina => (
-                            <TurmaDisciplinaItem key={disciplina._id} toast={toast} disciplina={disciplina} />
+                            <TurmaDisciplinaItem key={disciplina._id} toast={toast} disciplina={disciplina} onClick={handleSuccess} />
                         ))
                         )}
                     </div>

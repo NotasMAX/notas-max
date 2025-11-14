@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import Style from "../styles/TurmasRowItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
+import { removeDisciplina } from '../api/turmasapi';
 
-export default function TurmaDisciplinaItem({ disciplina, toast }) {
+export default function TurmaDisciplinaItem({ disciplina, toast, onClick }) {
 
-    const confirm = () => {
+    const confirm = (disciplina) => {
         confirmDialog({
             message: 'Deseja excluir esta disciplina da turma?',
             header: 'Exclusão',
@@ -12,19 +13,23 @@ export default function TurmaDisciplinaItem({ disciplina, toast }) {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Sim',
             rejectLabel: 'Não',
-            accept: () => accept(),
+            accept: () => accept(disciplina),
             reject: () => reject()
         });
     }
 
-    const accept = () => {
-        if (toast && toast.current) {
-            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Disciplina excluída com sucesso', life: 3000 });
+    const accept = async (disciplina) => {
+        try {
+            await removeDisciplina(disciplina._id);
+            onClick();
+            if (toast && toast.current) {
+                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Disciplina excluída com sucesso', life: 3000 });
+            }
+        } catch (error) {
+            if (toast && toast.current) {
+                toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Falha ao excluir disciplina', life: 3000 });
+            }
         }
-        if (toast && toast.current) {
-            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Falha ao excluir disciplina', life: 3000 });
-        }
-
     }
 
     const reject = () => {
@@ -42,7 +47,7 @@ export default function TurmaDisciplinaItem({ disciplina, toast }) {
                 {disciplina.professor.nome}
             </div>
             <button
-                onClick={confirm}
+                onClick={() => confirm(disciplina)}
                 className={Style.TurmaContainerColExcluir}>
                 <svg className={Style.TurmaContainerColIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M2 7C2 4.23858 4.23858 2 7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7ZM7 4C5.34315 4 4 5.34315 4 7V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V7C20 5.34315 18.6569 4 17 4H7Z" />

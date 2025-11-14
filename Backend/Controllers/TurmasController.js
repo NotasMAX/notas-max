@@ -114,7 +114,39 @@ export default class TurmasController {
                         serie: 1,
                         ano: 1,
                         alunos: { _id: 1, nome: 1, email: 1 },
-                        disciplinas: { _id: 1, professor: { _id: 1, nome: 1, email: 1 }, materia: { _id: 1, nome: 1 } }
+                        disciplinas: {
+                            $filter: {
+                                input: "$disciplinas",
+                                cond: { $and: [
+                                    { $ne: ["$$this._id", null] },
+                                    { $ne: ["$$this", null] }
+                                ]}
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        serie: 1,
+                        ano: 1,
+                        alunos: { _id: 1, nome: 1, email: 1 },
+                        disciplinas: {
+                            $cond: {
+                                if: { $gt: [{ $size: "$disciplinas" }, 0] },
+                                then: {
+                                    $map: {
+                                        input: "$disciplinas",
+                                        as: "disc",
+                                        in: {
+                                            _id: "$$disc._id",
+                                            professor: { _id: "$$disc.professor._id", nome: "$$disc.professor.nome", email: "$$disc.professor.email" },
+                                            materia: { _id: "$$disc.materia._id", nome: "$$disc.materia.nome" }
+                                        }
+                                    }
+                                },
+                                else: "$$REMOVE"
+                            }
+                        }
                     }
                 },
                 { $sort: { "alunos.nome": 1 } }
@@ -123,7 +155,23 @@ export default class TurmasController {
             if (!turma || turma.length === 0) {
                 return res.status(404).json({ message: "Turma não encontrada." });
             }
-            res.status(200).json({ turma: turma[0] });
+
+            // Remove disciplinas se estiver vazio ou com valores inválidos
+            const turmaData = turma[0];
+            
+            if (turmaData.disciplinas) {
+                const disciplinasValidas = turmaData.disciplinas.filter(d => 
+                    d._id && d.professor && d.professor._id && d.materia && d.materia._id
+                );
+                
+                if (disciplinasValidas.length > 0) {
+                    turmaData.disciplinas = disciplinasValidas;
+                } else {
+                    delete turmaData.disciplinas;
+                }
+            }
+
+            res.status(200).json({ turma: turmaData });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar a Turma", error });
         }
