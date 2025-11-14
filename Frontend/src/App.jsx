@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import TurmasCadastrar from "./pages/TurmasCadastrar";
+import TurmasSimuldos from "./pages/TurmasSimulados";
 import Home from "./pages/Home";
 import MateriaCadastrar from "./pages/MateriaCadastrar";
 import MateriaListar from "./pages/MateriaListar";
@@ -19,6 +20,13 @@ function App() {
       <Route path="Turmas/Cadastrar" element={
         <Layout>
           <TurmasCadastrar />
+        </Layout>
+      } />
+
+
+      <Route path="Turma/:id" element={
+        <Layout>
+          <TurmasSimuldos />
         </Layout>
       } />
 
@@ -41,7 +49,7 @@ function App() {
       } />
     </Routes>
 
-    
+
   );
 }
 
