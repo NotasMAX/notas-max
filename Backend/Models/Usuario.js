@@ -32,6 +32,7 @@ const usuarioSchema = new Schema({
     },
     telefone_responsavel: {
         type: String,
+        trim: true,
         required: false
     }
 }, {
