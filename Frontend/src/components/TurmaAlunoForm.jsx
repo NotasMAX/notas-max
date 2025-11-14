@@ -4,7 +4,7 @@ import Style from "../styles/TurmasAlunoForm.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
-import { getAlunos, addAluno } from '../api/turmasapi';
+import { getAlunos, addAluno, buscarAlunosPorNomeOuEmail } from '../api/turmasapi';
 
 
 
@@ -32,8 +32,21 @@ export default function TurmaAlunoForm({ initialData, onSubmit, response, turma 
     }, [initialData]);
 
 
-    const handleChange = (e) => {
-        // Atualizar estado do formulário conforme necessário
+    const handleChange = async (event) => {
+        const { name, value } = event.target;
+        setFormData(prevData => ({ ...prevData, [name]: value }));
+        if (event.target.value.trim() !== "") {
+            await buscarAlunosPorNomeOuEmail(event.target.value).then(response => {
+                setAlunos(response.data.alunos);
+            }).catch(error => {
+                if (toast && toast.current) {
+                    toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao buscar aluno"}`, life: 3000 });
+                }
+                else {
+                    alert("Erro ao buscar aluno.");
+                }
+            });
+        }
     }
 
     const handleClick = (e) => {
@@ -74,19 +87,20 @@ export default function TurmaAlunoForm({ initialData, onSubmit, response, turma 
     }
 
     return (
-        <form className={Style.TurmasAlunoForm}>
+        <form className={Style.TurmasAlunoForm} onSubmit={(e) => e.preventDefault()}>
             <Toast ref={toast} />
             <h2 className={Style.TurmasAlunoFormHeader}>Adicionar aluno na turma {turma.nome}</h2>
-            <input hidden value={turma._id} name="id" readOnly />
             <InputText
-                id="text"
+                type="text"
+                name="text"
                 onChange={handleChange}
+                value={formData.text}
                 placeholder="Digite o nome ou email do aluno"
                 className={Style.TurmasAlunoFormInput}
             />
             <div className={Style.TurmasAlunoFormList}>
                 {loading ? (<p>Carregando alunos...</p>) : (
-                    Alunos.length === 0 ? (
+                    !Alunos || Alunos.length === 0 ? (
                         <p>Nenhum aluno encontrado.</p>
                     ) : (
                         Alunos.map(aluno => (

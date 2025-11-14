@@ -67,11 +67,11 @@ export default class UsuariosController {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
-            const aluno = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" });
-            if (!aluno || aluno.length === 0) {
+            const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" });
+            if (!alunos) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
-            res.status(200).json(aluno);
+            res.status(200).json({ alunos });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar o Aluno", error });
         }
