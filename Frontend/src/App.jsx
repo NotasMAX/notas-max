@@ -4,7 +4,7 @@ import TurmasCadastrar from "./pages/TurmasCadastrar";
 import TurmasEditar from "./pages/TurmasEditar";
 import Turmas from "./pages/Turmas";
 import Home from "./pages/Home";
-
+import Simulados from "./pages/Simulados";
 
 function App() {
   return (
@@ -37,6 +37,12 @@ function App() {
       <Route path="Turma/Editar/:id" element={
         <Layout>
           <TurmasEditar />
+        </Layout>
+      } />
+
+         <Route path="/Simulados" element={
+        <Layout>
+          <Simulados />
         </Layout>
       } />
     </Routes >

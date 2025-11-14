@@ -5,8 +5,6 @@ import TurmasPesquisarForm from '../components/TurmasPesquisarForm';
 import TurmaItem from '../components/TurmaItem';
 import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
-
-
 import { getTurmasPorAno } from '../api/turmasapi';
 
 export default function Turmas() {
