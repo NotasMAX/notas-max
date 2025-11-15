@@ -1,9 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import Turmas from "./pages/Turmas";
 import TurmasCadastrar from "./pages/TurmasCadastrar";
 import TurmasEditar from "./pages/TurmasEditar";
-import Turmas from "./pages/Turmas";
 import Home from "./pages/Home";
+import MateriaCadastrar from "./pages/MateriaCadastrar";
+import MateriaListar from "./pages/MateriaListar";
+import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 
 function App() {
@@ -46,7 +49,6 @@ function App() {
         </Layout>
       } />
     </Routes >
-
 
   );
 }
