@@ -25,8 +25,8 @@ export default function TurmasSimulados() {
     const loadTurma = async () => {
         try {
             const res = await getOne(id);
-
-            setTurma(res.data);
+        
+            setTurma(res.data.turma);
 
         } catch (e) {
 
