@@ -1,11 +1,13 @@
 import React from 'react'
 import Style from "../styles/Header.module.css";
+import logo from "../imgs/logo.svg";
 
 export default function Header({ userName }) {
     return (
         <header className={Style.header}>
             <a className={Style.headerLink} href="/">
-                <img src="../src/imgs/logo.svg" alt="Logo" className={Style.headerLogo} /> NotasMax
+                <img src={logo} alt="Logo" className={Style.headerLogo} />
+                NotasMax
             </a>
             <div className={Style.headerElements}>
                 <a href='#' className={Style.headerNotification}>
@@ -17,9 +19,9 @@ export default function Header({ userName }) {
                 <span className={Style.headerUserName}>{userName || "Usuário"}</span>
                 <a href='#' className={Style.headerLogout}>
                     <svg className={Style.headerLogoutIcon} width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path className={Style.headerLogoutIconDoor} d="M3 1H10.5498C11.6311 1 12.5165 1.85963 12.5488 2.94043L12.9082 14.9404C12.9418 16.0677 12.037 16.9999 10.9092 17H3C1.89543 17 1 16.1046 1 15V3C1 1.89543 1.89543 1 3 1Z"  strokeWidth="2" />
+                        <path className={Style.headerLogoutIconDoor} d="M3 1H10.5498C11.6311 1 12.5165 1.85963 12.5488 2.94043L12.9082 14.9404C12.9418 16.0677 12.037 16.9999 10.9092 17H3C1.89543 17 1 16.1046 1 15V3C1 1.89543 1.89543 1 3 1Z" strokeWidth="2" />
                         <path d="M8.5 8.5H16" stroke="white" strokeWidth="4" />
-                        <path className={Style.headerLogoutIconArrow} fillRule="evenodd" clipRule="evenodd" d="M15.3081 3.68306C15.5521 3.43898 15.9479 3.43898 16.1919 3.68306L20.5669 8.05806C20.811 8.30214 20.811 8.69786 20.5669 8.94194L16.1919 13.3169C15.9479 13.561 15.5521 13.561 15.3081 13.3169C15.064 13.0729 15.064 12.6771 15.3081 12.4331L18.6161 9.125H8.875C8.52982 9.125 8.25 8.84518 8.25 8.5C8.25 8.15482 8.52982 7.875 8.875 7.875H18.6161L15.3081 4.56694C15.064 4.32286 15.064 3.92714 15.3081 3.68306Z"/>
+                        <path className={Style.headerLogoutIconArrow} fillRule="evenodd" clipRule="evenodd" d="M15.3081 3.68306C15.5521 3.43898 15.9479 3.43898 16.1919 3.68306L20.5669 8.05806C20.811 8.30214 20.811 8.69786 20.5669 8.94194L16.1919 13.3169C15.9479 13.561 15.5521 13.561 15.3081 13.3169C15.064 13.0729 15.064 12.6771 15.3081 12.4331L18.6161 9.125H8.875C8.52982 9.125 8.25 8.84518 8.25 8.5C8.25 8.15482 8.52982 7.875 8.875 7.875H18.6161L15.3081 4.56694C15.064 4.32286 15.064 3.92714 15.3081 3.68306Z" />
                     </svg>
 
                 </a>

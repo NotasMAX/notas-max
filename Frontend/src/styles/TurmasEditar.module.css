@@ -1,0 +1,49 @@
+.TurmasEditarHeader {
+     @apply text-[2.125rem] font-bold font-inter mb-6;
+}
+
+
+.TurmaDadosContainer {
+     @apply flex space-x-[1rem] text-[1.25rem] font-medium font-inter text-[#404040] mb-6;
+}
+
+.TurmaDados {
+     @apply border px-[1rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-sm;
+}
+
+.TurmaContainerHeader {
+     @apply mb-3 flex justify-between items-center;
+}
+
+.TurmaContainerTitle {
+     @apply text-[1.5625rem] font-bold font-inter;
+}
+
+.TurmaContainerButton {
+     @apply border px-[0.5rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-sm;
+}
+
+
+.TurmaContainerButtonIcon {
+     @apply fill-[#404040] h-[1.25rem] w-auto cursor-pointer;
+}
+
+.TurmaContainerButton:hover {
+     @apply bg-[#15538E];
+}
+
+.TurmaContainerButton:hover .TurmaContainerButtonIcon {
+     @apply fill-white;
+}
+
+.TurmaContainerDados {
+     @apply border px-[0.5rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-md mb-6 overflow-y-scroll h-[21.875rem];
+}
+
+.buttonBack {
+     @apply bg-[#1C86EB] text-white px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-solid text-[1.25rem] float-right mb-2;
+}
+
+.buttonBack:hover {
+     @apply bg-[#15538E];
+}

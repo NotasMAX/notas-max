@@ -41,5 +41,6 @@ module.exports = {
       'screen': '100vw',
     }
   },
-  plugins: [],
+  plugins: [
+  ],
 }
