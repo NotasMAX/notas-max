@@ -108,7 +108,7 @@ export default class SimuladosController {
 
     static async findSimuladoByDisciplinaId(id) {
         return await Simulado.find({
-            disciplina_id: id
+            "conteudos.turma_disciplina_id": id
         });;
     }
 }
