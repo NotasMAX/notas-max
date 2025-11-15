@@ -21,12 +21,12 @@ routes.get("/Usuarios/Alunos", UsuariosController.getAllAlunos);
 routes.get("/Usuarios/Professores", UsuariosController.getAllProfessores);
 routes.get("/Usuarios/:id", UsuariosController.getOne);
 
-routes.post("/Materias/Cadastrar", MateriasController.create); //Somente para testes
-routes.get("/Materias", MateriasController.getAll);
-routes.get("/Materia/:id", MateriasController.getOne);
+routes.post("/Materias/Cadastrar", MateriasController.criarMateria);
+routes.get("/Materias", MateriasController.listarMaterias);
+routes.get("/Materia/:id", MateriasController.buscarMateriaPorId);
+routes.put("/Materias/Editar/:id", MateriasController.editarMateria);
 routes.get("/Materias/Buscar", MateriasController.getMateriaByName);
 
-routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
 routes.delete("/Turmas/Remover/Disciplina", TurmaDisciplinasController.remove);
 
 export default routes;

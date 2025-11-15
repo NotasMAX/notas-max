@@ -3,7 +3,7 @@ import Style from "../styles/TurmasDisciplinaForm.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
 import { InputText } from 'primereact/inputtext';
 import { getProfessores, buscarProfessoresPorNomeOuEmail } from '../api/usuariosapi';
-import { getAllMaterias, buscarMateriasPorNome } from '../api/materiasapi';
+import { listarMaterias, buscarMateriasPorNome } from '../api/materiaApi';
 import { addDisciplina } from '../api/turmasapi';
 
 export default function TurmaDisciplinaForm({ initialData, onSubmit, toast, turma, overlayRef }) {
@@ -27,7 +27,7 @@ export default function TurmaDisciplinaForm({ initialData, onSubmit, toast, turm
             setLoading(false);
         });
 
-        getAllMaterias().then(response => {
+        listarMaterias().then(response => {
             setMaterias(response.data.materias);
         }).catch(error => {
             console.error("Erro ao buscar matérias:", error);
@@ -82,7 +82,7 @@ export default function TurmaDisciplinaForm({ initialData, onSubmit, toast, turm
                 });
         }
         else {
-            getAllMaterias().then(response => {
+            listarMaterias().then(response => {
                 setMaterias(response.data.materias);
             }).catch(error => {
                 console.error("Erro ao buscar matérias:", error);

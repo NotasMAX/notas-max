@@ -2,7 +2,7 @@ import Materia from '../Models/Materia.js';
 
 import { Types } from 'mongoose';
 
-export default class MateriaController {
+export default class MateriasController {
 
     static async criarMateria(req, res) {
         const { nome } = req.body;
@@ -23,7 +23,7 @@ export default class MateriaController {
     static async listarMaterias(req, res) {
         try {
             const materias = await Materia.find().sort({ nome: 1 });
-            res.status(200).json(materias);
+            res.status(200).json({materias});
         } catch (error) {
             res.status(500).json({ message: "Erro ao listar materias", error: error.message });
         }
@@ -72,11 +72,10 @@ export default class MateriaController {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
-            const materias = await Materias.find({ nome: { $regex: text, $options: "i" } }).sort("nome");
+            const materias = await Materia.find({ nome: { $regex: text, $options: "i" } }).sort("nome");
             res.status(200).json({ materias });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar a Matéria", error });
         }
     }
 }
-}// fim do materiaController

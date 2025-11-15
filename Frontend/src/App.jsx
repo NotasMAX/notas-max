@@ -43,13 +43,30 @@ function App() {
         </Layout>
       } />
 
-         <Route path="/Simulados" element={
+      <Route path="/Simulados" element={
         <Layout>
           <Simulados />
         </Layout>
       } />
-    </Routes >
 
+      <Route path="/Materias/Cadastrar" element={
+        <Layout>
+          <MateriaCadastrar />
+        </Layout>
+      } />
+
+      <Route path="/Materias" element={
+        <Layout>
+          <MateriaListar />
+        </Layout>
+      } />
+
+      <Route path="/Materias/Editar/:id" element={
+        <Layout>
+          <MateriaEditar />
+        </Layout>
+      } />
+    </Routes >
   );
 }
 
