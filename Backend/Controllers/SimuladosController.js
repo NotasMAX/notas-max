@@ -22,6 +22,11 @@ export default class SimuladosController {
             return res.status(422).json({ message: "Informe a data de realização" });
         if (!turma_id)
             return res.status(422).json({ message: "Informe a turma" });
+
+        const existingSimulado = await Simulado.findOne({ numero, bimestre, turma_id });
+        if (existingSimulado) {
+            return res.status(422).json({ message: "Já existe um simulado com este número e bimestre para a turma" });
+        }
         if (!conteudos || conteudos.length <= 0)
             return res.status(422).json({ message: "Informe as disciplinas." });
 

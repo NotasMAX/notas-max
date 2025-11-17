@@ -4,6 +4,7 @@ import SimuladosForm from '../components/SimuladosForm';
 import { useState, useEffect } from 'react';
 import Style from '../styles/SimuladosCadastrar.module.css';
 import { cadastrarSimulado } from '../api/simuladoApi';
+import { Toast } from 'primereact/toast';
 
 export default function SimuladosCadastrar() {
 
@@ -19,7 +20,10 @@ export default function SimuladosCadastrar() {
             const result = await cadastrarSimulado(formData);
             navigate(`/Simulados`, { replace: true, state: { message: result.data?.message || 'Simulado cadastrado com sucesso', type: 'success' } });
         } catch (error) {
-            console.log(error.response.data);
+           setResponse({
+                success: false,
+                message: error.response?.data?.message || 'Erro ao cadastrar simulado'
+            });
         }
     };
 
