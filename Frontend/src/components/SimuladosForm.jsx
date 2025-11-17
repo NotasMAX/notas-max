@@ -22,7 +22,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const removeDisciplina = (disciplinaToRemove) => {
         setFormData(prevData => ({
             ...prevData,
-            conteudos: prevData.conteudos.filter(disciplina => disciplina._id !== disciplinaToRemove._id)
+            conteudos: prevData.conteudos.filter(conteudo => conteudo.turma_disciplina_id !== disciplinaToRemove.turma_disciplina_id)
         }));
         if (toast && toast.current) {
             toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Disciplina excluída com sucesso', life: 3000 });
