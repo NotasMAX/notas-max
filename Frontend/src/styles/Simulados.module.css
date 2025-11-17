@@ -7,11 +7,11 @@
 }
 
 .SimuladosContainer {
-     @apply flex justify-between mb-6 lg:flex-row flex-col;
+     @apply flex justify-between mb-6 lg:flex-row flex-col lg:items-center;
 }
 
 .LinkCadastrar {
-     @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[20rem] h-[3.0625rem];
+     @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[20rem] h-[3.0625rem] lg:mt-[17px];
 }
 
 .LinkCadastrar:hover {
@@ -31,11 +31,15 @@
 }
 
 .formContainer {
-     @apply flex flex-col justify-between mb-[2rem] lg:flex-row;
+  @apply flex flex-col h-fit;
+}
+
+.formLabel {
+  @apply block text-sm font-medium sm:mt-4 lg:mt-0;
 }
 
 .formSelectContainerBimestre {
-     @apply relative w-[11rem] mt-4 lg:mt-0 lg:mr-4;
+     @apply relative w-[11rem] lg:mt-0 lg:mr-4;
 }
 
 .formSelectContainerBimestre .formSelect {
@@ -43,7 +47,7 @@
 }
 
 .formSelectContainer {
-     @apply relative w-[9rem] mt-4 lg:mt-0 lg:mr-4;
+     @apply relative w-[9rem] lg:mt-0 lg:mr-4;
 }
 
 .formSelectContainer:last-child {
