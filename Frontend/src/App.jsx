@@ -9,6 +9,7 @@ import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
+import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 
 function App() {
   return (
@@ -56,6 +57,12 @@ function App() {
         </Layout>
       } />
 
+      <Route path="/Simulados/Cadastrar" element={
+        <Layout>
+          <SimuladosCadastrar />
+        </Layout>
+      } />
+
       <Route path="/Simulados/:id" element={
         <Layout>
           <Simulados />
@@ -79,6 +86,7 @@ function App() {
           <MateriaEditar />
         </Layout>
       } />
+
     </Routes >
   );
 }

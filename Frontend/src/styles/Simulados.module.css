@@ -34,6 +34,14 @@
      @apply flex flex-col justify-between mb-[2rem] lg:flex-row;
 }
 
+.formSelectContainerBimestre {
+     @apply relative w-[11rem] mt-4 lg:mt-0 lg:mr-4;
+}
+
+.formSelectContainerBimestre .formSelect {
+     @apply w-[11rem];
+}
+
 .formSelectContainer {
      @apply relative w-[9rem] mt-4 lg:mt-0 lg:mr-4;
 }
@@ -54,4 +62,3 @@
 .formSelectArrow {
      @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
 }
-
