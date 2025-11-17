@@ -13,7 +13,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         bimestre: 0,
         data_realizacao: "",
         turma_id: "",
-        Disciplinas: [],
+        conteudos: [],
     });
     const navigate = useNavigate();
     const [Turmas, setTurmas] = useState([]);
@@ -22,7 +22,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const removeDisciplina = (disciplinaToRemove) => {
         setFormData(prevData => ({
             ...prevData,
-            Disciplinas: prevData.Disciplinas.filter(disciplina => disciplina._id !== disciplinaToRemove._id)
+            conteudos: prevData.conteudos.filter(disciplina => disciplina._id !== disciplinaToRemove._id)
         }));
         if (toast && toast.current) {
             toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Disciplina excluída com sucesso', life: 3000 });
@@ -61,11 +61,11 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                 toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'A turma selecionada não possui disciplinas.', life: 3000 });
                 return;
             }
-            const newDisciplinas = [];
+            const newConteudos = [];
             response.data.turma.disciplinas.forEach(element => {
-                newDisciplinas.push(
+                newConteudos.push(
                     {
-                        _id: element._id,
+                        turma_disciplina_id: element._id,
                         materia: element.materia,
                         professor: element.professor,
                         quantidade_questoes: 0,
@@ -75,9 +75,9 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             });
             setFormData(prevData => ({
                 ...prevData,
-                Disciplinas: newDisciplinas
+                conteudos: newConteudos
             }));
-            if (JSON.stringify(oldFormData.Disciplinas) !== JSON.stringify(newDisciplinas)) {
+            if (JSON.stringify(oldFormData.conteudos) !== JSON.stringify(newConteudos)) {
                 if (toast && toast.current) {
                     toast.current.show({ severity: 'success', summary: 'Aviso', detail: 'Disciplinas carregadas com sucesso', life: 3000 });
                 }
@@ -96,7 +96,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const handleChangeTurma = (e) => {
         const { name, value } = e.target;
         if (formData.turma_id !== value) {
-            if (formData.Disciplinas.length > 0 && formData.Disciplinas[0]._id) {
+            if (formData.conteudos.length > 0 && formData.conteudos[0]._id) {
                 confirmDialog({
                     message: 'Alterar a turma irá limpar as disciplinas selecionadas. Deseja continuar?',
                     header: 'Confirmação',
@@ -108,7 +108,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                         if (toast && toast.current) {
                             toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Turma alterada com sucesso', life: 3000 });
                         }
-                        setFormData(prevData => ({ ...prevData, [name]: value, Disciplinas: [] }));
+                        setFormData(prevData => ({ ...prevData, [name]: value, conteudos: [] }));
                     },
                     reject: () => {
                         if (toast && toast.current) {
@@ -118,7 +118,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                 });
             }
             else {
-                setFormData(prevData => ({ ...prevData, [name]: value, Disciplinas: [] }));
+                setFormData(prevData => ({ ...prevData, [name]: value, conteudos: [] }));
             }
         };
     };
@@ -136,11 +136,10 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     };
 
     const handleSubmit = (e) => {
-        console.log('Submitting form data:', formData);
         e.preventDefault();
         let questoesValidas = true;
         let pesosValidos = true;
-        formData.Disciplinas.forEach(element => {
+        formData.conteudos.forEach(element => {
             if (element.quantidade_questoes <= 0) {
                 questoesValidas = false;
             }
@@ -149,15 +148,58 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             }
         });
         if (!questoesValidas) {
-            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Todas as disciplinas devem ter uma quantidade de questões maior que zero.', life: 3000 });
+            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Todas as disciplinas devem ter uma quantidade de questões maior que zero.', life: 5000 });
         }
         if (!pesosValidos) {
-            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Todas as disciplinas devem ter um peso maior que zero.', life: 3000 });
+            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Todas as disciplinas devem ter um peso maior que zero.', life: 5000 });
         }
-        if (!questoesValidas || !pesosValidos) {
+        if (!formData.turma_id) {
+            const input_turma_id = document.getElementById("input_turma_id");
+            if (input_turma_id) {
+                input_turma_id.focus();
+                input_turma_id.reportValidity();
+            }
             return;
         }
-        // onSubmit(formData);
+        if (!formData.bimestre) {
+            const input_bimestre = document.getElementById("input_bimestre");
+            if (input_bimestre) {
+                input_bimestre.focus();
+                input_bimestre.reportValidity();
+            }
+            return;
+        }
+        if (!formData.tipo) {
+            const input_tipo = document.getElementById("input_tipo");
+            if (input_tipo) {
+                input_tipo.focus();
+                input_tipo.reportValidity();
+            }
+            return;
+        }
+        if (!formData.numero) {
+            const input_numero = document.getElementById("input_numero");
+            if (input_numero) {
+                input_numero.focus();
+                input_numero.reportValidity();
+            }
+            return;
+        }
+        if (!formData.data_realizacao) {
+            const input_data_realizacao = document.getElementById("input_data_realizacao");
+            if (input_data_realizacao) {
+                input_data_realizacao.focus();
+                input_data_realizacao.reportValidity();
+            }
+            return;
+        }
+        if (formData.conteudos.length === 0) {
+            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Adicione pelo menos uma disciplina.', life: 5000 });
+        }
+        if (!formData.turma_id || !formData.bimestre || !formData.tipo || !formData.numero || !formData.data_realizacao || formData.conteudos.length === 0 || !questoesValidas || !pesosValidos) {
+            return;
+        }
+        onSubmit(formData);
     };
 
     const handleAddDisciplina = (e, type) => {
@@ -179,6 +221,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     <div className={Style.formSelectContainerLarge}>
                         <select
                             required
+                            id="input_turma_id"
                             name="turma_id"
                             value={String(formData.turma_id)}
                             className={Style.formSelect}
@@ -198,6 +241,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     <div className={Style.formSelectContainerLarge}>
                         <select
                             required
+                            id="input_bimestre"
                             name="bimestre"
                             value={String(formData.bimestre)}
                             className={Style.formSelect}
@@ -219,16 +263,17 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     <div className={Style.formSelectContainerLarge}>
                         <select
                             required
+                            id="input_tipo"
                             name="tipo"
                             value={String(formData.tipo)}
                             className={Style.formSelect}
                             onChange={handleChange}
                         >
                             <option className={Style.formOption} value=""> Tipo</option>
-                            <option className={Style.formOption} key="dissertativo" value="Dissertativo">
+                            <option className={Style.formOption} key="dissertativo" value="dissertativo">
                                 Dissertativo
                             </option>
-                            <option className={Style.formOption} key="objetivo" value="Objetivo">
+                            <option className={Style.formOption} key="objetivo" value="objetivo">
                                 Objetivo
                             </option>
                         </select>
@@ -240,7 +285,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                         <select
                             required
                             className={Style.formSelect}
-                            id="numero" name="numero"
+                            id="input_numero" name="numero"
                             value={formData.numero}
                             onChange={handleChange}>
                             <option className={Style.formOption} value=""> Numeração</option>
@@ -258,6 +303,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                         <input
                             type="date"
                             required
+                            id="input_data_realizacao"
                             name="data_realizacao"
                             value={formData.data_realizacao}
                             className={Style.formInput}
@@ -299,14 +345,14 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                         <div className={Style.ContainerDisciplinasColAcoes}>
                         </div>
                     </div>
-                    {formData.Disciplinas.length === 0 || !formData.Disciplinas[0]._id ? (
+                    {formData.conteudos.length === 0 || !formData.conteudos[0].turma_disciplina_id ? (
                         <div className={Style.ContainerDisciplinasEmpty}>
                             Nenhuma disciplina adicionada.
                         </div>
                     ) : (
-                        [...formData.Disciplinas].sort((a, b) => (a.materia.nome || '').localeCompare(b.materia.nome || '')).map((disciplina, index) => (
+                        [...formData.conteudos].sort((a, b) => (a.materia.nome || '').localeCompare(b.materia.nome || '')).map((disciplina, index) => (
                             <SimuladosDisciplinaItem
-                                key={disciplina._id || index}
+                                key={disciplina.turma_disciplina_id || index}
                                 disciplina={disciplina}
                                 removeDisciplina={removeDisciplina}
                             />

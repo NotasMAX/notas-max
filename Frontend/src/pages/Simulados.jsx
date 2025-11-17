@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef, use } from 'react';
-// import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Style from '../styles/Simulados.module.css';
-// import TurmasPesquisarForm from '../components/TurmasPesquisarForm';
-// import TurmaItem from '../components/TurmaItem';
 import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
 import { getAllTurmas, getTurmasPorAno } from '../api/turmasapi';
@@ -14,8 +12,13 @@ export default function Simulados(initialData, onSubmit) {
         bimestre: 0,
     });
     let firstLoad = true;
+    const toast = useRef(null);
+    const toastShown = useRef(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
+        document.title = `NotasMAX - Simulados`;
         if (firstLoad) {
             setFormData({
                 ano: new Date().getFullYear(),
@@ -23,6 +26,17 @@ export default function Simulados(initialData, onSubmit) {
                 bimestre: 1,
             });
             firstLoad = false;
+        }
+        if (location.state && !toastShown.current) {
+            const { message, type } = location.state;
+            if (message && type === 'success') {
+                if (toast && toast.current) {
+                    toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message, life: 3000 });
+                    toastShown.current = true;
+                }
+            }
+            ;
+            window.history.replaceState({}, '')
         }
     }, []);
 
@@ -36,6 +50,7 @@ export default function Simulados(initialData, onSubmit) {
 
     return (
         <div>
+            <Toast ref={toast} />
             <h2 className={Style.SimuladosHeader}>Simulados</h2>
             <p className={Style.SimuladosAlert}>A alteração dos simulados pode ser feita até 15 dias após a sua criação.</p>
             <div className={Style.SimuladosContainer}>

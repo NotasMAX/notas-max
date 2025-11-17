@@ -7,7 +7,7 @@ const api = axios.create({
     }
 })
 
-export const cadastrarSimulado = (payload) => api.post('/Simulados/Create', payload);
+export const cadastrarSimulado = (payload) => api.post('/Simulado/Create', payload);
 export const getOne = (id) => api.get(`/Simulados/${id}`);
 export const getAll = () => api.get('/Simulados');
 export const getTurma = (id) => api.get(`/Turma/Simulado/${id}`)

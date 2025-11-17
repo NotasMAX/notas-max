@@ -1,26 +1,25 @@
 
 import { useNavigate } from 'react-router-dom';
 import SimuladosForm from '../components/SimuladosForm';
-// import { cadastrarTurma } from '../api/turmasapi';
 import { useState, useEffect } from 'react';
 import Style from '../styles/SimuladosCadastrar.module.css';
+import { cadastrarSimulado } from '../api/simuladoApi';
 
 export default function SimuladosCadastrar() {
 
-    // useEffect(() => {
-    //     document.title = 'NotasMAX - Cadastrar Simulado';
-    // }, []);
+    useEffect(() => {
+        document.title = 'NotasMAX - Cadastrar Simulado';
+    }, []);
 
     const navigate = useNavigate();
     const [response, setResponse] = useState(null);
 
     const handleCreate = async (formData) => {
-
         try {
-            const result = await cadastrarTurma(formData);
-            navigate(`/Turmas/${formData.ano}`, { replace: true, state: { message: result.data?.message || 'Turma cadastrada com sucesso', type: 'success' } });
+            const result = await cadastrarSimulado(formData);
+            navigate(`/Simulados`, { replace: true, state: { message: result.data?.message || 'Simulado cadastrado com sucesso', type: 'success' } });
         } catch (error) {
-            setResponse(error.response.data);
+            console.log(error.response.data);
         }
     };
 
