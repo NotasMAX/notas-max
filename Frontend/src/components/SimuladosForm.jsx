@@ -104,7 +104,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const handleChangeTurma = (e) => {
         const { name, value } = e.target;
         if (formData.turma_id !== value) {
-            if (formData.conteudos.length > 0 && formData.conteudos[0]._id) {
+            if (formData.conteudos.length > 0 && formData.conteudos[0].turma_disciplina_id) {
                 confirmDialog({
                     message: 'Alterar a turma irá limpar as disciplinas selecionadas. Deseja continuar?',
                     header: 'Confirmação',
