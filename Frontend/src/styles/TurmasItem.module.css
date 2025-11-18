@@ -1,0 +1,27 @@
+.TurmaContainer {
+    @apply w-[21.87rem] h-[12.25rem] border border-solid rounded-[1.25rem] border-gray-300 shadow-md bg-white mb-6 transition-transform duration-200 cursor-pointer relative
+}
+
+.TurmaContainer:hover{
+    @apply scale-x-105 scale-y-105 shadow-lg ;
+}
+
+.TurmaContainerHeaderYellow {
+    @apply bg-[#FAC239] h-6 w-full  h-[5rem] flex items-center justify-end rounded-[1.20rem] rounded-b-none;
+}
+
+.TurmaContainerHeaderBlue {
+    @apply bg-[#1E3A8A] h-6 w-full  h-[5rem] flex items-center justify-end rounded-[1.20rem] rounded-b-none	 ;
+}
+
+.TurmaContainerEditIcon{
+    @apply h-[2.375rem] w-auto fill-white pr-[1.25rem] cursor-pointer  hover:scale-x-110 hover:scale-y-110 absolute right-0 top-[1.3125rem];
+}
+
+.TurmaContainerBody{
+    @apply flex justify-center items-center h-[7.25rem];
+}
+
+.TurmaContainerSerie{
+    @apply text-[3rem] font-bold font-inter;
+}
