@@ -123,7 +123,6 @@ export default function Navigation({ }) {
                         Alunos
                     </div>
                 </NavLink>
-
             </nav >
         </div>
     )

@@ -1,0 +1,7 @@
+.TurmasCadastrarContainer{
+     
+}
+
+.TurmasCadastrarTitle {
+     @apply text-[2.125rem] font-bold font-inter mb-6 ;
+}

@@ -17,7 +17,7 @@ export default function MateriaListar() {
 		const fetchMaterias = async () => {
 			try {
 				const res = await listarMaterias();
-				if (mounted) setMaterias(res.data || []);
+				if (mounted) setMaterias(res.data.materias || []);
 			} catch (err) {
 				console.error('Erro ao buscar matérias:', err);
 				if (mounted) setError('Erro ao carregar matérias.');

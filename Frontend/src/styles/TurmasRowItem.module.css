@@ -1,0 +1,22 @@
+
+.TurmaContainerRow {
+     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-11 items-center gap-[1rem] mb-1;
+     grid-template-columns: 5fr 5fr 1.5rem;
+}
+
+.TurmaContainerRow:last-child {
+     @apply mb-0;
+}
+
+.TurmaContainerCol {
+     @apply text-[1.25rem] font-medium font-inter text-[#404040] whitespace-nowrap w-full overflow-hidden text-ellipsis;
+}
+
+.TurmaContainerColExcluir {
+     @apply float-right flex items-center justify-end;
+}
+
+.TurmaContainerColIcon {
+     @apply fill-[#B50909] h-[1.5rem] w-auto cursor-pointer float-right hover:scale-125 transition-transform duration-200;
+
+}

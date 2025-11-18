@@ -1,20 +1,39 @@
 import { Router } from "express";
 import TurmasController from "../Controllers/TurmasController.js";
-import materiaController from "../Controllers/materiaController.js";
+import TurmaDisciplinasController from "../Controllers/TurmaDisciplinasController.js";
+import UsuariosController from "../Controllers/UsuariosController.js";
+import MateriasController from "../Controllers/MateriasController.js";
+import SimuladosController from '../Controllers/SimuladosController.js';
+
 
 const routes = Router();
 
 //rotas de Turmas
 routes.get("/Turmas", TurmasController.getAll);
 routes.get("/Turma/:id", TurmasController.getOne);
-
+routes.get("/Turmas/Pesquisar/:ano", TurmasController.getByAno);
 routes.post("/Turmas/Cadastrar", TurmasController.create);
+routes.patch("/Turmas/Adicionar/Aluno", TurmasController.addAluno);
+routes.delete("/Turmas/Remover/Aluno", TurmasController.removeAluno);
+routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
+routes.delete("/Turmas/Remover/Disciplina", TurmaDisciplinasController.remove);
 
-//rotas de Materias
-routes.post("/Materias/Cadastrar", materiaController.criarMateria);
+routes.post("/Usuarios/CadastrarAluno", UsuariosController.createAluno); //Somente para testes
+routes.get("/Usuarios/Buscar/Alunos", UsuariosController.getAlunoByNameOrEmail);
+routes.get("/Usuarios/Buscar/Professores", UsuariosController.getProfessorByNameOrEmail);
+routes.get("/Usuarios/Alunos", UsuariosController.getAllAlunos); 
+routes.get("/Usuarios/Professores", UsuariosController.getAllProfessores);
+routes.get("/Usuarios/:id", UsuariosController.getOne);
 
-routes.get("/Materias", materiaController.listarMaterias);
-routes.get("/Materias/:id", materiaController.buscarMateriaPorId);
-routes.put("/Materias/Editar/:id", materiaController.editarMateria);
+routes.post("/Materias/Cadastrar", MateriasController.criarMateria);
+routes.get("/Materias", MateriasController.listarMaterias);
+routes.get("/Materia/:id", MateriasController.buscarMateriaPorId);
+routes.put("/Materias/Editar/:id", MateriasController.editarMateria);
+routes.get("/Materias/Buscar", MateriasController.getMateriaByName);
+
+routes.post('/Simulado/Create', SimuladosController.create);
+routes.get('/Simulado/:id', SimuladosController.getOne);
+routes.get('/Simulados', SimuladosController.getAll);
+routes.get('/Turma/Simulado/:id', SimuladosController.getTurma);
 
 export default routes;

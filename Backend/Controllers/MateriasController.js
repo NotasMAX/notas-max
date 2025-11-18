@@ -1,8 +1,8 @@
 import Materia from '../Models/Materia.js';
 
-import {Types} from 'mongoose';
+import { Types } from 'mongoose';
 
-export default class materiaController {
+export default class MateriasController {
 
     static async criarMateria(req, res) {
         const { nome } = req.body;
@@ -22,8 +22,8 @@ export default class materiaController {
 
     static async listarMaterias(req, res) {
         try {
-            const materias = await Materia.find();
-            res.status(200).json(materias);
+            const materias = await Materia.find().sort({ nome: 1 });
+            res.status(200).json({materias});
         } catch (error) {
             res.status(500).json({ message: "Erro ao listar materias", error: error.message });
         }
@@ -65,4 +65,17 @@ export default class materiaController {
             res.status(500).json({ message: "Erro ao editar materia", error: error.message });
         }
     }// fim do editarMateria
-}// fim do materiaController
+
+    static async getMateriaByName(req, res) {
+        const { text } = req.query;
+        if (!text || typeof text !== 'string' || text.trim() === '') {
+            return res.status(422).json({ message: "Texto de busca inválido" });
+        }
+        try {
+            const materias = await Materia.find({ nome: { $regex: text, $options: "i" } }).sort("nome");
+            res.status(200).json({ materias });
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar a Matéria", error });
+        }
+    }
+}
