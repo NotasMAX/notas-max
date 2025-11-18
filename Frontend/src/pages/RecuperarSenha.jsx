@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "../styles/Login.module.css";
 import logo from "../imgs/logo.svg";
+import { Link } from "react-router-dom";
+
 
 export default function RecuperarSenha() {
   const [email, setEmail] = useState("");
@@ -13,11 +15,6 @@ export default function RecuperarSenha() {
       setMensagem("Por favor, insira seu e-mail institucional.");
       return;
     }
-
-    setTimeout(() => {
-      setMensagem("Um link de recuperação foi enviado para seu e-mail.");
-      setEmail("");
-    }, 1000);
   };
 
   return (
@@ -38,10 +35,8 @@ export default function RecuperarSenha() {
             placeholder="exemplo@email.com"
             required
           />
-
-          <button type="submit" className={styles.button}>
-            Enviar Link 
-          </button>
+<button type="submit" className={styles.button}>
+  <Link to="/reset-senha">Enviar Link</Link> </button>
         </form>
 
         <div className={styles.recover}>
