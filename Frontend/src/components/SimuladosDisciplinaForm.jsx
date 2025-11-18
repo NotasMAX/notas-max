@@ -26,6 +26,23 @@ export default function SimuladosDisciplinaForm({ initialData, onSubmit, toast, 
         fetch();
     }, [initialData]);
 
+    const handleChange = async (event) => {
+        const { name, value } = event.target;
+        setFormData(prevData => ({ ...prevData, [name]: value }));
+        if (event.target.value.trim() !== "") {
+
+            const filteredDisciplinas = Disciplinas.filter(disciplina => {
+                const materiaNome = disciplina.materia?.nome?.toLowerCase() || '';
+                const professorNome = disciplina.professor?.nome?.toLowerCase() || '';
+                const searchText = event.target.value.toLowerCase();
+                return materiaNome.includes(searchText) || professorNome.includes(searchText);
+            });
+            setDisciplinas(filteredDisciplinas);
+        }
+        else {
+            fetch();
+        }
+    }
 
     const handleClickDisciplina = (disciplina) => {
         confirmDialog({
@@ -58,7 +75,7 @@ export default function SimuladosDisciplinaForm({ initialData, onSubmit, toast, 
                 <InputText
                     type="text"
                     name="text"
-                    // onChange={handleChangeProfessor}
+                    onChange={handleChange}
                     value={formData.text}
                     placeholder="Digite o nome da disciplina ou do professor"
                     className={Style.SimuladosDisciplinaFormInput}
