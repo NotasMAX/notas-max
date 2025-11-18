@@ -42,7 +42,7 @@ export default function TurmasSimulados() {
 
             setError(null);
 
-            const res = await getByTurma(turma.id);
+            const res = await getByTurma(id);
 
             setSimulados(res.data.simulados);
         } catch (e) {
@@ -60,9 +60,10 @@ export default function TurmasSimulados() {
         if (id) {
             loadTurma();
             loadSimulados();
+
+            console.log(id)
         }
 
-        document.title = `NotasMAX - Lista de Simulados da turma ${turma.serie}º EM - Ano ${turma.ano}`;
     }, [id]);
 
 

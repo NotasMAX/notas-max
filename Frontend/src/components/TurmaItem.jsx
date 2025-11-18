@@ -5,7 +5,7 @@ import Style from "../styles/TurmasItem.module.css";
 export default function TurmaItem({ turma, position }) {
     return (
         <div className={Style.TurmaContainer}>
-            <a href={`/Turma/${turma._id}`}        >
+            <a href={`/Turmas/Simulado/${turma._id}`}        >
                 <div className={(position === 1) ? Style.TurmaContainerHeaderYellow : Style.TurmaContainerHeaderBlue}> </div>
                 <div className={Style.TurmaContainerBody}>
                     <div className={Style.TurmaContainerSerie}>{turma.serie}º EM</div>

@@ -9,6 +9,7 @@ import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
+import SimuladosAlunosList from "./pages/SimuladosAlunosList";
 
 function App() {
   return (
@@ -44,13 +45,13 @@ function App() {
         </Layout>
       } />
 
-      <Route path="Turmas/:id" element={
+      <Route path="Turmas/Simulado/:id" element={
         <Layout>
           <TurmasSimulados />
         </Layout>
       } />
 
-      <Route path="Turmas/Simulado/:id" element={
+      <Route path="Turmas/Simulado/Aluno/:id" element={
         <Layout>
           <SimuladosAlunosList />
         </Layout>

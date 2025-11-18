@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from "../styles/List.module.css";
-import Button from "../styles/Button.module.css";
+import Button from "../styles/ButtonGroup.module.css";
 
 export default function SimuladoAlunoItem({ alunoResultado, numerosQuestoes }) {
     return (

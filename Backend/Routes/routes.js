@@ -35,6 +35,5 @@ routes.post('/Simulado/Create', SimuladosController.create);
 routes.get('/Simulado/:id', SimuladosController.getOne);
 routes.get('/Simulados', SimuladosController.getAll);
 routes.get('/Turmas/ByTurma/:turma_id', SimuladosController.getByTurma);
-routes.get('/Turma/Simulado/:id', SimuladosController.getTurma);
 
 export default routes;

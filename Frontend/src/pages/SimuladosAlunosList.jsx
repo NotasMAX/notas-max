@@ -27,8 +27,7 @@ export default function SimuladosAlunosList() {
 
         fetchSimulado();
 
-        document.title = `NotasMAX - Lista de Alunos do Simulado ${simulado.numero}`;
-
+        console.log(simulado);
     }, []);
 
     return (
