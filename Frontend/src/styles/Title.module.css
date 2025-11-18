@@ -1,0 +1,7 @@
+.titlePage {
+    @apply text-4xl font-bold text-[#043666];
+}
+
+.subtitlePage{
+    @apply text-gray-800;
+}

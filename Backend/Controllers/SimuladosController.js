@@ -56,47 +56,95 @@ export default class SimuladosController {
 
     static async getOne(req, res) {
 
+        const id = req.params.id;
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+
         try {
 
-            const id = req.params.id;
-            const ObjectId = Types.ObjectId;
+            const simulado = await Simulado.aggregate([
+                { $match: { _id: new ObjectId(id) } },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: "$turma" },
+                {
+                    $lookup: {
+                        from: 'turmasdisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'disciplinas'
+                    }
+                },
+                { $unwind: "$disciplinas" },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.resultados.aluno_id',
+                        foreignField: '_id',
+                        as: 'alunos'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        numero: 1,
+                        tipo: 1,
+                        bimestre: 1,
+                        data_realizacao: 1,
+                        turma: {
+                            _id: 1,
+                            ano: 1,
+                            serie: 1,
+                        },
+                        alunos: {
+                            $map: {
+                                input: "$alunos",
+                                as: "aluno",
+                                in: {
+                                    _id: "$$aluno._id",
+                                    nome: "$$aluno.nome",
+                                    email: "$$aluno.email",
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
 
-            if (!ObjectId.isValid(id))
-                return res.status(422).json({ message: "Id de simulado invalido", id });
-
-            const simulado = await Simulado.findById(id);
-
-            if (!simulado)
+            if (!simulado || simulado.length === 0)
                 return res.status(404).json({ message: 'Simulado não encontrado...' });
 
-            res.status(200).json({ simulado });
+            const simuladoData = simulado[0];
+            res.status(200).json({ simulado: simuladoData });
 
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar simulado', error });
         }
     }
 
-    static async getTurma(req, res) {
+    static async getByTurma(req, res) {
+
+        const id = req.params.turma_id;
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+
         try {
-            const id = req.params.id;
-            const ObjectId = Types.ObjectId;
 
-            if (!ObjectId.isValid(id))
-                return res.status(422).json({ message: "Id de simulado invalido", id });
+            const simulados = await Simulado.find({ turma_id: id });
+            res.status(200).json({ simulados });
 
-            // pega o simulado só com turma_id
-            const simulado = await Simulado.findById(id).select('turma_id');
-            if (!simulado)
-                return res.status(404).json({ message: 'Simulado não encontrado...' });
-
-            // busca a turma e retorna apenas os alunos
-            const turma = await Turmas.findById(simulado.turma_id).select('alunos');
-            if (!turma)
-                return res.status(404).json({ message: 'Turma não encontrada...' });
-
-            return res.status(200).json({ alunos: turma.alunos });
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao buscar turma', error });
+            res.status(500).json({ message: 'Erro ao buscar simulado por turma', error });
         }
     }
 

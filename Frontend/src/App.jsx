@@ -44,9 +44,15 @@ function App() {
         </Layout>
       } />
 
-      <Route path="Turma/:id" element={
+      <Route path="Turmas/:id" element={
         <Layout>
           <TurmasSimulados />
+        </Layout>
+      } />
+
+      <Route path="Turmas/Simulado/:id" element={
+        <Layout>
+          <SimuladosAlunosList />
         </Layout>
       } />
 

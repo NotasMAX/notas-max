@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getAll } from '../api/simuladoApi.js';
+import { getByTurma } from '../api/simuladoApi.js';
 import { getOne } from '../api/turmasapi.js';
 import { useParams } from 'react-router-dom';
 import BimestreSections from '../components/BimestreSections.jsx';
+import BimestreAtual from '../components/BimestreAtual.jsx';
 import Style from '../styles/ButtonGroup.module.css';
 
 
@@ -25,7 +26,7 @@ export default function TurmasSimulados() {
     const loadTurma = async () => {
         try {
             const res = await getOne(id);
-        
+
             setTurma(res.data.turma);
 
         } catch (e) {
@@ -41,12 +42,9 @@ export default function TurmasSimulados() {
 
             setError(null);
 
-            const res = await getAll();
-            const lista = res.data.simulados || [];
-            const filtrados = id ? lista.filter(s => String(s.turma_id
-            ) === String(id)) : lista;
+            const res = await getByTurma(turma.id);
 
-            setSimulados(filtrados);
+            setSimulados(res.data.simulados);
         } catch (e) {
 
             setError(e.message || 'Erro ao carregar simulados');
@@ -63,6 +61,8 @@ export default function TurmasSimulados() {
             loadTurma();
             loadSimulados();
         }
+
+        document.title = `NotasMAX - Lista de Simulados da turma ${turma.serie}º EM - Ano ${turma.ano}`;
     }, [id]);
 
 

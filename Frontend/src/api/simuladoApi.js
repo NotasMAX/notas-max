@@ -10,6 +10,7 @@ const api = axios.create({
 export const cadastrarSimulado = (payload) => api.post('/Simulados/Create', payload);
 export const getOne = (id) => api.get(`/Simulados/${id}`);
 export const getAll = () => api.get('/Simulados');
-export const getTurma = (id) => api.get(`/Turma/Simulado/${id}`)
+export const getTurma = (id) => api.get(`/Turmas/Simulado/${id}`)
+export const getByTurma = (turma_id) => api.get(`/Turmas/ByTurma/${turma_id}`)
 
 export default api;

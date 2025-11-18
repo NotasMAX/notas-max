@@ -8,7 +8,7 @@ export default function BimestreSections({ simulados }) {
 
   const handleView = async (id) => {
 
-    navigate(`/Turma/Simulado/${id}`);
+    navigate(`/Turmas/Simulado/${id}`);
 
   }
 
