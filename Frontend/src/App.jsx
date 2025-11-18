@@ -57,15 +57,15 @@ function App() {
         </Layout>
       } />
 
+      <Route path="/Simulados/:bimestre/:ano/:serie?" element={
+        <Layout>
+          <Simulados />
+        </Layout>
+      }/>
+
       <Route path="/Simulados/Cadastrar" element={
         <Layout>
           <SimuladosCadastrar />
-        </Layout>
-      } />
-
-      <Route path="/Simulados/:id" element={
-        <Layout>
-          <Simulados />
         </Layout>
       } />
 
