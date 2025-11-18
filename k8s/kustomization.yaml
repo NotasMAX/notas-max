@@ -1,0 +1,54 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: default
+
+commonLabels:
+  app.kubernetes.io/name: notas-max
+  app.kubernetes.io/version: "1.0.0"
+
+commonAnnotations:
+  app.kubernetes.io/managed-by: kustomize
+  deployment.kubernetes.io/revision: "1"
+
+resources:
+  - configmap.yaml
+  - mongodb-deployment.yaml
+  - backend-deployment.yaml
+  - frontend-deployment.yaml
+  - ingress.yaml
+
+# Substituições de imagens
+images:
+  - name: notas-max-backend
+    newName: notas-max-backend
+    newTag: latest
+  - name: notas-max-frontend
+    newName: notas-max-frontend
+    newTag: latest
+
+# Configurações padrão
+vars:
+  - name: MONGODB_URL
+    objref:
+      kind: ConfigMap
+      name: backend-config
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.MONGODB_URL
+  - name: NODE_ENV
+    objref:
+      kind: ConfigMap
+      name: backend-config
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.NODE_ENV
+
+# Réplicas padrão (pode ser sobrescrito em overlays)
+replicas:
+  - name: mongodb
+    count: 1
+  - name: backend
+    count: 1
+  - name: frontend
+    count: 1
