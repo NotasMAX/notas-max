@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation, replace } from 'react-router-dom';
 import Style from '../styles/Simulados.module.css';
 import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
-import SimuladosPesquisarForm from '../components/SimuladoTurmasPesquisarForm';
+import SimuladosPesquisarForm from '../components/SimuladoPesquisarForm';
 
 
 export default function Simulados() {
@@ -12,7 +12,7 @@ export default function Simulados() {
         ano: anoURL,
         serie: serieURL,
     } = useParams();
-
+    const [Simulados, setSimulados] = useState([]);
     let firstLoad = true;
     const toast = useRef(null);
     const toastShown = useRef(false);
@@ -24,7 +24,7 @@ export default function Simulados() {
 
         if (firstLoad) {
             firstLoad = false;
-            if (!bimestre && !serie && !ano) {
+            if (!bimestreURL && !serieURL && !anoURL) {
                 const month = new Date().getMonth() + 1;
                 let currentBimestre;
                 let currentAno = new Date().getFullYear();
@@ -49,18 +49,17 @@ export default function Simulados() {
                     toastShown.current = true;
                 }
             }
-            ;
             window.history.replaceState({}, '')
         }
     }, []);
 
-    const handleChange = (data) => {
-        const { bimestre, ano, serie } = data;
-        let path = `/Simulados/${bimestre}/${ano}`;
-        if (serie && serie !== 0) {
-            path += `/${serie}`;
-        }
-        navigate(path, { replace: true });
+    useEffect(() => {
+        document.title = `NotasMAX - Simulados -` + (serieURL ? ` ${serieURL}º EM` : '') + ` - ${bimestreURL}º Bimestre ${anoURL}`;
+    }, [bimestreURL, anoURL, serieURL]);
+
+    const fetchSimulados = async () => {
+        // Fetch simulados from API based on bimestreURL, anoURL, serieURL
+        // and update the Simulados state
     }
 
     return (
@@ -80,7 +79,38 @@ export default function Simulados() {
                     ano: anoURL ? parseInt(anoURL) : 0,
                     serie: serieURL ? parseInt(serieURL) : 0,
                     bimestre: bimestreURL ? parseInt(bimestreURL) : 0,
-                }} onSubmit={handleChange} />
+                }} />
+            </div>
+            <div className={Style.SimuladoContainer}>
+                <div className={Style.ContainerHeader}>
+                    <div className={Style.ContainerCol}>
+                        Turma
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        Simulado
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        Tipo
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        Data Realização
+                    </div>
+                    <div className={Style.ContainerColAcoes}>
+                    </div>
+                </div>
+                {/* {formData.conteudos.length === 0 || !formData.conteudos[0].turma_disciplina_id ? (
+                    <div className={Style.ContainerEmpty}>
+                        Nenhuma disciplina adicionada.
+                    </div>
+                ) : (
+                    [...formData.conteudos].sort((a, b) => (a.materia.nome || '').localeCompare(b.materia.nome || '')).map((disciplina, index) => (
+                        <SimuladosDisciplinaItem
+                            key={disciplina.turma_disciplina_id || index}
+                            disciplina={disciplina}
+                            removeDisciplina={removeDisciplina}
+                        />
+                    ))
+                )} */}
             </div>
         </div>
     );

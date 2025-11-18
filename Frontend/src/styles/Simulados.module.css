@@ -29,3 +29,25 @@
 .SimuladosFilters {
      @apply flex flex-col lg:flex-row;
 }
+
+.SimuladoContainer {
+  @apply border pb-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-md mb-6 min-h-[21.875rem];
+}
+
+.ContainerHeader {
+  @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] mb-1 bg-[#F5F5F5] rounded-b-none;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1.5rem;
+}
+
+.ContainerCol {
+  @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block;
+}
+
+.ContainerColAcoes {
+  @apply w-full text-center text-[1.125rem] font-inter font-medium;
+}
+
+.ContainerRow {
+  @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] m-2;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1.5rem;
+}
