@@ -187,6 +187,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             const input_turma_id = document.getElementById("input_turma_id");
             if (input_turma_id) {
                 input_turma_id.focus();
+                input_turma_id.setCustomValidity("A turma é obrigatória.");
                 input_turma_id.reportValidity();
             }
             return;
@@ -195,6 +196,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             const input_bimestre = document.getElementById("input_bimestre");
             if (input_bimestre) {
                 input_bimestre.focus();
+                input_bimestre.setCustomValidity("O bimestre é obrigatório.");
                 input_bimestre.reportValidity();
             }
             return;
@@ -203,6 +205,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             const input_tipo = document.getElementById("input_tipo");
             if (input_tipo) {
                 input_tipo.focus();
+                input_tipo.setCustomValidity("O tipo é obrigatório.");
                 input_tipo.reportValidity();
             }
             return;
@@ -211,6 +214,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             const input_numero = document.getElementById("input_numero");
             if (input_numero) {
                 input_numero.focus();
+                input_numero.setCustomValidity("O número é obrigatório.");
                 input_numero.reportValidity();
             }
             return;
@@ -219,6 +223,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             const input_data_realizacao = document.getElementById("input_data_realizacao");
             if (input_data_realizacao) {
                 input_data_realizacao.focus();
+                input_data_realizacao.setCustomValidity("A data de realização é obrigatória.");
                 input_data_realizacao.reportValidity();
             }
             return;
