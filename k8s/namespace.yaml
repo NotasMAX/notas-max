@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: notas-max
-  labels:
-    name: notas-max

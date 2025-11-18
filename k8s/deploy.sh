@@ -1,70 +1,45 @@
 #!/bin/bash
-
-# Script para fazer deploy da aplicação no Kubernetes
-
 set -e
 
-echo "🚀 Iniciando deploy da aplicação NotasMax no Kubernetes..."
+echo "🚀 Deploy NotasMax - Kubernetes"
 
-# 1. Criar o cluster se não existir
-echo "📋 Verificando cluster Kind..."
-if ! kind get clusters | grep -q "kind"; then
-    echo "❌ Cluster 'kind' não encontrado. Criando..."
-    kind create cluster --name kind --config /home/evelyn/notas-max/k8s/kind-config.yaml
-else
-    echo "✅ Cluster 'kind' encontrado"
+# 1. Criar cluster se não existir
+if ! kind get clusters 2>/dev/null | grep -q "kind"; then
+    echo "📋 Criando cluster Kind..."
+    kind create cluster --name kind --config kind-config.yaml
 fi
 
-# 2. Configurar contexto
-echo "📝 Configurando contexto do kubectl..."
-kubectl config use-context kind-kind
+echo "✅ Cluster pronto"
 
-# 3. Construir imagens Docker
-echo "🏗️  Construindo imagens Docker..."
-cd /home/evelyn/notas-max
+# 2. Build das imagens
+echo "🏗️  Build Backend..."
+docker build -f ../Backend/dockerfile -t notas-max-backend:latest ../Backend > /dev/null 2>&1
 
-# Build Backend
-echo "Building backend image..."
-docker build -f Backend/dockerfile -t notas-max-backend:latest ./Backend
+echo "🏗️  Build Frontend..."
+docker build -f ../Frontend/dockerfile -t notas-max-frontend:latest ../Frontend > /dev/null 2>&1
 
-# Build Frontend
-echo "Building frontend image..."
-docker build -f Frontend/dockerfile -t notas-max-frontend:latest ./Frontend
+# 3. Carregar imagens
+echo "📦 Carregando imagens no Kind..."
+kind load docker-image notas-max-backend:latest --name kind > /dev/null 2>&1
+kind load docker-image notas-max-frontend:latest --name kind > /dev/null 2>&1
 
-# 4. Carregar imagens no Kind
-echo "📦 Carregando imagens no cluster Kind..."
-kind load docker-image notas-max-backend:latest --name kind
-kind load docker-image notas-max-frontend:latest --name kind
+# 4. Deploy
+echo "🔧 Aplicando configurações..."
+kubectl apply -f app.yaml
 
-# 5. Aplicar recursos Kubernetes
-echo "🔧 Aplicando recursos Kubernetes..."
-kubectl apply -f /home/evelyn/notas-max/k8s/configmap.yaml
-kubectl apply -f /home/evelyn/notas-max/k8s/mongodb-deployment.yaml
-kubectl apply -f /home/evelyn/notas-max/k8s/backend-deployment.yaml
-kubectl apply -f /home/evelyn/notas-max/k8s/frontend-deployment.yaml
+# 5. Aguardar
+echo "⏳ Aguardando pods ficarem prontos..."
+sleep 10
 
-# 6. Aguardar deployments ficarem prontos
-echo "⏳ Aguardando deployments ficarem prontos..."
-kubectl rollout status deployment/mongodb --timeout=5m
-kubectl rollout status deployment/backend --timeout=5m
-kubectl rollout status deployment/frontend --timeout=5m
-
-# 7. Mostrar status
+# 6. Verificar status
 echo ""
-echo "✅ Deploy concluído com sucesso!"
+echo "📊 Status dos Pods:"
+kubectl get pods
+
 echo ""
-echo "📊 Status dos recursos:"
-kubectl get pods -o wide
+echo "✅ Deploy concluído!"
 echo ""
-echo "🔗 Serviços disponíveis:"
-kubectl get svc
-echo ""
-echo "🌐 Acessos:"
+echo "🌐 Acesse a aplicação em:"
 echo "   Frontend: http://localhost:30080"
 echo "   Backend:  http://localhost:30005"
 echo "   MongoDB:  localhost:30017"
-echo ""
-echo "💡 Dicas úteis:"
-echo "   Ver logs: kubectl logs -f deployment/backend"
-echo "   Acessar pod: kubectl exec -it <pod-name> -- /bin/bash"
-echo "   Deletar tudo: kubectl delete -f /home/evelyn/notas-max/k8s/"
