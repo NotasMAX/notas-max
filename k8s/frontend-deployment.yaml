@@ -15,11 +15,6 @@ metadata:
     app: frontend
 spec:
   replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   selector:
     matchLabels:
       app: frontend
@@ -48,18 +43,6 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "300m"
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 5173
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 5173
-            initialDelaySeconds: 5
-            periodSeconds: 5
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -93,23 +76,3 @@ spec:
       targetPort: 5173
       nodePort: 30080
       protocol: TCP
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: frontend-hpa
-  namespace: default
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: frontend
-  minReplicas: 2
-  maxReplicas: 4
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 75
