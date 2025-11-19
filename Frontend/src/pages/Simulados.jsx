@@ -4,6 +4,7 @@ import Style from '../styles/Simulados.module.css';
 import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
 import SimuladosPesquisarForm from '../components/SimuladoPesquisarForm';
+import { findSimuladoByBimestreAnoSerie } from '../api/simuladoApi';
 
 
 export default function Simulados() {
@@ -55,11 +56,18 @@ export default function Simulados() {
 
     useEffect(() => {
         document.title = `NotasMAX - Simulados -` + (serieURL ? ` ${serieURL}º EM` : '') + ` - ${bimestreURL}º Bimestre ${anoURL}`;
+        fetchSimulados();
     }, [bimestreURL, anoURL, serieURL]);
 
     const fetchSimulados = async () => {
-        // Fetch simulados from API based on bimestreURL, anoURL, serieURL
-        // and update the Simulados state
+        try {
+            findSimuladoByBimestreAnoSerie(bimestreURL, anoURL, serieURL).then((response) => {
+                const data = response.data;
+                setSimulados(data.simulados || []);
+            });
+        } catch (error) {
+            console.error("Erro ao buscar simulados:", error);
+        }
     }
 
     return (
@@ -98,19 +106,36 @@ export default function Simulados() {
                     <div className={Style.ContainerColAcoes}>
                     </div>
                 </div>
-                {/* {formData.conteudos.length === 0 || !formData.conteudos[0].turma_disciplina_id ? (
+                {Simulados.length === 0 && (
                     <div className={Style.ContainerEmpty}>
-                        Nenhuma disciplina adicionada.
+                        Nenhum simulado encontrado.
                     </div>
-                ) : (
-                    [...formData.conteudos].sort((a, b) => (a.materia.nome || '').localeCompare(b.materia.nome || '')).map((disciplina, index) => (
-                        <SimuladosDisciplinaItem
-                            key={disciplina.turma_disciplina_id || index}
-                            disciplina={disciplina}
-                            removeDisciplina={removeDisciplina}
-                        />
-                    ))
-                )} */}
+                )}
+                {Simulados.map((simulado) => (
+                    <div key={simulado._id} className={Style.ContainerRow}>
+                        <div className={Style.ContainerCol}>
+                            {simulado.turma.serie}º EM
+                        </div>
+                        <div className={Style.ContainerCol}>
+                            {`Simulado Nº ${simulado.numero}`}
+                        </div>
+                        <div className={Style.ContainerCol}>
+                            {simulado.tipo}
+                        </div>
+                        <div className={Style.ContainerCol}>
+                            {new Date(simulado.data_realizacao).toLocaleDateString('pt-BR')}
+                        </div>
+                            <div className={Style.ContainerCol}>
+                            {new Date(simulado.createdAt).toLocaleDateString('pt-BR')}
+                        </div>
+                        <div className={Style.ContainerColAcoes}>
+                            <a href={`/Simulado/Detalhes/${simulado._id}`} className={Style.LinkDetails}>
+
+                                Detalhes
+                            </a>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

@@ -32,6 +32,7 @@ routes.put("/Materias/Editar/:id", MateriasController.editarMateria);
 routes.get("/Materias/Buscar", MateriasController.getMateriaByName);
 
 routes.post('/Simulado/Create', SimuladosController.create);
+routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie', SimuladosController.findSimuladoByBimestreAnoSerie);
 routes.get('/Simulado/:id', SimuladosController.getOne);
 routes.get('/Simulados', SimuladosController.getAll);
 routes.get('/Turma/Simulado/:id', SimuladosController.getTurma);

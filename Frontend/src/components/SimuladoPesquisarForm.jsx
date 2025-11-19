@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import Style from "../styles/SimuladosPesquisarForm.module.css";
 
@@ -9,6 +9,12 @@ export default function SimuladosPesquisarForm({ initialData, onSubmit }) {
         bimestre: 0,
     });
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData(initialData);
+        }
+    }, [initialData]);
 
     const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i);
 

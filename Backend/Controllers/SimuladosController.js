@@ -51,7 +51,7 @@ export default class SimuladosController {
         } catch (error) {
             res.status(500).json({ message: 'erro ao inserir simulado', error });
         }
-    }// fim create
+    }
 
     static async getAll(req, res) {
 
@@ -62,12 +62,10 @@ export default class SimuladosController {
             res.status(500).json({ message: 'Erro ao buscar simulados', error })
         }
 
-    }// fim getAll
+    }
 
     static async getOne(req, res) {
-
         try {
-
             const id = req.params.id;
             const ObjectId = Types.ObjectId;
 
@@ -120,5 +118,41 @@ export default class SimuladosController {
         return await Simulado.find({
             "conteudos.turma_disciplina_id": id
         });;
+    }
+
+    static async findSimuladoByBimestreAnoSerie(req, res) {
+        const { bimestre, ano, serie } = req.params;
+
+        const bimestreNum = Number(bimestre);
+        const anoNum = Number(ano);
+        const serieNum = serie !== undefined ? Number(serie) : null;
+
+        if (!bimestre || isNaN(bimestreNum) || bimestreNum <= 0)
+            return res.status(422).json({ message: "Informe um bimestre válido (número positivo)" });
+        if (!ano || isNaN(anoNum) || anoNum <= 0)
+            return res.status(422).json({ message: "Informe um ano válido (número positivo)" });
+
+        try {
+            if (serie !== "undefined") {
+                const simulados = await Simulado.aggregate([
+                    { $match: { bimestre: bimestreNum } },
+                    { $lookup: { from: 'turmas', localField: 'turma_id', foreignField: '_id', as: 'turma' } },
+                    { $unwind: '$turma' },
+                    { $match: { 'turma.serie': serieNum, 'turma.ano': anoNum } },
+                    { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } }
+                ]);
+                return res.status(200).json({ simulados });
+            }
+            const simulados = await Simulado.aggregate([
+                { $match: { bimestre: bimestreNum } },
+                { $lookup: { from: 'turmas', localField: 'turma_id', foreignField: '_id', as: 'turma' } },
+                { $unwind: '$turma' },
+                { $match: { 'turma.ano': anoNum } },
+                { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } }
+            ]);
+            return res.status(200).json({ simulados });
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar simulados", error });
+        }
     }
 }

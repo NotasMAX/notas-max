@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Style from "../styles/SimuladosForm.module.css";
 import { getAllTurmas, getOne } from "../api/turmasapi";
 import { Toast } from "primereact/toast";
-import { OverlayPanel } from 'primereact/overlaypanel';
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import SimuladosDisciplinaItem from "./SimuladosDisciplinaItem";
-import SimuladosDisciplinaForm from "./SimuladosDisciplinaForm";
 
 export default function SimuladosForm({ initialData, onSubmit, response }) {
     const [formData, setFormData] = useState(initialData || {
@@ -20,7 +18,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const navigate = useNavigate();
     const [Turmas, setTurmas] = useState([]);
     const toast = useRef(null);
-    const opDisciplinas = useRef(null);
 
     const removeDisciplina = (disciplinaToRemove) => {
         setFormData(prevData => ({
@@ -239,61 +236,29 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             return;
         }
         if (!error) {
-
-            onSubmit(formData);
+            const dataParts = formData.data_realizacao.split('-');
+            const dataCorrigida = new Date(dataParts[0], dataParts[1] - 1, dataParts[2], 0, 0, 0);
+            
+            const dataSubmit = {
+                ...formData,
+                data_realizacao: dataCorrigida.toISOString()
+            };
+            
+            onSubmit(dataSubmit);
         }
     };
 
-    const handleAddDisciplina = (e) => {
+    const handleAddDisciplina = (e, type) => {
+        if (type === "one") {
+        } else if (type === "all") {
+        }
         e.preventDefault();
-        if (!formData.turma_id) {
-            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Selecione uma turma antes de adicionar disciplinas.', life: 3000 });
-            return;
-        }
-        opDisciplinas.current.toggle(e);
-
     }
-
-    const handleSubmitDisciplina = (disciplina) => {
-        opDisciplinas.current.hide();
-        if (!disciplina || !disciplina._id) return;
-        const exists = formData.conteudos.some(c => c.turma_disciplina_id === disciplina._id);
-        if (exists) {
-            if (toast && toast.current) {
-                toast.current.show({ severity: 'warn', summary: 'Alerta', detail: 'Disciplina já adicionada.', life: 3000 });
-            }
-            return;
-        }
-        setFormData(prevData => ({
-            ...prevData,
-            conteudos: [
-                ...prevData.conteudos,
-                {
-                    turma_disciplina_id: disciplina._id,
-                    materia: disciplina.materia || disciplina.materia?._id || null,
-                    professor: disciplina.professor || null,
-                    quantidade_questoes: 0,
-                    peso: 0
-                }
-            ]
-        }));
-        if (toast && toast.current) {
-            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Disciplina adicionada com sucesso', life: 3000 });
-        }
-    };
 
     return (
         <div>
             <Toast ref={toast} />
             <ConfirmDialog />
-            <OverlayPanel ref={opDisciplinas} dismissable>
-                <SimuladosDisciplinaForm
-                    turma_id={formData.turma_id}
-                    toast={toast}
-                    overlayRef={opDisciplinas}
-                    onSubmit={handleSubmitDisciplina}
-                />
-            </OverlayPanel>
             <form>
                 <div className={Style.formGroup}>
                     <div className={Style.formSelectContainerLarge}>
