@@ -139,7 +139,8 @@ export default class SimuladosController {
                     { $lookup: { from: 'turmas', localField: 'turma_id', foreignField: '_id', as: 'turma' } },
                     { $unwind: '$turma' },
                     { $match: { 'turma.serie': serieNum, 'turma.ano': anoNum } },
-                    { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } }
+                    { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } },
+                    { $sort: { numero: 1 } }
                 ]);
                 return res.status(200).json({ simulados });
             }
@@ -148,7 +149,8 @@ export default class SimuladosController {
                 { $lookup: { from: 'turmas', localField: 'turma_id', foreignField: '_id', as: 'turma' } },
                 { $unwind: '$turma' },
                 { $match: { 'turma.ano': anoNum } },
-                { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } }
+                { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } },
+                { $sort: { numero: 1 } }
             ]);
             return res.status(200).json({ simulados });
         } catch (error) {
