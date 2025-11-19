@@ -46,3 +46,7 @@
 .ContainerColAcoes {
      @apply w-full text-center text-[1.125rem] font-inter font-medium;
 }
+
+.ContainerEmpty {
+     @apply text-center font-inter font-medium text-[1.25rem] text-[#6B7280] mt-12;
+}
