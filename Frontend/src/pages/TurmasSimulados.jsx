@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import BimestreSections from '../components/BimestreSections.jsx';
 import BimestreAtual from '../components/BimestreAtual.jsx';
 import Style from '../styles/ButtonGroup.module.css';
+import TitleStyle from '../styles/Title.module.css';
 
 
 export default function TurmasSimulados() {
@@ -60,8 +61,6 @@ export default function TurmasSimulados() {
         if (id) {
             loadTurma();
             loadSimulados();
-
-            console.log(id)
         }
 
     }, [id]);
@@ -80,12 +79,12 @@ export default function TurmasSimulados() {
 
     return (
         <div>
-            <div className='mt-5 flex justify-between'>
+            <div className={TitleStyle.titleContent}>
                 <div>
-                    <h1 className='text-4xl font-bold text-[#043666]'>
+                    <h1 className={TitleStyle.titlePage}>
                         {turma ? `Turma ${turma.serie}º EM - Ano ${turma.ano}` : 'Turma'}
                     </h1>
-                    <p className='text-gray-800 '>Lista de simulados separados por bimestres</p>
+                    <p className={TitleStyle.spaceBetween}>Lista de simulados separados por bimestres</p>
                 </div>
                 <div>
 
@@ -105,7 +104,7 @@ export default function TurmasSimulados() {
 
             </div>
 
-            <div className='mt-5 flex gap-3'>
+            <div className='flex gap-3'>
                 <button className={Style.buttonSecondarySmall}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" clipRule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" fill="#4b5563" />

@@ -63,7 +63,6 @@ export default class SimuladosController {
             return res.status(422).json({ message: "Id de simulado invalido", id });
 
         try {
-
             const simulado = await Simulado.aggregate([
                 { $match: { _id: new ObjectId(id) } },
                 {
@@ -74,22 +73,101 @@ export default class SimuladosController {
                         as: 'turma'
                     }
                 },
-                { $unwind: "$turma" },
+                { $unwind: { path: "$turma", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'turma.alunos',
+                        foreignField: '_id',
+                        as: 'turma.alunosDetalhes'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$conteudos",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
                 {
                     $lookup: {
                         from: 'turmasdisciplinas',
                         localField: 'conteudos.turma_disciplina_id',
                         foreignField: '_id',
-                        as: 'disciplinas'
+                        as: 'conteudos.disciplina'
                     }
                 },
-                { $unwind: "$disciplinas" },
+                { $unwind: { path: "$conteudos.disciplina", preserveNullAndEmptyArrays: true } },
                 {
-                    $lookup: {
-                        from: 'usuarios',
-                        localField: 'conteudos.resultados.aluno_id',
-                        foreignField: '_id',
-                        as: 'alunos'
+                    $group: {
+                        _id: {
+                            simulado_id: "$_id",
+                            conteudo_id: "$conteudos._id"
+                        },
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudo: {
+                            $first: {
+                                _id: "$conteudos._id",
+                                turma_disciplina_id: "$conteudos.turma_disciplina_id",
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                peso: "$conteudos.peso",
+                                disciplina: "$conteudos.disciplina",
+                                resultados: "$conteudos.resultados"
+                            }
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id.simulado_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudos: {
+                            $push: "$conteudo"
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        "turma.alunos": {
+                            $map: {
+                                input: "$turma.alunosDetalhes",
+                                as: "aluno",
+                                in: {
+                                    _id: "$$aluno._id",
+                                    nome: "$$aluno.nome",
+                                    email: "$$aluno.email",
+                                    resultados: {
+                                        $map: {
+                                            input: "$conteudos",
+                                            as: "conteudo",
+                                            in: {
+                                                conteudo_id: "$$conteudo._id",
+                                                disciplina: "$$conteudo.disciplina.nome",
+                                                quantidade_questoes: "$$conteudo.quantidade_questoes",
+                                                resultado: {
+                                                    $arrayElemAt: [
+                                                        {
+                                                            $filter: {
+                                                                input: "$$conteudo.resultados",
+                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
+                                                            }
+                                                        },
+                                                        0
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 {
@@ -103,30 +181,22 @@ export default class SimuladosController {
                             _id: 1,
                             ano: 1,
                             serie: 1,
+                            alunos: 1
                         },
-                        alunos: {
-                            $map: {
-                                input: "$alunos",
-                                as: "aluno",
-                                in: {
-                                    _id: "$$aluno._id",
-                                    nome: "$$aluno.nome",
-                                    email: "$$aluno.email",
-                                }
-                            }
-                        }
+                        conteudos: 1
                     }
                 }
             ]);
 
             if (!simulado || simulado.length === 0)
-                return res.status(404).json({ message: 'Simulado não encontrado...' });
+                return res.status(404).json({ message: 'Simulado não encontrado' });
 
             const simuladoData = simulado[0];
             res.status(200).json({ simulado: simuladoData });
 
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao buscar simulado', error });
+            console.error('Erro:', error);
+            res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
     }
 

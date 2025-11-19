@@ -6,9 +6,10 @@ function getBimester(date = new Date(), monthsPerBimester = 2, startMonth = 1) {
   return Math.ceil(shifted / monthsPerBimester);
 }
 
-export default function BimestreAtual() {
+export default function BimestreAtual({ bimestre, ano }) {
   const [now, setNow] = useState(new Date());
 
+  if(!ano && !bimestre)
   useEffect(() => {
     fetch("https://worldtimeapi.org/api/ip")
       .then(res => {
@@ -26,12 +27,12 @@ export default function BimestreAtual() {
       });
   }, []);
 
-  const ano = now.getFullYear();
-  const bimestre = getBimester(now, 2, 1);
+  const anoAtual = ano || now.getFullYear();
+  const bimestreAtual = bimestre || getBimester(now, 2, 1);
 
   return (
     <div className="border border-gray-500 rounded-md px-4 py-2 inline-block text-gray-500">
-      {bimestre}º Bimestre - {ano}
+      {bimestreAtual}º Bimestre - {anoAtual}
     </div>
   );
 }

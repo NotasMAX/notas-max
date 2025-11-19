@@ -10,6 +10,8 @@ import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
 import SimuladosAlunosList from "./pages/SimuladosAlunosList";
+import SimuladoNotasPorMateria from "./pages/SimuladoNotasPorMateria";
+import SimuladoNotasPorSimulado from "./pages/SimuladoNotasPorSimulado";
 
 function App() {
   return (
@@ -66,6 +68,18 @@ function App() {
       <Route path="/Simulados/:id" element={
         <Layout>
           <Simulados />
+        </Layout>
+      } />
+
+      <Route path="/Simulados/Notas/id" element={
+        <Layout>
+          <SimuladoNotasPorSimulado />
+        </Layout>
+      } />
+
+      <Route path="/Simulados/Notas/Materia/id" element={
+        <Layout>
+          <SimuladoNotasPorMateria />
         </Layout>
       } />
 

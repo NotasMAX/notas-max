@@ -1,7 +1,11 @@
+.titleContent {
+    @apply flex justify-between mb-3
+}
+
 .titlePage {
     @apply text-4xl font-bold text-[#043666];
 }
 
-.subtitlePage{
+.subtitlePage {
     @apply text-gray-800;
 }
