@@ -142,8 +142,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
 
     const handleChangeDate = (e) => {
         if (e.target.value < new Date().toISOString().split("T")[0]) {
-            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'A data não pode ser anterior à atual.', life: 3000 });
-            return;
+            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'A data é anterior à atual.', life: 3000 });
         }
         if (e.target.value === new Date().toISOString().split("T")[0]) {
             toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'A data é igual à data atual.', life: 3000 });
