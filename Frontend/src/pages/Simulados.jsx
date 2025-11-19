@@ -113,7 +113,7 @@ export default function Simulados() {
                     </div>
                 )}
                 {Simulados.map((simulado) => (
-                   <SimuladosItem key={simulado._id} simulado={simulado} />
+                    <SimuladosItem key={simulado._id} simulado={simulado} />
                 ))}
             </div>
         </div>

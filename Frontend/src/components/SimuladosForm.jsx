@@ -435,9 +435,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                 </div>
                 <div className={Style.buttonGroup}>
                     <div className={Style.buttonGroup}>
-                        <button type="submit" className={Style.buttonPrimary} onClick={handleSubmit}>
-                            Cadastrar Simulado
-                        </button>
+
                         <button
                             type="button"
                             className={Style.buttonSecondary}
@@ -460,6 +458,9 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                                 });
                             }}>
                             Cancelar
+                        </button>
+                        <button type="submit" className={Style.buttonPrimary} onClick={handleSubmit}>
+                            Cadastrar Simulado
                         </button>
                     </div>
                 </div>

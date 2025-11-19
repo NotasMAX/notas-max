@@ -20,7 +20,7 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
-        
+
         if (name === 'serie' && inputSerie.current) {
             inputSerie.current.setCustomValidity("");
         }
@@ -100,15 +100,16 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
                 </div>
             </div>
             <div className={Style.buttonGroup}>
-                <button type="submit" className={Style.buttonPrimary}>
-                    Cadastrar Turma
-                </button>
                 <button
                     type="button"
                     className={Style.buttonSecondary}
                     onClick={() => navigate(-1)}>
                     Cancelar
                 </button>
+                <button type="submit" className={Style.buttonPrimary}>
+                    Cadastrar Turma
+                </button>
+
             </div>
         </form>
     );

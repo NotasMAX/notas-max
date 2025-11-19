@@ -1,5 +1,5 @@
 .ContainerSimuladoCol {
-    @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block;
+    @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block capitalize;
 }
 
 .ContainerSimuladoColAcoes {
@@ -7,15 +7,15 @@
 }
 
 .ContainerSimuladoRow {
-    @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] m-2;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1.5rem;
+    @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-5 items-center gap-[1rem] m-2;
+    grid-template-columns: 1fr 1fr 1fr 1fr 3rem;
 }
 
 
 .LinkSimulado {
-    @apply flex items-center justify-end;
+    @apply flex items-center justify-center rounded border-solid border border-[#D1D5DB] hover:scale-y-110 h-[2rem] w-[2rem] hover:scale-x-110 shadow-md ;
 }
 
 .ContainerSimuladoColIcon {
-    @apply h-[2.375rem] w-auto fill-[#4B5563] cursor-pointer hover:scale-x-110 hover:scale-y-110;
+    @apply h-[1.5rem] w-auto fill-[#4B5563] cursor-pointer  ;
 }
