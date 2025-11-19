@@ -140,7 +140,7 @@ export default class SimuladosController {
                     { $unwind: '$turma' },
                     { $match: { 'turma.serie': serieNum, 'turma.ano': anoNum } },
                     { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } },
-                    { $sort: { numero: 1 } }
+                    { $sort: { 'turma.serie': 1, numero: 1 } }
                 ]);
                 return res.status(200).json({ simulados });
             }
@@ -150,7 +150,7 @@ export default class SimuladosController {
                 { $unwind: '$turma' },
                 { $match: { 'turma.ano': anoNum } },
                 { $project: { turma: 1, numero: 1, tipo: 1, bimestre: 1, data_realizacao: 1, conteudos: 1, createdAt: 1 } },
-                { $sort: { numero: 1 } }
+                { $sort: { 'turma.serie': 1, numero: 1 } }
             ]);
             return res.status(200).json({ simulados });
         } catch (error) {
