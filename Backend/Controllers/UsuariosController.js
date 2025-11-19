@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 export default class UsuariosController {
 
-    async cadastrarProfessor(req, res) {
+    static async cadastrarProfessor(req, res) {
         try {
             const { nome, email, telefone_contato, senha } = req.body;
 
@@ -31,9 +31,9 @@ export default class UsuariosController {
         }
     }
 
-    async cadastrarAluno(req, res) {
+   static async cadastrarAluno(req, res) {
         try {
-            const { nome, email, telefone_contato, senha, telefone_responsavel } = req.body;
+            const { nome, email, telefone_contato, senha, nome_responsavel, telefone_responsavel } = req.body;
 
             // Criptografar senha com salt 12
             const senhaHash = await bcrypt.hash(senha, 12);
@@ -43,6 +43,7 @@ export default class UsuariosController {
                 email,
                 telefone_contato,
                 senha: senhaHash,
+                nome_responsavel,
                 telefone_responsavel,
                 tipo_usuario: "aluno"
             });
@@ -52,6 +53,7 @@ export default class UsuariosController {
                 nome: novoAluno.nome,
                 email: novoAluno.email,
                 telefone_contato: novoAluno.telefone_contato,
+                nome_responsavel: novoAluno.nome_responsavel,
                 telefone_responsavel: novoAluno.telefone_responsavel
             });
 
@@ -61,7 +63,7 @@ export default class UsuariosController {
         }
     }
 
-    async listarProfessores(req, res) {
+    static async listarProfessores(req, res) {
         try {
             const professores = await Usuario.find(
                 { tipo_usuario: "professor" },
@@ -75,7 +77,7 @@ export default class UsuariosController {
         }
     }
 
-    async listarAlunos(req, res) {
+   static async listarAlunos(req, res) {
         try {
             const alunos = await Usuario.find(
                 { tipo_usuario: "aluno" },
@@ -89,7 +91,7 @@ export default class UsuariosController {
         }
     }
 
-    async getUsuario(req, res) {
+    static async getUsuario(req, res) {
         try {
             const id = req.params.id?.trim();
             if (!Types.ObjectId.isValid(id)) {
@@ -97,8 +99,9 @@ export default class UsuariosController {
             }
 
             const usuario = await Usuario.findById(id).select(
-                "nome email telefone_contato telefone_responsavel tipo_usuario"
+                "nome email telefone_contato nome_responsavel telefone_responsavel tipo_usuario"
             );
+            
 
             if (!usuario) {
                 return res.status(404).json({ error: "Usuário não encontrado." });
@@ -113,7 +116,7 @@ export default class UsuariosController {
         }
     }
 
-    async atualizarUsuario(req, res) {
+   static async atualizarUsuario(req, res) {
         try {
             const id = req.params.id?.trim(); 
             if (!Types.ObjectId.isValid(id)) {
@@ -138,7 +141,7 @@ export default class UsuariosController {
                 { 
                     new: true, 
                     runValidators: true, 
-                    fields: "nome email telefone_contato telefone_responsavel" 
+                    fields: "nome email telefone_contato nome_responsavel telefone_responsavel" 
                 }
             );
 
@@ -149,11 +152,9 @@ export default class UsuariosController {
             return res.status(500).json({ error: "Erro ao atualizar usuário." });
         }
     }
-};
 
+    //METODOS ANTIGOS/TESTE
 
-
-/* export default class UsuariosController {
     static async createAluno(req, res) { //Somente para testes
         const {
             nome,
@@ -255,6 +256,7 @@ export default class UsuariosController {
     static async findUsuarioById(id) {
         return await Usuarios.findById(id);
     }
+};
 
-} */
+
 
