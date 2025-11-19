@@ -16,7 +16,7 @@ export default function SimuladosPesquisarForm({ initialData, onSubmit }) {
         }
     }, [initialData]);
 
-    const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i);
+    const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i).reverse();
 
     const handleChange = (e) => {
         const { name, value } = e.target;

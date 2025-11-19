@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation, replace } from 'react-router-dom';
 import Style from '../styles/Simulados.module.css';
 import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
-import SimuladosPesquisarForm from '../components/SimuladoPesquisarForm';
+import SimuladosPesquisarForm from '../components/SimuladosPesquisarForm';
 import { findSimuladoByBimestreAnoSerie } from '../api/simuladoApi';
 import SimuladosItem from '../components/SimuladosItem';
 
