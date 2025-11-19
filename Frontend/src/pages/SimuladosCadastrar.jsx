@@ -4,7 +4,8 @@ import SimuladosForm from '../components/SimuladosForm';
 import { useState, useEffect } from 'react';
 import Style from '../styles/SimuladosCadastrar.module.css';
 import { cadastrarSimulado } from '../api/simuladoApi';
-import { Toast } from 'primereact/toast';
+import { getOne } from '../api/turmasapi';
+
 
 export default function SimuladosCadastrar() {
 
@@ -18,8 +19,8 @@ export default function SimuladosCadastrar() {
     const handleCreate = async (formData) => {
         try {
             const result = await cadastrarSimulado(formData);
-            console.log(formData);
-            navigate(`/Simulados/${formData.bimestre}/${formData.data_realizacao.year}/`, { replace: true, state: { message: result.data?.message || 'Simulado cadastrado com sucesso', type: 'success' } });
+            const turma = await getOne(formData.turma_id);
+            navigate(`/Simulados/${formData.bimestre}/${turma.data.turma.ano}/${turma.data.turma.serie}`, { replace: true, state: { message: result.data?.message || 'Simulado cadastrado com sucesso', type: 'success' } });
         } catch (error) {
             setResponse({
                 success: false,
