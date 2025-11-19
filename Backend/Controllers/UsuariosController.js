@@ -2,7 +2,7 @@ import Usuario from "../Models/Usuario.js";
 import { Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export default {
+export default class UsuariosController {
 
     async cadastrarProfessor(req, res) {
         try {
@@ -29,7 +29,7 @@ export default {
             console.error(error);
             return res.status(500).json({ error: "Erro ao cadastrar professor." });
         }
-    },
+    }
 
     async cadastrarAluno(req, res) {
         try {
@@ -59,7 +59,7 @@ export default {
             console.error(error);
             return res.status(500).json({ error: "Erro ao cadastrar aluno." });
         }
-    },
+    }
 
     async listarProfessores(req, res) {
         try {
@@ -73,7 +73,7 @@ export default {
             console.error(error);
             return res.status(500).json({ error: "Erro ao buscar professores." });
         }
-    },
+    }
 
     async listarAlunos(req, res) {
         try {
@@ -87,7 +87,7 @@ export default {
             console.error(error);
             return res.status(500).json({ error: "Erro ao buscar alunos." });
         }
-    },
+    }
 
     async getUsuario(req, res) {
         try {
@@ -111,7 +111,7 @@ export default {
             console.error(error);
             return res.status(500).json({ error: "Erro ao buscar o usuário." });
         }
-    },
+    }
 
     async atualizarUsuario(req, res) {
         try {
