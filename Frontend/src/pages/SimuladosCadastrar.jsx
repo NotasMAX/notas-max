@@ -18,9 +18,10 @@ export default function SimuladosCadastrar() {
     const handleCreate = async (formData) => {
         try {
             const result = await cadastrarSimulado(formData);
-            navigate(`/Simulados`, { replace: true, state: { message: result.data?.message || 'Simulado cadastrado com sucesso', type: 'success' } });
+            console.log(formData);
+            navigate(`/Simulados/${formData.bimestre}/${formData.data_realizacao.year}/`, { replace: true, state: { message: result.data?.message || 'Simulado cadastrado com sucesso', type: 'success' } });
         } catch (error) {
-           setResponse({
+            setResponse({
                 success: false,
                 message: error.response?.data?.message || 'Erro ao cadastrar simulado'
             });

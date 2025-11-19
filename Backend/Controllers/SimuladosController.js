@@ -46,7 +46,7 @@ export default class SimuladosController {
         try {
 
             const simuladoSave = await simulado.save();
-            res.status(200).json({ message: 'Sucesso ao inserir o simulado', simuladoSave });
+            res.status(200).json({ message: 'Sucesso ao inserir o simulado', simulado: simuladoSave });
 
         } catch (error) {
             res.status(500).json({ message: 'erro ao inserir simulado', error });

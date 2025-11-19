@@ -4,7 +4,9 @@ import Style from "../styles/SimuladosForm.module.css";
 import { getAllTurmas, getOne } from "../api/turmasapi";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { OverlayPanel } from "primereact/overlaypanel";
 import SimuladosDisciplinaItem from "./SimuladosDisciplinaItem";
+import SimuladosDisciplinaForm from "./SimuladosDisciplinaForm";
 
 export default function SimuladosForm({ initialData, onSubmit, response }) {
     const [formData, setFormData] = useState(initialData || {
@@ -18,6 +20,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const navigate = useNavigate();
     const [Turmas, setTurmas] = useState([]);
     const toast = useRef(null);
+    const overlayRef = useRef(null);
 
     const removeDisciplina = (disciplinaToRemove) => {
         setFormData(prevData => ({
@@ -27,6 +30,15 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         if (toast && toast.current) {
             toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Disciplina excluída com sucesso', life: 3000 });
         }
+    };
+
+    const handleUpdateDisciplina = (turma_disciplina_id, updatedDisciplina) => {
+        setFormData(prevData => ({
+            ...prevData,
+            conteudos: prevData.conteudos.map(conteudo =>
+                conteudo.turma_disciplina_id === turma_disciplina_id ? updatedDisciplina : conteudo
+            )
+        }));
     };
 
     useEffect(() => {
@@ -52,9 +64,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         }
         fetchTurmas();
     }, [initialData]);
-
-    useEffect(() => {
-    }, [formData]);
 
     const fetchDisciplinas = async (e) => {
         e.preventDefault();
@@ -238,32 +247,49 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         if (!error) {
             const dataParts = formData.data_realizacao.split('-');
             const dataCorrigida = new Date(dataParts[0], dataParts[1] - 1, dataParts[2], 0, 0, 0);
-            
+
             const dataSubmit = {
                 ...formData,
                 data_realizacao: dataCorrigida.toISOString()
             };
-            
+
             onSubmit(dataSubmit);
         }
     };
 
-    const handleAddDisciplina = (e, type) => {
-        if (type === "one") {
-        } else if (type === "all") {
+
+    const handleAddDisciplina = (disciplina) => {
+        overlayRef.current.hide();
+        const exists = formData.conteudos.some(conteudo => conteudo.turma_disciplina_id === disciplina._id);
+        if (exists) {
+            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Esta disciplina já foi adicionada.', life: 3000 });
+            return;
         }
-        e.preventDefault();
-    }
+        const novaConteudo = {
+            turma_disciplina_id: disciplina._id,
+            materia: disciplina.materia,
+            professor: disciplina.professor,
+            quantidade_questoes: 0,
+            peso: 0
+        };
+        setFormData(prevData => ({
+            ...prevData,
+            conteudos: [...prevData.conteudos, novaConteudo]
+        }));
+    };
+
 
     return (
         <div>
             <Toast ref={toast} />
             <ConfirmDialog />
+            <OverlayPanel ref={overlayRef} >
+                <SimuladosDisciplinaForm toast={toast} turma_id={formData.turma_id} overlayRef={overlayRef} onSubmit={handleAddDisciplina} />
+            </OverlayPanel>
             <form>
                 <div className={Style.formGroup}>
                     <div className={Style.formSelectContainerLarge}>
                         <select
-                            required
                             id="input_turma_id"
                             name="turma_id"
                             value={String(formData.turma_id)}
@@ -283,7 +309,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     </div>
                     <div className={Style.formSelectContainerLarge}>
                         <select
-                            required
                             id="input_bimestre"
                             name="bimestre"
                             value={String(formData.bimestre)}
@@ -305,7 +330,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                 <div className={Style.formGroup}>
                     <div className={Style.formSelectContainerLarge}>
                         <select
-                            required
                             id="input_tipo"
                             name="tipo"
                             value={String(formData.tipo)}
@@ -326,7 +350,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     </div>
                     <div className={Style.formSelectContainerLarge}>
                         <select
-                            required
                             className={Style.formSelect}
                             id="input_numero" name="numero"
                             value={formData.numero}
@@ -345,7 +368,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     <div className={Style.formSelectContainer}>
                         <input
                             type="date"
-                            required
                             id="input_data_realizacao"
                             name="data_realizacao"
                             value={formData.data_realizacao}
@@ -355,7 +377,14 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     </div>
                 </div>
                 <div className={Style.formGroupDisciplinas}>
-                    <button onClick={(e) => handleAddDisciplina(e)} className={Style.buttonDisciplinas}>
+                    <button onClick={(e) => {
+                        e.preventDefault();
+                        if (!formData.turma_id) {
+                            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Selecione uma turma antes de buscar disciplinas.', life: 3000 });
+                            return;
+                        }
+                        overlayRef.current.toggle(e)
+                    }} className={Style.buttonDisciplinas}>
                         <svg className={Style.buttonDisciplinasIcon} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" />
                             <path fillRule="evenodd" clipRule="evenodd" d="M12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8C11 7.44772 11.4477 7 12 7Z" />
@@ -398,6 +427,8 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                                 key={disciplina.turma_disciplina_id || index}
                                 disciplina={disciplina}
                                 removeDisciplina={removeDisciplina}
+                                onUpdate={handleUpdateDisciplina}
+                                toast={toast}
                             />
                         ))
                     )}
