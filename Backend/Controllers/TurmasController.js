@@ -48,7 +48,7 @@ export default class TurmasController {
 
     static async getAll(req, res) {
         try {
-            const turmas = await Turmas.find({}).sort("-ano");
+            const turmas = await Turmas.find({}).sort("-ano serie");
             res.status(200).json({ turmas });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar todas as Turmas", error });
