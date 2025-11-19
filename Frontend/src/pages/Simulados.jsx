@@ -5,6 +5,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
 import SimuladosPesquisarForm from '../components/SimuladoPesquisarForm';
 import { findSimuladoByBimestreAnoSerie } from '../api/simuladoApi';
+import SimuladosItem from '../components/SimuladosItem';
 
 
 export default function Simulados() {
@@ -74,7 +75,7 @@ export default function Simulados() {
         <div>
             <Toast ref={toast} />
             <h2 className={Style.SimuladosHeader}>Simulados</h2>
-            <p className={Style.SimuladosAlert}>A alteração dos simulados pode ser feita até 15 dias após a sua criação.</p>
+            <p className={Style.SimuladosAlert}>A alteração dos simulados pode ser feita até 15 dias após a sua realização.</p>
             <div className={Style.SimuladosContainer}>
                 <a href="/Simulados/Cadastrar" className={Style.LinkCadastrar}>
                     <svg className={Style.LinkCadastrarIcon} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,29 +113,7 @@ export default function Simulados() {
                     </div>
                 )}
                 {Simulados.map((simulado) => (
-                    <div key={simulado._id} className={Style.ContainerRow}>
-                        <div className={Style.ContainerCol}>
-                            {simulado.turma.serie}º EM
-                        </div>
-                        <div className={Style.ContainerCol}>
-                            {`Simulado Nº ${simulado.numero}`}
-                        </div>
-                        <div className={Style.ContainerCol}>
-                            {simulado.tipo}
-                        </div>
-                        <div className={Style.ContainerCol}>
-                            {new Date(simulado.data_realizacao).toLocaleDateString('pt-BR')}
-                        </div>
-                            <div className={Style.ContainerCol}>
-                            {new Date(simulado.createdAt).toLocaleDateString('pt-BR')}
-                        </div>
-                        <div className={Style.ContainerColAcoes}>
-                            <a href={`/Simulado/Detalhes/${simulado._id}`} className={Style.LinkDetails}>
-
-                                Detalhes
-                            </a>
-                        </div>
-                    </div>
+                   <SimuladosItem key={simulado._id} simulado={simulado} />
                 ))}
             </div>
         </div>

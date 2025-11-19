@@ -1,0 +1,21 @@
+.ContainerSimuladoCol {
+    @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block;
+}
+
+.ContainerSimuladoColAcoes {
+    @apply w-full text-center text-[1.125rem] font-inter font-medium;
+}
+
+.ContainerSimuladoRow {
+    @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] m-2;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1.5rem;
+}
+
+
+.LinkSimulado {
+    @apply flex items-center justify-end;
+}
+
+.ContainerSimuladoColIcon {
+    @apply h-[2.375rem] w-auto fill-[#4B5563] cursor-pointer hover:scale-x-110 hover:scale-y-110;
+}
