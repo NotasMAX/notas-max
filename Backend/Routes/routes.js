@@ -18,11 +18,18 @@ routes.delete("/Turmas/Remover/Aluno", TurmasController.removeAluno);
 routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
 routes.delete("/Turmas/Remover/Disciplina", TurmaDisciplinasController.remove);
 
-routes.post("/Usuarios/CadastrarAluno", UsuariosController.createAluno); //Somente para testes
-routes.get("/Usuarios/Buscar/Alunos", UsuariosController.getAlunoByNameOrEmail);
+
+routes.get("/Usuarios/Professores", UsuariosController.listarProfessores);
+routes.get("/Usuarios/Alunos", UsuariosController.listarAlunos);
+routes.get("/Usuarios/Detalhes/:id", UsuariosController.getUsuario);
+routes.put("/Usuarios/Editar/:id", UsuariosController.atualizarUsuario);
+routes.post("/Usuarios/Professor", UsuariosController.cadastrarProfessor);
+routes.post("/Usuarios/Aluno", UsuariosController.cadastrarAluno);
+
+
+routes.post("/Usuarios/CadastrarAluno", UsuariosController.createAluno); //Somente para testes ↓
+routes.get("/Usuarios/Buscar/Alunos", UsuariosController.getAlunoByNameOrEmail); 
 routes.get("/Usuarios/Buscar/Professores", UsuariosController.getProfessorByNameOrEmail);
-routes.get("/Usuarios/Alunos", UsuariosController.getAllAlunos); 
-routes.get("/Usuarios/Professores", UsuariosController.getAllProfessores);
 routes.get("/Usuarios/:id", UsuariosController.getOne);
 
 routes.post("/Materias/Cadastrar", MateriasController.criarMateria);
@@ -39,3 +46,4 @@ routes.get('/Turma/Simulado/:id', SimuladosController.getTurma);
 routes.patch('/Simulado/Editar/:id', SimuladosController.update);
 
 export default routes;
+

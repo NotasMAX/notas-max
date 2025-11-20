@@ -4,6 +4,9 @@ import Turmas from "./pages/Turmas";
 import TurmasCadastrar from "./pages/TurmasCadastrar";
 import TurmasEditar from "./pages/TurmasEditar";
 import Home from "./pages/Home";
+import Login from "./pages/LoginPage";
+import RecuperarSenha from "./pages/RecuperarSenha";
+import ResetSenha from "./pages/ResetSenha";
 import MateriaCadastrar from "./pages/MateriaCadastrar";
 import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
@@ -14,14 +17,27 @@ import SimuladosEditar from "./pages/SimuladosEditar";
 
 function App() {
   return (
+
+
+
     <Routes>
 
-      <Route path="/" element={
+<Route path="/reset-senha" element={
+          <ResetSenha />
+      } />
+
+ <Route path="/Login" element={
+          <Login />
+      } />
+
+      <Route path="/Home" element={
         <Layout>
           <Home />
         </Layout>
       } />
 
+    <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+    
       <Route path="Turmas/Cadastrar" element={
         <Layout>
           <TurmasCadastrar />
