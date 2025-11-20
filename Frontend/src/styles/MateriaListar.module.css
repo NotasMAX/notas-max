@@ -1,29 +1,94 @@
+/* Container principal da página */
+.pageContainer {
+     @apply p-6 bg-white min-h-screen;
+}
+
+/* Cabeçalho */
 .MateriaListarHeader {
-     @apply text-[2.125rem] font-bold font-inter;
+     @apply text-[1.5rem] font-bold font-inter mb-6;
 }
 
-.MateriaListarAlert {
-     @apply font-medium font-inter text-[1.25rem] mt-2 mb-6;
-}
-
+/* Container do botão de cadastrar */
 .MateriaListarContainer {
-     @apply flex justify-between mb-6 lg:flex-row flex-col;
+     @apply flex justify-start mb-6;
 }
 
+/* Botão de cadastrar */
 .LinkCadastrar {
-     @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[20rem] h-[3.0625rem];
+     @apply flex flex-row items-center justify-center font-normal font-inter text-[0.875rem] text-[#404040] border border-gray-300 rounded-md bg-white shadow-sm px-4 py-2 h-auto;
+     transition: all 0.2s ease;
 }
 
 .LinkCadastrar:hover {
-     @apply bg-[#1E3A8A] text-white;
+     @apply bg-gray-50;
 }
 
 .LinkCadastrarIcon {
-     @apply fill-[#404040] h-[1.5rem] w-auto mr-[0.625rem];
+     @apply fill-[#404040] h-[1.25rem] w-auto mr-2;
 }
 
-.LinkCadastrar:hover .LinkCadastrarIcon {
-     @apply fill-white;
+/* Wrapper da tabela */
+.tableWrapper {
+     @apply w-full;
+}
+
+/* Tabela */
+.table {
+     @apply w-full border-separate;
+     border-spacing: 0 0.5rem;
+}
+
+/* Cabeçalho da tabela */
+.tableHeader {
+     @apply bg-[#F5F5F5];
+}
+
+.tableHeaderCell {
+     @apply px-6 py-3 text-left text-[0.875rem] font-semibold font-inter text-[#404040] rounded-l-lg;
+}
+
+.tableHeaderCellAction {
+     @apply px-6 py-3 text-center text-[0.875rem] font-semibold font-inter text-[#404040] rounded-r-lg;
+}
+
+/* Linhas da tabela */
+.tableRow {
+     @apply bg-white border-2 border-gray-300 shadow-sm;
+}
+
+.tableRow:hover {
+     @apply bg-gray-50;
+}
+
+/* Células da tabela */
+.tableCell {
+     @apply px-6 py-4 text-[0.875rem] font-normal font-inter text-[#404040] rounded-l-lg;
+}
+
+.tableCellAction {
+     @apply px-6 py-4 text-center rounded-r-lg;
+}
+
+/* Botão de editar */
+.editButton {
+     @apply inline-flex items-center justify-center text-gray-600 transition-all;
+     background: none;
+     border: none;
+     cursor: pointer;
+     padding: 0;
+}
+
+.editIcon {
+     @apply h-[1.5rem] w-auto fill-gray-600 cursor-pointer transition-transform;
+}
+
+.editButton:hover .editIcon {
+     @apply scale-110 fill-gray-800;
+}
+
+/* Classes não utilizadas mas mantidas para compatibilidade */
+.MateriaListarAlert {
+     @apply font-medium font-inter text-[1.25rem] mt-2 mb-6;
 }
 
 .MateriaListarFilters {
@@ -44,7 +109,6 @@
 
 .formSelect {
      @apply rounded-md lg:pr-2 w-[9rem] h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none pl-4;
-
 }
 
 .formOption {
@@ -53,57 +117,4 @@
 
 .formSelectArrow {
      @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
-}
-
-
-
-/*TurmasEditar*/
-.TurmasEditarHeader {
-     @apply text-[2.125rem] font-bold font-inter mb-6;
-}
-
-
-.TurmaDadosContainer {
-     @apply flex space-x-[1rem] text-[1.25rem] font-medium font-inter text-[#404040] mb-6;
-}
-
-.TurmaDados {
-     @apply border px-[1rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-sm;
-}
-
-.TurmaContainerHeader {
-     @apply mb-3 flex justify-between items-center;
-}
-
-.TurmaContainerTitle {
-     @apply text-[1.5625rem] font-bold font-inter;
-}
-
-.TurmaContainerButton {
-     @apply border px-[0.5rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-sm;
-}
-
-
-.TurmaContainerButtonIcon {
-     @apply fill-[#404040] h-[1.25rem] w-auto cursor-pointer;
-}
-
-.TurmaContainerButton:hover {
-     @apply bg-[#15538E];
-}
-
-.TurmaContainerButton:hover .TurmaContainerButtonIcon {
-     @apply fill-white;
-}
-
-.TurmaContainerDados {
-     @apply border px-[0.5rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-md mb-6 overflow-y-scroll h-[21.875rem];
-}
-
-.buttonBack {
-     @apply bg-[#1C86EB] text-white px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-solid text-[1.25rem] float-right mb-2;
-}
-
-.buttonBack:hover {
-     @apply bg-[#15538E];
 }

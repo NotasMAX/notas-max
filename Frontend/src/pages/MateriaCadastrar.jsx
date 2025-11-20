@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import MateriasForm from '../components/MateriaForm';
 import { cadastrarMateria } from '../api/materiaApi';
+import Style from '../styles/MateriaForm.module.css';
 
 export default function MateriasCadastrar() {
 
@@ -22,8 +23,8 @@ export default function MateriasCadastrar() {
     };
 
     return (
-        <div className="p-4 bg-white">
-            <h2>Nova Matéria</h2>
+        <div className={Style.pageContainer}>
+            <h2 className={Style.pageTitle}>Cadastrar Materia</h2>
             <MateriasForm onSubmit={handleCreate} />
         </div>
     );
