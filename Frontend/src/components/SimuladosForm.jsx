@@ -90,10 +90,13 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                     }
                 );
             });
-            setFormData(prevData => ({
-                ...prevData,
-                conteudos: newConteudos
-            }));
+            newConteudos.forEach(conteudo => {
+                if (oldFormData.conteudos.some(oldConteudo => oldConteudo.turma_disciplina_id === conteudo.turma_disciplina_id)) {
+                    conteudo.quantidade_questoes = oldFormData.conteudos.find(oldConteudo => oldConteudo.turma_disciplina_id === conteudo.turma_disciplina_id).quantidade_questoes;
+                    conteudo.peso = oldFormData.conteudos.find(oldConteudo => oldConteudo.turma_disciplina_id === conteudo.turma_disciplina_id).peso;
+                }
+            });
+            setFormData(prevData => ({ ...prevData, conteudos: newConteudos }));
             if (JSON.stringify(oldFormData.conteudos) !== JSON.stringify(newConteudos)) {
                 if (toast && toast.current) {
                     toast.current.show({ severity: 'success', summary: 'Aviso', detail: 'Disciplinas carregadas com sucesso', life: 3000 });
