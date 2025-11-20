@@ -23,7 +23,6 @@ const LoginForm = () => {
           withCredentials: true,
         }
       );
-      console.log(email, senha)
       const { token, usuario } = response.data;
 
       // Salva o token e o usuário no localStorage
