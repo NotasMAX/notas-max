@@ -75,7 +75,7 @@ export default function Simulados() {
         <div>
             <Toast ref={toast} />
             <h2 className={Style.SimuladosHeader}>Simulados</h2>
-            <p className={Style.SimuladosAlert}>A alteração dos simulados pode ser feita até 15 dias após a sua realização.</p>
+            <p className={Style.SimuladosAlert}>A alteração dos simulados pode ser feita até 15 dias após a sua criação.</p>
             <div className={Style.SimuladosContainer}>
                 <a href="/Simulados/Cadastrar" className={Style.LinkCadastrar}>
                     <svg className={Style.LinkCadastrarIcon} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,6 +103,9 @@ export default function Simulados() {
                     </div>
                     <div className={Style.ContainerCol}>
                         Data Realização
+                    </div>
+                        <div className={Style.ContainerCol}>
+                        Data Criação
                     </div>
                     <div className={Style.ContainerColAcoes}>
                     </div>

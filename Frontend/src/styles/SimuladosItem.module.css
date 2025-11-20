@@ -7,8 +7,8 @@
 }
 
 .ContainerSimuladoRow {
-    @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-5 items-center gap-[1rem] m-2;
-    grid-template-columns: 1fr 1fr 1fr 1fr 3rem;
+    @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] m-2;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 3rem;
 }
 
 
@@ -18,4 +18,12 @@
 
 .ContainerSimuladoColIcon {
     @apply h-[1.5rem] w-auto fill-[#4B5563] cursor-pointer  ;
+}
+
+.LinkSimuladoDisabled{
+    @apply flex items-center justify-center rounded border-solid border border-[#E5E5E5] bg-[#F3F4F6] h-[2rem] w-[2rem] cursor-not-allowed shadow-md ;
+}
+
+.LinkSimuladoDisabled .ContainerSimuladoColIcon {
+    @apply fill-[#9CA3AF] cursor-not-allowed ;
 }

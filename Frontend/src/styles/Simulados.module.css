@@ -35,8 +35,8 @@
 }
 
 .ContainerHeader {
-     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-5 items-center gap-[1rem] mb-1 bg-[#F5F5F5] rounded-b-none;
-     grid-template-columns: 1fr 1fr 1fr 1fr 3rem;
+     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] mb-1 bg-[#F5F5F5] rounded-b-none;
+     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 3rem;
 }
 
 .ContainerCol {
