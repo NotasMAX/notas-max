@@ -36,5 +36,6 @@ routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie', SimuladosC
 routes.get('/Simulado/:id', SimuladosController.getOne);
 routes.get('/Simulados', SimuladosController.getAll);
 routes.get('/Turma/Simulado/:id', SimuladosController.getTurma);
+routes.patch('/Simulado/Editar/:id', SimuladosController.update);
 
 export default routes;

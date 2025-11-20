@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Style from "../styles/SimuladosDisciplinaItem.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
-// import { removeDisciplina } from '../api/turmasapi';
 
 export default function SimuladosDisciplinaItem({ disciplina, toast, onClick, removeDisciplina, onUpdate }) {
 

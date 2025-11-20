@@ -10,6 +10,7 @@ import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
+import SimuladosEditar from "./pages/SimuladosEditar";
 
 function App() {
   return (
@@ -66,6 +67,12 @@ function App() {
       <Route path="/Simulados/Cadastrar" element={
         <Layout>
           <SimuladosCadastrar />
+        </Layout>
+      } />
+
+      <Route path="/Simulado/Editar/:id" element={
+        <Layout>
+          <SimuladosEditar />
         </Layout>
       } />
 
