@@ -17,17 +17,14 @@ import SimuladosEditar from "./pages/SimuladosEditar";
 
 function App() {
   return (
-
-
-
     <Routes>
 
-<Route path="/reset-senha" element={
-          <ResetSenha />
+      <Route path="/reset-senha" element={
+        <ResetSenha />
       } />
 
- <Route path="/Login" element={
-          <Login />
+      <Route path="/Login" element={
+        <Login />
       } />
 
       <Route path="/Home" element={
@@ -36,8 +33,14 @@ function App() {
         </Layout>
       } />
 
-    <Route path="/recuperar-senha" element={<RecuperarSenha />} />
-    
+      <Route path="/" element={
+        <Layout>
+          <Home />
+        </Layout>
+      } />
+
+      <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+
       <Route path="Turmas/Cadastrar" element={
         <Layout>
           <TurmasCadastrar />
@@ -78,7 +81,7 @@ function App() {
         <Layout>
           <Simulados />
         </Layout>
-      }/>
+      } />
 
       <Route path="/Simulados/Cadastrar" element={
         <Layout>

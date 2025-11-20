@@ -12,12 +12,10 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "E-mail e senha são obrigatórios." });
     }
 
-    
     const usuario = await Usuario.findOne({ email }).select("+senha");
     if (!usuario) {
-      return res.status(404).json({ message: "Credenciais Inválidas." });
+      return res.status(401).json({ message: "Credenciais Inválidas." });
     }
-
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
     if (!senhaCorreta) {

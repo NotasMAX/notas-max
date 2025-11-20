@@ -31,7 +31,7 @@ export default class UsuariosController {
         }
     }
 
-   static async cadastrarAluno(req, res) {
+    static async cadastrarAluno(req, res) {
         try {
             const { nome, email, telefone_contato, senha, nome_responsavel, telefone_responsavel } = req.body;
 
@@ -77,7 +77,7 @@ export default class UsuariosController {
         }
     }
 
-   static async listarAlunos(req, res) {
+    static async listarAlunos(req, res) {
         try {
             const alunos = await Usuario.find(
                 { tipo_usuario: "aluno" },
@@ -101,7 +101,7 @@ export default class UsuariosController {
             const usuario = await Usuario.findById(id).select(
                 "nome email telefone_contato nome_responsavel telefone_responsavel tipo_usuario"
             );
-            
+
 
             if (!usuario) {
                 return res.status(404).json({ error: "Usuário não encontrado." });
@@ -116,9 +116,9 @@ export default class UsuariosController {
         }
     }
 
-   static async atualizarUsuario(req, res) {
+    static async atualizarUsuario(req, res) {
         try {
-            const id = req.params.id?.trim(); 
+            const id = req.params.id?.trim();
             if (!Types.ObjectId.isValid(id)) {
                 return res.status(400).json({ error: "ID inválido." });
             }
@@ -138,10 +138,10 @@ export default class UsuariosController {
             const usuarioAtualizado = await Usuario.findByIdAndUpdate(
                 id,
                 updates,
-                { 
-                    new: true, 
-                    runValidators: true, 
-                    fields: "nome email telefone_contato nome_responsavel telefone_responsavel" 
+                {
+                    new: true,
+                    runValidators: true,
+                    fields: "nome email telefone_contato nome_responsavel telefone_responsavel"
                 }
             );
 
@@ -225,14 +225,13 @@ export default class UsuariosController {
         }
     }
 
-
     static async getAlunoByNameOrEmail(req, res) {
         const { text } = req.query;
         if (!text || typeof text !== 'string' || text.trim() === '') {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
-            const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" }).sort("nome")  ;
+            const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" }).sort("nome");
             res.status(200).json({ alunos });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar o Aluno", error });
@@ -251,7 +250,6 @@ export default class UsuariosController {
             res.status(500).json({ message: "Erro ao buscar o Professor", error });
         }
     }
-
 
     static async findUsuarioById(id) {
         return await Usuarios.findById(id);

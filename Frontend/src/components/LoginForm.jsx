@@ -36,6 +36,7 @@ const LoginForm = () => {
       if (err.response && err.response.status === 401) {
         setErro("E-mail ou senha incorretos.");
       } else {
+        console.log(err);
         setErro("Erro no servidor. Tente novamente mais tarde.");
       }
     }
