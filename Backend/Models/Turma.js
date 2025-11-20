@@ -17,23 +17,7 @@ const TurmaSchema = new Schema({
             ref: "Usuarios",
         },
     ],
-    professores: [
-        {
-            professor_id: {
-                type: Schema.Types.ObjectId,
-                ref: "Usuarios",
-            },
-            materias: [
-                {
-                    materia_id: {
-                        type: Schema.Types.ObjectId,
-                        ref: "Materias",
-                    },
-                },
-            ],
-        },
-    ],
 }, { timestamps: true, strict: true });
 
-const Turma = mongoose.model("Turmas", TurmaSchema);
+const Turma = mongoose.models.Turmas || mongoose.model("Turmas", TurmaSchema);
 export default Turma;

@@ -14,7 +14,7 @@ export default function Home() {
         <div>
             <h2>Bem-vindo à Página Inicial</h2>
             <a href="/Turmas/Cadastrar">Cadastrar Turma</a>
-
+            <a href="/Materias/Cadastrar" style={{ marginLeft: '20px' }}>Cadastrar Matéria</a>
         </div>
     );
 }

@@ -1,23 +1,44 @@
 .spanError {
-  @apply text-red-600 text-sm mt-0.5;
+  @apply text-red-600 mt-0.5 font-medium font-inter;
 }
 
-.formLabel {
-  @apply block text-sm;
+.formGroup {
+  @apply flex mt-[1.875rem] mb-[1.875rem];
 }
 
-.formInput {
-  @apply w-full border rounded px-3 py-2;
+.formSelectContainer {
+  @apply relative w-[7.1875rem] mr-[1rem] lg:mt-0;
 }
 
-.buttonPrimary {
-  @apply bg-green-600 text-white px-4 py-2 rounded;
+.formSelect {
+  @apply rounded-md lg:pr-2 w-[7.1875rem] h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none pl-4;
+
 }
 
-.buttonSecondary {
-  @apply bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2 rounded hover:bg-gray-200;
+.formOption {
+  @apply text-[1.25rem] w-[7.1875rem] font-medium font-inter mb-6 text-[#404040] text-left;
+}
+
+.formSelectArrow {
+  @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
 }
 
 .buttonGroup {
-  @apply flex items-center gap-3;
+  @apply flex justify-center space-x-[1rem];
+}
+
+.buttonPrimary{
+  @apply bg-[#1C86EB] text-white px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-solid text-[1.25rem];  
+}
+
+.buttonPrimary:hover{
+  @apply bg-[#15538E];
+}
+
+.buttonSecondary{
+  @apply bg-transparent text-[#404040] px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-2 border-solid text-[1.25rem];
+}
+
+.buttonSecondary:hover{
+  @apply bg-[#D9D9D9] text-white;
 }
