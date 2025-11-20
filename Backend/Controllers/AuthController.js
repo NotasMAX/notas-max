@@ -15,13 +15,13 @@ export const login = async (req, res) => {
     
     const usuario = await Usuario.findOne({ email }).select("+senha");
     if (!usuario) {
-      return res.status(404).json({ message: "Usuário não encontrado." });
+      return res.status(404).json({ message: "Credenciais Inválidas." });
     }
 
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
     if (!senhaCorreta) {
-      return res.status(401).json({ message: "Senha incorreta." });
+      return res.status(401).json({ message: "Credenciais Inválidas." });
     }
 
     const token = jwt.sign(

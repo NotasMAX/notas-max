@@ -13,6 +13,7 @@ const usuarioSchema = new Schema({
     default: "aluno",
   },
   telefone_responsavel: { type: String },
+  nome_responsavel: { type: String, trim: true }, 
 }, {
   timestamps: true,
   strict: true
@@ -20,4 +21,3 @@ const usuarioSchema = new Schema({
 
 const Usuario = mongoose.model("Usuario", usuarioSchema);
 export default Usuario;
-
