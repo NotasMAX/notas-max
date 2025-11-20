@@ -3,7 +3,7 @@
 }
 
 .SimuladosAlert {
-     @apply font-medium font-inter text-[1.25rem] mt-2 mb-6;
+     @apply font-medium font-inter text-[1.25rem] mt-2;
 }
 
 .SimuladosContainer {
