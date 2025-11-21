@@ -9,6 +9,10 @@ import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
+import AlunoCadastrar from "./pages/AlunoCadastrar";
+import AlunoListar from "./pages/AlunoListar";
+import AlunoEditar from "./pages/AlunoEditar";
+import AlunoVisualizar from "./pages/AlunoVisualizar";
 
 function App() {
   return (
@@ -20,6 +24,7 @@ function App() {
         </Layout>
       } />
 
+      {/* Rotas de Turmas */}
       <Route path="Turmas/Cadastrar" element={
         <Layout>
           <TurmasCadastrar />
@@ -50,6 +55,7 @@ function App() {
         </Layout>
       } />
 
+      {/* Rotas de Simulados */}
       <Route path="/Simulados" element={
         <Layout>
           <Simulados />
@@ -62,6 +68,7 @@ function App() {
         </Layout>
       } />
 
+      {/* Rotas de Matérias */}
       <Route path="/Materias/Cadastrar" element={
         <Layout>
           <MateriaCadastrar />
@@ -79,6 +86,32 @@ function App() {
           <MateriaEditar />
         </Layout>
       } />
+
+      {/* Rotas de Alunos */}
+      <Route path="/Alunos/CadastrarAluno" element={
+        <Layout>
+          <AlunoCadastrar />
+        </Layout>
+      } />
+
+      <Route path="/Alunos" element={
+        <Layout>
+          <AlunoListar />
+        </Layout>
+      } />
+
+      <Route path="/Alunos/Visualizar/:id" element={
+        <Layout>
+          <AlunoVisualizar />
+        </Layout>
+      } />
+
+      <Route path="/Alunos/Editar/:id" element={
+        <Layout>
+          <AlunoEditar />
+        </Layout>
+      } />
+
     </Routes >
   );
 }

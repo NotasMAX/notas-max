@@ -1,0 +1,55 @@
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import AlunoForm from '../components/AlunoForm';
+import api from '../api/usuariosapi';
+import Style from '../styles/AlunoForm.module.css';
+
+export default function AlunoEditar() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [aluno, setAluno] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        document.title = 'NotasMAX - Editar Aluno';
+    }, []);
+
+    useEffect(() => {
+        const fetchAluno = async () => {
+            try {
+                const res = await api.get(`/Usuarios/${id}`);
+                setAluno(res.data);
+            } catch (err) {
+                console.error('Erro ao buscar aluno:', err);
+                setError('Erro ao carregar aluno.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchAluno();
+        }
+    }, [id]);
+
+    const handleUpdate = async (formData) => {
+        try {
+            await api.put(`/Usuarios/${id}`, formData);
+            navigate('/Alunos');
+        } catch (error) {
+            console.error("Erro ao atualizar aluno:", error);
+            alert("Erro ao atualizar aluno.");
+        }
+    };
+
+    if (loading) return <div className="p-4">Carregando...</div>;
+    if (error) return <div className="p-4 text-red-600">{error}</div>;
+
+    return (
+        <div className={Style.pageContainer}>
+            <h2 className={Style.pageTitle}>Editar Aluno</h2>
+            {aluno && <AlunoForm initialData={aluno} onSubmit={handleUpdate} />}
+        </div>
+    );
+}

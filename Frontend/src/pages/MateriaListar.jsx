@@ -38,7 +38,7 @@ export default function MateriaListar() {
 
 	return (
 		<div className={Style.pageContainer}>
-			<h2 className={Style.MateriaListarHeader}>Materias</h2>
+			<h2 className={Style.MateriaListarHeader}>Matérias</h2>
 
 			<div className={Style.MateriaListarContainer}>
 				<a href="/Materias/Cadastrar" className={Style.LinkCadastrar}>

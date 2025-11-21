@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MateriasForm from '../components/MateriaForm';
 import { getMateriaById, editarMateria } from '../api/materiaApi';
+import Style from '../styles/MateriaForm.module.css';
 
 export default function MateriaEditar() {
     const { id } = useParams();
