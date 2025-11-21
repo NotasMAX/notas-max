@@ -3,15 +3,15 @@
 }
 
 .SimuladosAlert {
-     @apply font-medium font-inter text-[1.25rem] mt-2 mb-6;
+     @apply font-medium font-inter text-[1.25rem] mt-2;
 }
 
 .SimuladosContainer {
-     @apply flex justify-between mb-6 lg:flex-row flex-col;
+     @apply flex justify-between mb-6 lg:flex-row flex-col lg:items-center;
 }
 
 .LinkCadastrar {
-     @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[20rem] h-[3.0625rem];
+     @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[20rem] h-[3.0625rem] lg:mt-[17px];
 }
 
 .LinkCadastrar:hover {
@@ -30,28 +30,23 @@
      @apply flex flex-col lg:flex-row;
 }
 
-.formContainer {
-     @apply flex flex-col justify-between mb-[2rem] lg:flex-row;
+.SimuladoContainer {
+     @apply border pb-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-md mb-6 min-h-[21.875rem];
 }
 
-.formSelectContainer {
-     @apply relative w-[9rem] mt-4 lg:mt-0 lg:mr-4;
+.ContainerHeader {
+     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] mb-1 bg-[#F5F5F5] rounded-b-none;
+     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 3rem;
 }
 
-.formSelectContainer:last-child {
-     @apply lg:mr-6;
+.ContainerCol {
+     @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block;
 }
 
-.formSelect {
-     @apply rounded-md lg:pr-2 w-[9rem] h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none pl-4;
-
+.ContainerColAcoes {
+     @apply w-full text-center text-[1.125rem] font-inter font-medium;
 }
 
-.formOption {
-     @apply text-[1.25rem] w-[7.1875rem] font-medium font-inter mb-6 text-[#404040] text-left;
+.ContainerEmpty {
+     @apply text-center font-inter font-medium text-[1.25rem] text-[#6B7280] mt-12;
 }
-
-.formSelectArrow {
-     @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
-}
-
