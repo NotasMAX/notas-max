@@ -66,7 +66,7 @@ export default function MateriasForm({ initialData, onSubmit }) {
                     className={Style.buttonSecondary}
                     onClick={() => navigate(-1)}
                 >
-                    Volta
+                    Voltar
                 </button>
                 <button type="submit" className={Style.buttonPrimary}>
                     Salvar

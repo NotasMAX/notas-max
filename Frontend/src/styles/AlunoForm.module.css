@@ -5,7 +5,7 @@
 
 /* Título da página */
 .pageTitle {
-  @apply text-[1.5rem] font-bold font-inter mb-8;
+  @apply text-[2.125rem] font-bold font-inter mb-6;
 }
 
 /* Formulário */
