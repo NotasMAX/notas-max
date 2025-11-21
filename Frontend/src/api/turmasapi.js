@@ -1,11 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://localhost:5000/NotasMax",
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
+import api from "../utils/api.js";
 
 export const cadastrarTurma = (payload) => api.post("/Turmas/Cadastrar", payload);
 export const getAllTurmas = () => api.get("/Turmas");
