@@ -28,6 +28,14 @@ export const login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
+    // Definir cookie com o token
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: false, // Mude para true em produção com HTTPS
+      sameSite: "lax",
+      maxAge: 3600000 // 1 hora em ms
+    });
+
     return res.status(200).json({
       message: "Login realizado com sucesso.",
       token,

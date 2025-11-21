@@ -1,4 +1,4 @@
-import api from "../utils/api.js";
+import api from "../utils/api";
 
 export const cadastrarTurma = (payload) => api.post("/Turmas/Cadastrar", payload);
 export const getAllTurmas = () => api.get("/Turmas");

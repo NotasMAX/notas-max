@@ -29,8 +29,8 @@ export const authenticateToken = (req, res, next) => {
 
 export const authorizeAdmin = (req, res, next) => {
    
-    if (!req.user || req.user.perfil !== 'Admin') {
-        console.log("aqui");
+    if (!req.user || req.user.tipo_usuario !== 'administrador') {
+        console.log("Usuário sem permissão de admin:", req.user?.tipo_usuario);
         return res.status(403).json({ message: 'Proibido. Apenas administradores podem realizar esta ação.' });
     }
     next();

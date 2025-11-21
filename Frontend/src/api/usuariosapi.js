@@ -1,4 +1,4 @@
-import api from "../utils/api.js";
+import api from "../utils/api";
 
 export const getProfessores = () => api.get("/Usuarios/Professores");
 export const getAlunos = () => api.get("/Usuarios/Alunos");

@@ -1,4 +1,4 @@
-import api from "../utils/api.js";
+import api from "../utils/api";
 
 export const cadastrarMateria = (payload) => api.post("/Materias/Cadastrar", payload);
 export const listarMaterias = () => api.get("/Materias");
