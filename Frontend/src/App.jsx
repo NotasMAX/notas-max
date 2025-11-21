@@ -15,6 +15,7 @@ import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
+import NotFound from "./pages/NotFound";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -170,6 +171,14 @@ function AppRoutes() {
             <MateriaEditar />
           </Layout>
         </AdminRoute>
+      } />
+
+      <Route path="/404" element={
+        <NotFound />
+      } />
+
+      <Route path="*" element={
+        <Navigate to="/404" replace />
       } />
 
     </Routes>
