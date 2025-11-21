@@ -1,45 +1,45 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import AlunoForm from '../components/AlunoForm';
+import ProfessorForm from '../components/ProfessorForm';
 import { getUsuario, updateUsuario } from '../api/usuariosapi';
-import Style from '../styles/AlunoForm.module.css';
+import Style from '../styles/ProfessorForm.module.css';
 
-export default function AlunoEditar() {
+export default function ProfessorEditar() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [aluno, setAluno] = useState(null);
+    const [professor, setProfessor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        document.title = 'NotasMAX - Editar Aluno';
+        document.title = 'NotasMAX - Editar Professor';
     }, []);
 
     useEffect(() => {
-        const fetchAluno = async () => {
+        const fetchProfessor = async () => {
             try {
                 const res = await getUsuario(id);
-                setAluno(res.data);
+                setProfessor(res.data);
             } catch (err) {
-                console.error('Erro ao buscar aluno:', err);
-                setError('Erro ao carregar aluno.');
+                console.error('Erro ao buscar professor:', err);
+                setError('Erro ao carregar professor.');
             } finally {
                 setLoading(false);
             }
         };
 
         if (id) {
-            fetchAluno();
+            fetchProfessor();
         }
     }, [id]);
 
     const handleUpdate = async (formData) => {
         try {
             await updateUsuario(id, formData);
-            navigate('/Alunos');
+            navigate('/Professores');
         } catch (error) {
-            console.error("Erro ao atualizar aluno:", error);
-            alert("Erro ao atualizar aluno.");
+            console.error("Erro ao atualizar professor:", error);
+            alert("Erro ao atualizar professor.");
         }
     };
 
@@ -48,8 +48,8 @@ export default function AlunoEditar() {
 
     return (
         <div className={Style.pageContainer}>
-            <h2 className={Style.pageTitle}>Editar Aluno</h2>
-            {aluno && <AlunoForm initialData={aluno} onSubmit={handleUpdate} />}
+            <h2 className={Style.pageTitle}>Editar Professor</h2>
+            {professor && <ProfessorForm initialData={professor} onSubmit={handleUpdate} />}
         </div>
     );
 }

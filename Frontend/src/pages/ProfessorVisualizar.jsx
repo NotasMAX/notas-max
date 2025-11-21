@@ -1,51 +1,51 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getUsuario } from '../api/usuariosapi';
-import Style from '../styles/AlunoForm.module.css';
+import Style from '../styles/ProfessorForm.module.css';
 
-export default function AlunoVisualizar() {
+export default function ProfessorVisualizar() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [aluno, setAluno] = useState(null);
+    const [professor, setProfessor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        document.title = 'NotasMAX - Informações do Aluno';
+        document.title = 'NotasMAX - Informações do Professor';
     }, []);
 
     useEffect(() => {
-        const fetchAluno = async () => {
+        const fetchProfessor = async () => {
             try {
                 const res = await getUsuario(id);
-                setAluno(res.data);
+                setProfessor(res.data);
             } catch (err) {
-                console.error('Erro ao buscar aluno:', err);
-                setError('Erro ao carregar informações do aluno.');
+                console.error('Erro ao buscar professor:', err);
+                setError('Erro ao carregar informações do professor.');
             } finally {
                 setLoading(false);
             }
         };
 
         if (id) {
-            fetchAluno();
+            fetchProfessor();
         }
     }, [id]);
 
     if (loading) return <div className="p-4">Carregando informações...</div>;
     if (error) return <div className="p-4 text-red-600">{error}</div>;
-    if (!aluno) return <div className="p-4">Aluno não encontrado.</div>;
+    if (!professor) return <div className="p-4">Professor não encontrado.</div>;
 
     return (
         <div className={Style.pageContainer}>
-            <h2 className={Style.pageTitle}>Informações Aluno</h2>
+            <h2 className={Style.pageTitle}>Informações Professor</h2>
 
             <div className={Style.form}>
                 {/* Nome Completo */}
                 <div className={Style.formGroup}>
                     <label className={Style.formLabel}>Nome Completo</label>
                     <div className={Style.formInputReadonly}>
-                        {aluno.nome}
+                        {professor.nome}
                     </div>
                 </div>
 
@@ -54,31 +54,14 @@ export default function AlunoVisualizar() {
                     <div className={Style.formGroup}>
                         <label className={Style.formLabel}>E-mail institucional</label>
                         <div className={Style.formInputReadonly}>
-                            {aluno.email}
+                            {professor.email}
                         </div>
                     </div>
 
                     <div className={Style.formGroup}>
                         <label className={Style.formLabel}>Telefone</label>
                         <div className={Style.formInputReadonly}>
-                            {aluno.telefone_contato}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Nome Responsável e Telefone Responsável - Lado a lado */}
-                <div className={Style.formRow}>
-                    <div className={Style.formGroup}>
-                        <label className={Style.formLabel}>Nome responsavel</label>
-                        <div className={Style.formInputReadonly}>
-                            {aluno.nome_responsavel || '-'}
-                        </div>
-                    </div>
-
-                    <div className={Style.formGroup}>
-                        <label className={Style.formLabel}>Telefone Responsavel</label>
-                        <div className={Style.formInputReadonly}>
-                            {aluno.telefone_responsavel || '-'}
+                            {professor.telefone_contato}
                         </div>
                     </div>
                 </div>
@@ -95,7 +78,7 @@ export default function AlunoVisualizar() {
                     <button 
                         type="button"
                         className={Style.buttonPrimary}
-                        onClick={() => navigate(`/Alunos/Editar/${id}`)}
+                        onClick={() => navigate(`/Professores/Editar/${id}`)}
                     >
                         Editar
                     </button>

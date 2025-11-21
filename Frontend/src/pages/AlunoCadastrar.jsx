@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import AlunoForm from '../components/AlunoForm';
-import api from '../api/usuariosapi';
+import { createAluno } from '../api/usuariosapi';
 import Style from '../styles/AlunoForm.module.css';
 
 export default function AlunoCadastrar() {
@@ -14,10 +14,8 @@ export default function AlunoCadastrar() {
 
     const handleCreate = async (formData) => {
         try {
-            // Como não há endpoint específico de cadastro na API fornecida,
-            // você precisará criar ou usar o endpoint apropriado
-            await api.post('/Usuarios/CadastrarAluno', formData);
-            navigate('/Usuarios/CadastrarAluno');
+            await createAluno(formData);
+            navigate('/Alunos');
         } catch (error) {
             console.error("Erro ao cadastrar aluno:", error);
             alert("Erro ao cadastrar aluno.");

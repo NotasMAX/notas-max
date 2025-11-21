@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Style from "../styles/AlunoForm.module.css";
+import Style from "../styles/ProfessorForm.module.css";
 
-export default function AlunoForm({ initialData, onSubmit, isEditMode = true }) {
+export default function ProfessorForm({ initialData, onSubmit, isEditMode = true }) {
     const [formData, setFormData] = useState(initialData || {
         nome: "",
         email: "",
         telefone_contato: "",
-        telefone_responsavel: "",
-        nome_responsavel: "",
         senha: ""
     });
 
@@ -71,9 +69,7 @@ export default function AlunoForm({ initialData, onSubmit, isEditMode = true }) 
             nome: formData.nome.trim(),
             email: formData.email.trim(),
             telefone_contato: formData.telefone_contato.trim(),
-            telefone_responsavel: formData.telefone_responsavel?.trim() || "",
-            nome_responsavel: formData.nome_responsavel?.trim() || "",
-            tipo_usuario: "aluno"
+            tipo_usuario: "professor"
         };
 
         onSubmit(cleanData);
@@ -139,33 +135,6 @@ export default function AlunoForm({ initialData, onSubmit, isEditMode = true }) 
                     {errors.senha && <span className={Style.spanError}>{errors.senha}</span>}
                 </div>
             )}
-
-            {/* Nome Responsável e Telefone Responsável - Lado a lado */}
-            <div className={Style.formRow}>
-                <div className={Style.formGroup}>
-                    <label className={Style.formLabel}>Nome responsavel</label>
-                    <input
-                        type="text"
-                        name="nome_responsavel"
-                        value={formData.nome_responsavel || ""}
-                        className={Style.formInput}
-                        onChange={handleChange}
-                        disabled={!isEditMode}
-                    />
-                </div>
-
-                <div className={Style.formGroup}>
-                    <label className={Style.formLabel}>Telefone Responsavel</label>
-                    <input
-                        type="tel"
-                        name="telefone_responsavel"
-                        value={formData.telefone_responsavel || ""}
-                        className={Style.formInput}
-                        onChange={handleChange}
-                        disabled={!isEditMode}
-                    />
-                </div>
-            </div>
 
             {/* Botões */}
             <div className={Style.buttonGroup}>

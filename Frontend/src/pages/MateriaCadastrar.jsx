@@ -15,10 +15,16 @@ export default function MateriasCadastrar() {
     const handleCreate = async (formData) => {
         try {
             await cadastrarMateria(formData);
-            navigate('/');
+            navigate('/Materias');
         } catch (error) {
             console.error("Erro ao criar a matéria:", error);
-            alert("Erro ao criar a matéria.");
+            
+            // Verifica se é erro de duplicata (409)
+            if (error.response?.status === 409) {
+                alert(error.response.data.error || "Já existe uma matéria cadastrada com este nome.");
+            } else {
+                alert("Erro ao criar a matéria.");
+            }
         }
     };
 

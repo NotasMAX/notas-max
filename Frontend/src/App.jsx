@@ -16,6 +16,10 @@ import AlunoCadastrar from "./pages/AlunoCadastrar";
 import AlunoListar from "./pages/AlunoListar";
 import AlunoEditar from "./pages/AlunoEditar";
 import AlunoVisualizar from "./pages/AlunoVisualizar";
+import ProfessorCadastrar from "./pages/ProfessorCadastrar";
+import ProfessorListar from "./pages/ProfessorListar";
+import ProfessorEditar from "./pages/ProfessorEditar";
+import ProfessorVisualizar from "./pages/ProfessorVisualizar";
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
 
@@ -23,13 +27,11 @@ function App() {
   return (
     <Routes>
 
-      <Route path="/reset-senha" element={
-        <ResetSenha />
-      } />
+      <Route path="/reset-senha" element={<ResetSenha />} />
 
-      <Route path="/Login" element={
-        <Login />
-      } />
+      <Route path="/Login" element={<Login />} />
+
+      <Route path="/recuperar-senha" element={<RecuperarSenha />} />
 
       <Route path="/Home" element={
         <Layout>
@@ -44,8 +46,6 @@ function App() {
       } />
 
       {/* Rotas de Turmas */}
-      <Route path="/recuperar-senha" element={<RecuperarSenha />} />
-
       <Route path="Turmas/Cadastrar" element={
         <Layout>
           <TurmasCadastrar />
@@ -89,7 +89,6 @@ function App() {
         </Layout>
       } />
 
-      {/* Rotas de Matérias */}
       <Route path="/Simulados/Cadastrar" element={
         <Layout>
           <SimuladosCadastrar />
@@ -102,6 +101,7 @@ function App() {
         </Layout>
       } />
 
+      {/* Rotas de Matérias */}
       <Route path="/Materias/Cadastrar" element={
         <Layout>
           <MateriaCadastrar />
@@ -121,7 +121,7 @@ function App() {
       } />
 
       {/* Rotas de Alunos */}
-      <Route path="/Alunos/CadastrarAluno" element={
+      <Route path="/Alunos/Cadastrar" element={
         <Layout>
           <AlunoCadastrar />
         </Layout>
@@ -142,6 +142,31 @@ function App() {
       <Route path="/Alunos/Editar/:id" element={
         <Layout>
           <AlunoEditar />
+        </Layout>
+      } />
+
+      {/* Rotas de Professores */}
+      <Route path="/Professores/Cadastrar" element={
+        <Layout>
+          <ProfessorCadastrar />
+        </Layout>
+      } />
+
+      <Route path="/Professores" element={
+        <Layout>
+          <ProfessorListar />
+        </Layout>
+      } />
+
+      <Route path="/Professores/Visualizar/:id" element={
+        <Layout>
+          <ProfessorVisualizar />
+        </Layout>
+      } />
+
+      <Route path="/Professores/Editar/:id" element={
+        <Layout>
+          <ProfessorEditar />
         </Layout>
       } />
 
