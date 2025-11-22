@@ -5,12 +5,19 @@ import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import SimuladosNotaItem from "./SimuladosNotaItem";
 
-export default function SimuladosForm({ initialData, onSubmit, response, conteudos }) {
+export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno }) {
     const [formData, setFormData] = useState(initialData || {
-        resultados: []
+        conteudos: conteudosRecebidos
     });
     const toast = useRef(null);
     const navigate = useNavigate();
+    const [NumeroQuestoes, setNumeroQuestoes] = useState();
+    const [NumeroAcertos, setNumeroAcertos] = useState();
+
+    useEffect(() => {
+        setFormData({ ...formData, conteudos: conteudosRecebidos });
+        setNumeroQuestoes(conteudosRecebidos.reduce((total, conteudo) => total + (conteudo.quantidade_questoes || 0), 0));
+    }, [conteudosRecebidos]);
 
     useEffect(() => {
         if (response) {
@@ -20,12 +27,18 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
         }
     }, [response]);
 
+    useEffect(() => {
+        setNumeroAcertos(formData.conteudos.reduce((total, conteudo) => total + (conteudo.resultados?.acertos || 0), 0));
+    }, [formData.conteudos]);
+
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+        const updatedConteudos = formData.conteudos.map((conteudo) =>
+            conteudo.turma_disciplina_id === e.turma_disciplina_id
+                ? e
+                : conteudo
+        );
+        const newFormData = { ...formData, conteudos: updatedConteudos };
+        setFormData(newFormData);
     }
 
     const handleSubmit = (e) => {
@@ -51,19 +64,34 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                     <div className={Style.ContainerColAcoes}>
                     </div>
                 </div>
-                {conteudos.length === 0 && (
+                {formData.conteudos && formData.conteudos.length === 0 && (
                     <div className={Style.ContainerEmpty}>
                         Nenhum simulado encontrado.
                     </div>
                 )}
-                {conteudos.map((conteudo, index) => (
+                {formData.conteudos && formData.conteudos.map((conteudo, index) => (
                     <SimuladosNotaItem
                         key={index}
                         conteudo={conteudo}
+                        aluno={aluno}
                         onUpdate={handleChange}
-                        
+                        toast={toast}
                     />
                 ))}
+                <div className={Style.ContainerFooter}>
+                    <div className={Style.ContainerCol}>
+                        Total
+                    </div>
+                    <div className={Style.ContainerCol}>
+
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        {String(NumeroAcertos).padStart(2, '0')}
+                    </div>
+                    <div className={Style.ContainerColAcoes}>
+                        / {String(NumeroQuestoes).padStart(2, '0')}
+                    </div>
+                </div>
                 <div className={Style.buttonGroup}>
                     <button
                         type="button"

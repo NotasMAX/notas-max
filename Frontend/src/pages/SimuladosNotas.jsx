@@ -67,6 +67,7 @@ export default function SimuladosNotas() {
     }
 
     const handleFormSubmit = async (formData) => {
+        console.log(formData);
         alert("Formulário submetido!");
         // Implementar lógica de submissão do formulário de notas
     }
@@ -90,8 +91,9 @@ export default function SimuladosNotas() {
             <SimuladosNotasForm
                 initialData={Simulado}
                 response={Response}
-                conteudos={Simulado ? Simulado.conteudos : []}
+                conteudosRecebidos={Simulado ? Simulado.conteudos : []}
                 onSubmit={handleFormSubmit}
+                aluno={Aluno}
             />
 
         </div>

@@ -9,10 +9,6 @@ const ResultadoSchema = new Schema({
         ref: "Usuarios",
         required: true,
     },
-    nota: {
-        type: Number,
-        required: true,
-    },
     acertos: {
         type: Number,
         required: true,
