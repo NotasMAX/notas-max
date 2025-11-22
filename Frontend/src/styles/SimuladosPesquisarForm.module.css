@@ -1,3 +1,7 @@
+.SimuladosFilters{
+     @apply flex flex-col lg:flex-row lg:items-end lg:justify-start sm:mt-[1rem];
+}
+
 .formContainer {
      @apply flex flex-col h-fit;
 }

@@ -1,16 +1,22 @@
+
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import routes from "./Routes/routes.js";
+import authRoutes from "./Routes/AuthRoute.js";
+import "./DB/conn.js"; 
 
-const app = new express();
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
     origin: ["http://localhost:30080"]
 }))
 
+app.use("/NotasMax/Auth", authRoutes);
 app.use("/NotasMax", routes);
 
 app.listen(5000);

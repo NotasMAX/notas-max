@@ -20,7 +20,7 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
-        
+
         if (name === 'serie' && inputSerie.current) {
             inputSerie.current.setCustomValidity("");
         }
@@ -49,12 +49,8 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
     };
 
     const gerarAnos = () => {
-        const anos = [];
-        const anoAtual = new Date().getFullYear()
-        for (let i = anoAtual + 1; i >= anoAtual - 50; i--) {
-            anos.push(i);
-        }
-        return anos;
+        const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i).reverse();
+        return years;
     };
 
     return (
@@ -100,15 +96,16 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
                 </div>
             </div>
             <div className={Style.buttonGroup}>
-                <button type="submit" className={Style.buttonPrimary}>
-                    Cadastrar Turma
-                </button>
                 <button
                     type="button"
                     className={Style.buttonSecondary}
                     onClick={() => navigate(-1)}>
                     Cancelar
                 </button>
+                <button type="submit" className={Style.buttonPrimary}>
+                    Cadastrar Turma
+                </button>
+
             </div>
         </form>
     );

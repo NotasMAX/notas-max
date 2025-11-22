@@ -3,7 +3,9 @@ import { useParams, useNavigate, useLocation, replace } from 'react-router-dom';
 import Style from '../styles/Simulados.module.css';
 import { Skeleton } from 'primereact/skeleton';
 import { Toast } from 'primereact/toast';
-import SimuladosPesquisarForm from '../components/SimuladoTurmasPesquisarForm';
+import SimuladosPesquisarForm from '../components/SimuladosPesquisarForm';
+import { findSimuladoByBimestreAnoSerie } from '../api/simuladoApi';
+import SimuladosItem from '../components/SimuladosItem';
 
 
 export default function Simulados() {
@@ -12,7 +14,7 @@ export default function Simulados() {
         ano: anoURL,
         serie: serieURL,
     } = useParams();
-
+    const [Simulados, setSimulados] = useState([]);
     let firstLoad = true;
     const toast = useRef(null);
     const toastShown = useRef(false);
@@ -24,7 +26,7 @@ export default function Simulados() {
 
         if (firstLoad) {
             firstLoad = false;
-            if (!bimestre && !serie && !ano) {
+            if (!bimestreURL && !serieURL && !anoURL) {
                 const month = new Date().getMonth() + 1;
                 let currentBimestre;
                 let currentAno = new Date().getFullYear();
@@ -49,18 +51,24 @@ export default function Simulados() {
                     toastShown.current = true;
                 }
             }
-            ;
             window.history.replaceState({}, '')
         }
     }, []);
 
-    const handleChange = (data) => {
-        const { bimestre, ano, serie } = data;
-        let path = `/Simulados/${bimestre}/${ano}`;
-        if (serie && serie !== 0) {
-            path += `/${serie}`;
+    useEffect(() => {
+        document.title = `NotasMAX - Simulados -` + (serieURL ? ` ${serieURL}º EM` : '') + ` - ${bimestreURL}º Bimestre ${anoURL}`;
+        fetchSimulados();
+    }, [bimestreURL, anoURL, serieURL]);
+
+    const fetchSimulados = async () => {
+        try {
+            findSimuladoByBimestreAnoSerie(bimestreURL, anoURL, serieURL).then((response) => {
+                const data = response.data;
+                setSimulados(data.simulados || []);
+            });
+        } catch (error) {
+            console.error("Erro ao buscar simulados:", error);
         }
-        navigate(path, { replace: true });
     }
 
     return (
@@ -80,7 +88,36 @@ export default function Simulados() {
                     ano: anoURL ? parseInt(anoURL) : 0,
                     serie: serieURL ? parseInt(serieURL) : 0,
                     bimestre: bimestreURL ? parseInt(bimestreURL) : 0,
-                }} onSubmit={handleChange} />
+                }} />
+            </div>
+            <div className={Style.SimuladoContainer}>
+                <div className={Style.ContainerHeader}>
+                    <div className={Style.ContainerCol}>
+                        Turma
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        Simulado
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        Tipo
+                    </div>
+                    <div className={Style.ContainerCol}>
+                        Data Realização
+                    </div>
+                        <div className={Style.ContainerCol}>
+                        Data Criação
+                    </div>
+                    <div className={Style.ContainerColAcoes}>
+                    </div>
+                </div>
+                {Simulados.length === 0 && (
+                    <div className={Style.ContainerEmpty}>
+                        Nenhum simulado encontrado.
+                    </div>
+                )}
+                {Simulados.map((simulado) => (
+                    <SimuladosItem key={simulado._id} simulado={simulado} />
+                ))}
             </div>
         </div>
     );

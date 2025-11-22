@@ -7,8 +7,10 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import SimuladosDisciplinaItem from "./SimuladosDisciplinaItem";
 import SimuladosDisciplinaForm from "./SimuladosDisciplinaForm";
+import { Tooltip } from "primereact/tooltip";
+import Turma from "../../../Backend/Models/Turma";
 
-export default function SimuladosForm({ initialData, onSubmit, response }) {
+export default function SimuladosForm({ initialData, onSubmit, response, simulado }) {
     const [formData, setFormData] = useState(initialData || {
         numero: 0,
         tipo: "",
@@ -17,10 +19,17 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         turma_id: "",
         conteudos: [],
     });
+    const [Turma, setTurma] = useState([]);
+    const tooltipRef = useRef(null);
     const navigate = useNavigate();
-    const [Turmas, setTurmas] = useState([]);
     const toast = useRef(null);
     const overlayRef = useRef(null);
+
+    useEffect(() => {
+        if (simulado) {
+            fetchSimuladoConteudos();
+        }
+    }, [simulado]);
 
     const removeDisciplina = (disciplinaToRemove) => {
         setFormData(prevData => ({
@@ -41,6 +50,40 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         }));
     };
 
+    const fetchSimuladoConteudos = async () => {
+
+        try {
+            const turma = (await getOne(simulado.turma_id)).data.turma;
+            setTurma(turma);
+            const conteudos = [];
+            simulado.conteudos.forEach(simulado => {
+                turma.disciplinas.forEach(turma_disciplina => {
+                    if (String(simulado.turma_disciplina_id) === String(turma_disciplina._id)) {
+                        conteudos.push({
+                            turma_disciplina_id: turma_disciplina._id,
+                            materia: turma_disciplina.materia,
+                            professor: turma_disciplina.professor,
+                            quantidade_questoes: simulado.quantidade_questoes || 0,
+                            peso: simulado.peso || 0
+                        });
+                    }
+                });
+            });
+
+            setFormData({
+                numero: simulado.numero || 0,
+                tipo: simulado.tipo || "",
+                bimestre: simulado.bimestre || 0,
+                data_realizacao: simulado.data_realizacao ? new Date(simulado.data_realizacao).toISOString().split('T')[0] : "",
+                turma_id: turma._id || "",
+                conteudos: conteudos
+            });;
+        } catch (error) {
+            console.error('Error fetching turma:', error);
+        }
+    }
+
+
     useEffect(() => {
         if (response) {
             if (toast && toast.current) {
@@ -49,20 +92,10 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
         }
     }, [response]);
 
-    const fetchTurmas = async () => {
-        try {
-            const response = await getAllTurmas();
-            setTurmas(response.data.turmas);
-        } catch (error) {
-            console.error('Error fetching turmas:', error);
-        }
-    };
-
     useEffect(() => {
         if (initialData) {
             setFormData(initialData);
         }
-        fetchTurmas();
     }, [initialData]);
 
     const fetchDisciplinas = async (e) => {
@@ -111,36 +144,6 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
-    };
-
-    const handleChangeTurma = (e) => {
-        const { name, value } = e.target;
-        if (formData.turma_id !== value) {
-            if (formData.conteudos.length > 0 && formData.conteudos[0].turma_disciplina_id) {
-                confirmDialog({
-                    message: 'Alterar a turma irá limpar as disciplinas selecionadas. Deseja continuar?',
-                    header: 'Confirmação',
-                    icon: <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none"><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M12 7v6" /><circle cx="12" cy="16" r="1" fill="#ee4544" /><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M9.216 3c1.18-.667 1.954-1 2.784-1c1.114 0 2.128.6 4.157 1.802l.686.406c2.029 1.202 3.043 1.803 3.6 2.792c.557.99.557 2.19.557 4.594v.812c0 2.403 0 3.605-.557 4.594c-.557.99-1.571 1.59-3.6 2.791l-.686.407C14.128 21.399 13.114 22 12 22c-1.114 0-2.128-.6-4.157-1.802l-.686-.407c-2.029-1.2-3.043-1.802-3.6-2.791C3 16.01 3 14.81 3 12.406v-.812C3 9.19 3 7.989 3.557 7C3.996 6.22 4.719 5.682 6 4.9" /></g></svg>,
-                    acceptClassName: 'p-button-danger',
-                    acceptLabel: 'Sim',
-                    rejectLabel: 'Não',
-                    accept: () => {
-                        if (toast && toast.current) {
-                            toast.current.show({ severity: 'success', summary: 'Sucesso', detail: 'Turma alterada com sucesso', life: 3000 });
-                        }
-                        setFormData(prevData => ({ ...prevData, [name]: value, conteudos: [] }));
-                    },
-                    reject: () => {
-                        if (toast && toast.current) {
-                            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Alteração cancelada', life: 3000 });
-                        }
-                    }
-                });
-            }
-            else {
-                setFormData(prevData => ({ ...prevData, [name]: value, conteudos: [] }));
-            }
-        };
     };
 
     const handleChangeDate = (e) => {
@@ -288,22 +291,25 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
             <OverlayPanel ref={overlayRef} >
                 <SimuladosDisciplinaForm toast={toast} turma_id={formData.turma_id} overlayRef={overlayRef} onSubmit={handleAddDisciplina} />
             </OverlayPanel>
+            <Tooltip target={tooltipRef} />
             <form>
                 <div className={Style.formGroup}>
-                    <div className={Style.formSelectContainerLarge}>
+                    <div
+                        ref={tooltipRef}
+                        data-pr-tooltip="Não é possível alterar a turma do simulado"
+                        data-pr-position="left"
+                        data-pr-at="left-5 center"
+                        data-pr-my="right center-2"
+                        className={Style.formSelectContainerLarge}>
                         <select
+                            disabled
                             id="input_turma_id"
                             name="turma_id"
                             value={String(formData.turma_id)}
                             className={Style.formSelect}
-                            onChange={handleChangeTurma}
                         >
-                            <option className={Style.formOption} value="">Turma</option>
-                            {Turmas.map((turma) => (
-                                <option className={Style.formOption} key={turma._id} value={turma._id}>
-                                    {turma.ano} - {turma.serie}º EM
-                                </option>
-                            ))}
+                            <option className={Style.formOption} value={Turma._id}>{Turma.ano} - {Turma.serie}º EM</option>
+
                         </select>
                         <svg className={Style.formSelectArrow} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z" />
@@ -462,7 +468,7 @@ export default function SimuladosForm({ initialData, onSubmit, response }) {
                             Cancelar
                         </button>
                         <button type="submit" className={Style.buttonPrimary} onClick={handleSubmit}>
-                            Cadastrar Simulado
+                            Atualizar Simulado
                         </button>
                     </div>
                 </div>

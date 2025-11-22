@@ -7,7 +7,7 @@ export default function TurmasPesquisaForm({ initialData, onSubmit }) {
         ano: 0,
     });
 
-    const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i);
+    const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i).reverse();
 
     useEffect(() => {
 
