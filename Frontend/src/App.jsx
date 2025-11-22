@@ -18,6 +18,7 @@ import SimuladosEditar from "./pages/SimuladosEditar";
 import AlunoDesempenho from "./pages/AlunoDesempenho";
 import TurmaDesempenho from "./pages/TurmaDesempenho";
 import NotFound from "./pages/NotFound";
+import SimuladosNotas from "./pages/SimuladosNotas";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -135,6 +136,15 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
+      <Route path="/Simulados/Notas/:simulado/:aluno" element={
+        <AdminRoute>
+          <Layout>
+            <SimuladosNotas />
+          </Layout>
+        </AdminRoute>
+      } />
+
+
       <Route path="/Simulados/Cadastrar" element={
         <AdminRoute>
           <Layout>
@@ -181,7 +191,7 @@ function AppRoutes() {
             <AlunoDesempenho />
           </Layout>
         </AdminRoute>
-        
+
       } />
 
       <Route path="/Turma/:id/desempenho" element={
