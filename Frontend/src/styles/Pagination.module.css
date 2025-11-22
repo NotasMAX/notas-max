@@ -1,0 +1,52 @@
+/* Container principal da paginação */
+.paginationContainer {
+  @apply flex items-center justify-center gap-4 mt-8 mb-4;
+}
+
+/* Botões Anterior/Próxima */
+.paginationButton {
+  @apply flex items-center gap-2 px-4 py-2 text-[0.875rem] font-medium font-inter text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+.paginationButton:disabled {
+  @apply text-gray-400 cursor-not-allowed hover:bg-white;
+}
+
+.paginationButton:disabled svg {
+  @apply fill-gray-400;
+}
+
+/* Container dos números de página */
+.pageNumbers {
+  @apply flex items-center gap-2;
+}
+
+/* Botões de número de página */
+.pageNumber {
+  @apply min-w-[2.5rem] h-[2.5rem] flex items-center justify-center text-[0.875rem] font-medium font-inter text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+/* Página ativa */
+.pageNumber.active {
+  @apply bg-blue-500 text-white border-blue-500 hover:bg-blue-600;
+}
+
+/* Reticências */
+.ellipsis {
+  @apply px-2 text-gray-500 text-[0.875rem] font-medium;
+}
+
+/* Responsividade para mobile */
+@media (max-width: 640px) {
+  .paginationContainer {
+    @apply flex-wrap;
+  }
+
+  .paginationButton {
+    @apply text-[0.75rem] px-3 py-1.5;
+  }
+
+  .pageNumber {
+    @apply min-w-[2rem] h-[2rem] text-[0.75rem];
+  }
+}
