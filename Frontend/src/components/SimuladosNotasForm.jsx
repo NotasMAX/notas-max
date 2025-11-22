@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Style from "../styles/SimuladosNotasForm.module.css";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import SimuladosNotaItem from "./SimuladosNotaItem";
 
 export default function SimuladosForm({ initialData, onSubmit, response, conteudos }) {
     const [formData, setFormData] = useState(initialData || {
@@ -56,9 +57,12 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                     </div>
                 )}
                 {conteudos.map((conteudo, index) => (
-                    <div key={index}>
-                        <h3 className={Style.ConteudoTitle}>{conteudo._id}</h3>
-                    </div>
+                    <SimuladosNotaItem
+                        key={index}
+                        conteudo={conteudo}
+                        onUpdate={handleChange}
+                        
+                    />
                 ))}
                 <div className={Style.buttonGroup}>
                     <button

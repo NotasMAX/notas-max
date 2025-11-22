@@ -3,8 +3,8 @@
 }
 
 .ContainerHeader {
-     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-4 items-center gap-[1rem] mb-1 bg-[#F5F5F5] mt-[1rem];
-     grid-template-columns: 1fr 1fr 1fr 3rem;
+     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-4 items-center gap-[1rem] bg-[#F5F5F5] mt-[1rem];
+     grid-template-columns: 1fr 1fr 12rem 3rem;
 }
 
 .SimuladosHeader {
@@ -12,7 +12,7 @@
 }
 
 .SimuladosSubHeader {
-     @apply text-[2rem] font-inter mb-4 mt-[1rem] text-[#404040];
+     @apply text-[2rem] font-inter text-[#404040];
 }
 
 .ContainerCol {
@@ -28,7 +28,7 @@
 }
 
 .buttonGroup {
-     @apply flex justify-center space-x-[1rem];
+     @apply flex justify-center space-x-[1rem] mt-[2rem];
 }
 
 .buttonPrimary {

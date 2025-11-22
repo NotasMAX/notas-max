@@ -1,0 +1,17 @@
+.ContainerCol {
+    @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block;
+}
+
+.ContainerColAcoes {
+    @apply w-full text-left text-[1.125rem] font-inter font-medium;
+}
+
+.ContainerRow {
+    @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-4 items-center gap-[1rem];
+    grid-template-columns: 1fr 1fr 12rem 3rem;
+}
+
+.QuestoesInput {
+    @apply w-[12rem] h-[2.5rem] bg-white border border-gray-300 rounded-md px-2 text-[1.125rem] font-medium font-inter text-center;
+}
+
