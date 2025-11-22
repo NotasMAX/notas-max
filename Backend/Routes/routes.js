@@ -19,7 +19,7 @@ routes.delete("/Turmas/Remover/Aluno",authenticateToken, authorizeAdmin, TurmasC
 routes.get("/Turma/:id/desempenho", authenticateToken, authorizeAdmin,TurmasController.getDesempenhoByTurma);
 routes.post("/Turmas/Adicionar/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.create);
 routes.delete("/Turmas/Remover/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.remove);
-
+routes.get("/Turmas/Disciplinas/:turma_disciplina_id",authenticateToken, authorizeAdmin, TurmaDisciplinasController.getOne);
 
 routes.get("/Usuarios/Professores",authenticateToken, authorizeAdmin, UsuariosController.listarProfessores);
 routes.get("/Usuarios/Alunos",authenticateToken, authorizeAdmin, UsuariosController.listarAlunos);
