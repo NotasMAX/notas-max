@@ -155,36 +155,6 @@ export default class UsuariosController {
         }
     }
 
-    //METODOS ANTIGOS/TESTE
-
-    static async createAluno(req, res) { //Somente para testes
-        const {
-            nome,
-            email,
-            telefone_contato,
-            senha,
-            tipo_usuario,
-            telefone_responsavel
-        } = req.body;
-
-        const usuario = new Usuarios({
-            nome,
-            email,
-            telefone_contato,
-            senha,
-            tipo_usuario,
-            telefone_responsavel
-        });
-
-        try {
-            const novoUsuario = await usuario.save();
-            res.status(200).json({ message: "Usuário inserido com sucesso!", novoUsuario });
-        }
-        catch (error) {
-            res.status(500).json({ message: "Problema ao inserir o Usuário", error });
-        }
-    }
-
     static async getAllAlunos(req, res) {
         try {
             const alunos = await Usuarios.find({}).where({ tipo_usuario: "aluno" }).sort("nome");

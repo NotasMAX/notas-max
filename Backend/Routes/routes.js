@@ -29,8 +29,6 @@ routes.put("/Usuarios/Editar/:id",authenticateToken, authorizeAdmin, UsuariosCon
 routes.post("/Usuarios/Professor",authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
 routes.post("/Usuarios/Aluno",authenticateToken, authorizeAdmin, UsuariosController.cadastrarAluno);
 
-
-routes.post("/Usuarios/CadastrarAluno",authenticateToken, authorizeAdmin, UsuariosController.createAluno); //Somente para testes ↓
 routes.get("/Usuarios/Buscar/Alunos",authenticateToken, authorizeAdmin, UsuariosController.getAlunoByNameOrEmail); 
 routes.get("/Usuarios/Buscar/Professores",authenticateToken, authorizeAdmin, UsuariosController.getProfessorByNameOrEmail);
 routes.get("/Usuarios/:id",authenticateToken, authorizeAdmin, UsuariosController.getOne);
