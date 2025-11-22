@@ -18,7 +18,7 @@ export default function TurmaItem({ turma, position }) {
             </a>
             <Link
                 ref={tooltipRef}
-                to={`/Turma/Editar/${turma._id}`}
+                to={`/Turmas/Editar/${turma._id}`}
                 aria-label={`Editar turma ${turma._id}`}
                 data-pr-tooltip={`Editar turma`}>
                 <svg className={Style.TurmaContainerEditIcon} width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">

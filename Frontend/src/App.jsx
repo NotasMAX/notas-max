@@ -13,15 +13,12 @@ import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
-<<<<<<< HEAD
 import SimuladosAlunosList from "./pages/SimuladosAlunosList";
 import SimuladoNotasPorMateria from "./pages/SimuladoNotasPorMateria";
 import SimuladoNotasPorSimulado from "./pages/SimuladoNotasPorSimulado";
-=======
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
 import NotFound from "./pages/NotFound";
->>>>>>> origin/main
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -107,7 +104,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="Turma/Editar/:id" element={
+      <Route path="Turmas/Editar/:id" element={
         <AdminRoute>
           <Layout>
             <TurmasEditar />
@@ -167,13 +164,13 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="/Simulados/Notas/:simuladoId/:alunoId" element={
+      <Route path="/Simulados/Notas/:simuladoIdParams/:bimestre/:alunoId" element={
         <Layout>
           <SimuladoNotasPorSimulado />
         </Layout>
       } />
 
-      <Route path="/Simulados/Notas/Materia/:simuladoId/:alunoId" element={
+      <Route path="/Simulados/Notas/Materia/:simuladoIdParams/:bimestre/:alunoId" element={
         <Layout>
           <SimuladoNotasPorMateria />
         </Layout>
