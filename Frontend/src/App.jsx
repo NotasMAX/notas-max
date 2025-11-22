@@ -15,6 +15,8 @@ import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
+import AlunoDesempenho from "./pages/AlunoDesempenho";
+import TurmaDesempenho from "./pages/TurmaDesempenho";
 import NotFound from "./pages/NotFound";
 
 const ProtectedRoute = ({ children }) => {
@@ -169,6 +171,23 @@ function AppRoutes() {
         <AdminRoute>
           <Layout>
             <MateriaEditar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Usuarios/Aluno/:id/desempenho" element={
+        <AdminRoute>
+          <Layout>
+            <AlunoDesempenho />
+          </Layout>
+        </AdminRoute>
+        
+      } />
+
+      <Route path="/Turma/:id/desempenho" element={
+        <AdminRoute>
+          <Layout>
+            <TurmaDesempenho />
           </Layout>
         </AdminRoute>
       } />

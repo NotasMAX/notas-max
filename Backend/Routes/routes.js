@@ -16,12 +16,14 @@ routes.get("/Turmas/Pesquisar/:ano",authenticateToken, authorizeAdmin, TurmasCon
 routes.post("/Turmas/Cadastrar",authenticateToken, authorizeAdmin, TurmasController.create);
 routes.patch("/Turmas/Adicionar/Aluno",authenticateToken, authorizeAdmin, TurmasController.addAluno);
 routes.delete("/Turmas/Remover/Aluno",authenticateToken, authorizeAdmin, TurmasController.removeAluno);
+routes.get("/Turma/:id/desempenho", authenticateToken, authorizeAdmin,TurmasController.getDesempenhoByTurma);
 routes.post("/Turmas/Adicionar/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.create);
 routes.delete("/Turmas/Remover/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.remove);
 
 
 routes.get("/Usuarios/Professores",authenticateToken, authorizeAdmin, UsuariosController.listarProfessores);
 routes.get("/Usuarios/Alunos",authenticateToken, authorizeAdmin, UsuariosController.listarAlunos);
+routes.get("/Usuarios/Aluno/:id/desempenho", authenticateToken, authorizeAdmin, UsuariosController.getDesempenhoByAluno);
 routes.get("/Usuarios/Detalhes/:id",authenticateToken, authorizeAdmin, UsuariosController.getUsuario);
 routes.put("/Usuarios/Editar/:id",authenticateToken, authorizeAdmin, UsuariosController.atualizarUsuario);
 routes.post("/Usuarios/Professor",authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
