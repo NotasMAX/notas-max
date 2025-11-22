@@ -23,7 +23,6 @@
      @apply border px-[0.5rem] py-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-sm;
 }
 
-
 .TurmaContainerButtonIcon {
      @apply fill-[#404040] h-[1.25rem] w-auto cursor-pointer;
 }

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Style from "../styles/TurmasForm.module.css";
 
 export default function TurmasForm({ initialData, onSubmit, response }) {
     const [formData, setFormData] = useState(initialData || {
-        serie: 0,
-        ano: 0
+        serie: "",
+        ano: ""
     });
     const navigate = useNavigate();
+    const inputAno = useRef(null);
+    const inputSerie = useRef(null);
 
     useEffect(() => {
         if (initialData) {
@@ -18,20 +20,37 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({ ...prevData, [name]: value }));
+
+        if (name === 'serie' && inputSerie.current) {
+            inputSerie.current.setCustomValidity("");
+        }
+        if (name === 'ano' && inputAno.current) {
+            inputAno.current.setCustomValidity("");
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (inputSerie.current.value === "") {
+            inputSerie.current.setCustomValidity("A série é obrigatória.");
+            inputSerie.current.reportValidity();
+            inputSerie.current.focus();
+            return;
+        }
+
+        if (inputAno.current.value === "") {
+            inputAno.current.setCustomValidity("O ano é obrigatório.");
+            inputAno.current.reportValidity();
+            return;
+        }
+
         onSubmit(formData);
     };
 
     const gerarAnos = () => {
-        const anos = [];
-        const anoAtual = new Date().getFullYear()
-        for (let i = anoAtual + 1; i >= anoAtual - 50; i--) {
-            anos.push(i);
-        }
-        return anos;
+        const years = Array.from({ length: new Date().getFullYear() + 1 - 1950 + 1 }, (_, i) => 1950 + i).reverse();
+        return years;
     };
 
     return (
@@ -42,10 +61,10 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
             <div className={Style.formGroup}>
                 <div className={Style.formSelectContainer}>
                     <select
-                        required
                         className={Style.formSelect}
-                        id="serie" name="serie"
+                        id="input_serie" name="serie"
                         value={formData.serie}
+                        ref={inputSerie}
                         onChange={handleChange}>
                         <option className={Style.formOption} value="">Série</option>
                         <option className={Style.formOption} value="1">1º EM</option>
@@ -58,10 +77,10 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
                 </div>
                 <div className={Style.formSelectContainer}>
                     <select
-                        required
-                        name="ano"
+                        id="input_ano" name="ano"
                         value={String(formData.ano)}
                         className={Style.formSelect}
+                        ref={inputAno}
                         onChange={handleChange}
                     >
                         <option className={Style.formOption} value=""> Ano</option>
@@ -77,15 +96,16 @@ export default function TurmasForm({ initialData, onSubmit, response }) {
                 </div>
             </div>
             <div className={Style.buttonGroup}>
-                <button type="submit" className={Style.buttonPrimary}>
-                    Cadastrar Turma
-                </button>
                 <button
                     type="button"
                     className={Style.buttonSecondary}
                     onClick={() => navigate(-1)}>
                     Cancelar
                 </button>
+                <button type="submit" className={Style.buttonPrimary}>
+                    Cadastrar Turma
+                </button>
+
             </div>
         </form>
     );

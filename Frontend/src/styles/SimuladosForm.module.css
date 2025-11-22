@@ -1,0 +1,124 @@
+.SimuladosHeader {
+  @apply text-[2.125rem] font-bold font-inter mb-[1.875rem];
+}
+
+.spanError {
+  @apply text-red-600 mt-0.5 font-medium font-inter;
+}
+
+.formGroup {
+  @apply flex lg:mt-[1rem] lg:mb-[1rem] sm:flex-row flex-col items-start;
+}
+
+.formSelectContainer {
+  @apply relative w-[10rem] mr-[1rem] lg:mt-0 mt-4;
+}
+
+.formSelectContainerLarge {
+  @apply relative w-[12rem] mr-[1rem] lg:mt-0 mt-4;
+}
+
+.formSelectContainerLarge .formSelect {
+  @apply w-[12rem];
+}
+
+.formSelect {
+  @apply rounded-md lg:pr-2 w-[10rem] h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none pl-4;
+}
+
+.formOption {
+  @apply text-[1.25rem] w-[7.1875rem] font-medium font-inter mb-6 text-[#404040] text-left;
+}
+
+.formSelectArrow {
+  @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
+}
+
+.formInput {
+  @apply w-[12rem] h-[3.0625rem] bg-white border border-gray-300 rounded-md px-4 text-[1.25rem] font-medium font-inter mb-[1rem] sm:mb-0 md:mb-0 lg:mt-0;
+}
+
+.formGroupDisciplinas {
+  @apply flex sm:flex-row flex-col items-start lg:gap-[1rem] mb-[1rem];
+}
+
+.buttonDisciplinas {
+  @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[20rem] h-[3.0625rem] mb-[1rem] sm:mb-0;
+}
+
+.buttonDisciplinasLarge {
+  @apply flex flex-row items-center justify-center font-medium font-inter text-[1.25rem] text-[#404040] border rounded-md shadow-md w-[25rem] h-[3.0625rem];
+}
+
+.buttonDisciplinas:hover,
+.buttonDisciplinasLarge:hover {
+  @apply bg-[#1E3A8A] text-white;
+}
+
+.buttonDisciplinasIcon {
+  @apply fill-[#404040] h-[1.5rem] w-auto mr-[0.625rem];
+}
+
+.buttonDisciplinas:hover .buttonDisciplinasIcon,
+.buttonDisciplinasLarge:hover .buttonDisciplinasIcon {
+  @apply fill-white;
+}
+
+.SimuladoContainerDisciplinas {
+  @apply border pb-[0.5rem] border-solid border-[#D9D9D9] rounded-[0.4375rem] shadow-md mb-6 min-h-[21.875rem];
+}
+
+.ContainerDisciplinasHeader {
+  @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] mb-1 bg-[#F5F5F5] rounded-b-none;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1.5rem;
+}
+
+.ContainerDisciplinasCol {
+  @apply w-full text-center font-inter font-medium text-[1.125rem] inline-block;
+}
+
+.ContainerDisciplinasColAcoes {
+  @apply w-full text-center text-[1.125rem] font-inter font-medium;
+}
+
+.ContainerDisciplinasRow {
+  @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-6 items-center gap-[1rem] m-2;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1.5rem;
+}
+
+.DisciplinasInput {
+  @apply w-6/12 h-[2.5rem] bg-white border border-gray-300 rounded-md px-2 text-[1.125rem] font-medium font-inter text-center;
+}
+
+.buttonDeleteDisciplina {
+  @apply flex items-center justify-end;
+}
+
+.ContainerDisciplinasColIcon {
+  @apply fill-[#B50909] h-[1.5rem] w-auto cursor-pointer float-right hover:scale-125 transition-transform duration-200;
+}
+
+.ContainerDisciplinasEmpty
+{
+  @apply text-red-600 w-full text-center font-inter font-medium text-[1.125rem] inline-block mt-[2rem];
+}
+
+.buttonGroup {
+  @apply flex justify-center space-x-[1rem];
+}
+
+.buttonPrimary {
+  @apply bg-[#1C86EB] text-white px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-solid text-[1.25rem];
+}
+
+.buttonPrimary:hover {
+  @apply bg-[#15538E];
+}
+
+.buttonSecondary {
+  @apply bg-transparent text-[#404040] px-[1.3125rem] py-[0.59375rem] border border-[#D9D9D9] rounded-[0.4375rem] font-medium font-inter border-2 border-solid text-[1.25rem];
+}
+
+.buttonSecondary:hover {
+  @apply bg-[#D9D9D9] text-white;
+}

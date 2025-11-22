@@ -1,25 +1,23 @@
-
-
-.TurmasDisciplinaForm {
+.SimuladosDisciplinaForm {
     @apply w-[35rem] h-[19.49rem];
 }
 
-.TurmasDisciplinaFormHeader {
+.SimuladosDisciplinaFormHeader {
     @apply text-xl font-bold font-inter mb-4;
 }
 
-.TurmasDisciplinaFormInput {
+.SimuladosDisciplinaFormInput {
     @apply w-full;
 }
 
-.TurmasDisciplinaFormList {
+.SimuladosDisciplinaFormList {
     @apply overflow-y-auto mt-3 overflow-x-hidden h-[13rem] border border-gray-300 rounded flex flex-col;
 }
 
-.TurmasDisciplinaFormListItem {
+.SimuladosDisciplinaFormListItem {
     @apply p-2 border-b border-gray-300 hover:bg-gray-100 cursor-pointer;
 }
 
-.TurmasDisciplinaFormAlert {
-      @apply text-red-600 mt-0.5 font-medium font-inter text-center mt-auto mb-auto;
+.SimuladosDisciplinaFormAlert {
+    @apply text-red-600 mt-0.5 font-medium font-inter text-center mt-auto mb-auto;
 }
