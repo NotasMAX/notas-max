@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const mongoUrl = process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/NotasMax";
 
-async function main(){
-    await mongoose.connect(mongoUrl);
-    console.log("Conectou mongodb");
-}
-main().catch((err)=>console.log(err));
+mongoose.connect(mongoUrl)
+    .then(() => console.log("✓ Conectou ao MongoDB"))
+    .catch((err) => {
+        console.error("✗ Erro ao conectar MongoDB:", err.message);
+        process.exit(1);
+    });
 
 export default mongoose;
