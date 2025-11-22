@@ -8,7 +8,6 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import SimuladosDisciplinaItem from "./SimuladosDisciplinaItem";
 import SimuladosDisciplinaForm from "./SimuladosDisciplinaForm";
 import { Tooltip } from "primereact/tooltip";
-import Turma from "../../../Backend/Models/Turma";
 
 export default function SimuladosForm({ initialData, onSubmit, response, simulado }) {
     const [formData, setFormData] = useState(initialData || {
