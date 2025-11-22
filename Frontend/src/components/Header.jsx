@@ -1,8 +1,18 @@
 import React from 'react'
 import Style from "../styles/Header.module.css";
+import { Link, useNavigate } from 'react-router-dom';
 import logo from "../imgs/logo.svg";
+import { useAuth } from '../context/AuthContext';
 
-export default function Header({ userName }) {
+export default function Header({}) {
+      const { user, logoutUser } = useAuth();
+      const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logoutUser();
+        navigate('/login');
+    };
+
     return (
         <header className={Style.header}>
             <a className={Style.headerLink} href="/">
@@ -16,15 +26,14 @@ export default function Header({ userName }) {
                         <path fillRule="evenodd" clipRule="evenodd" d="M9.44304 19.1694C9.90173 18.8618 10.5229 18.9843 10.8305 19.443C10.9299 19.5912 11.0843 19.731 11.2919 19.8345C11.4998 19.938 11.7445 19.9964 12 19.9964C12.2556 19.9964 12.5002 19.938 12.7081 19.8345C12.9157 19.731 13.0701 19.5912 13.1695 19.443C13.4771 18.9843 14.0983 18.8618 14.557 19.1694C15.0157 19.4771 15.1382 20.0983 14.8305 20.557C14.5234 21.0149 14.0944 21.3783 13.6 21.6246C13.1058 21.8708 12.5546 21.9964 12 21.9964C11.4454 21.9964 10.8942 21.8708 10.4 21.6246C9.90565 21.3783 9.4766 21.0149 9.16948 20.557C8.86187 20.0983 8.98435 19.4771 9.44304 19.1694Z" />
                     </svg>
                 </a>
-                <span className={Style.headerUserName}>{userName || "Usuário"}</span>
-                <a href='#' className={Style.headerLogout}>
+                <span className={Style.headerUserName}>Bem vindo, {user?.nome?.split(' ')[0] || "Usuário"}!</span>
+                <button onClick={handleLogout} className={Style.headerLogout}>
                     <svg className={Style.headerLogoutIcon} width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path className={Style.headerLogoutIconDoor} d="M3 1H10.5498C11.6311 1 12.5165 1.85963 12.5488 2.94043L12.9082 14.9404C12.9418 16.0677 12.037 16.9999 10.9092 17H3C1.89543 17 1 16.1046 1 15V3C1 1.89543 1.89543 1 3 1Z" strokeWidth="2" />
                         <path d="M8.5 8.5H16" stroke="white" strokeWidth="4" />
                         <path className={Style.headerLogoutIconArrow} fillRule="evenodd" clipRule="evenodd" d="M15.3081 3.68306C15.5521 3.43898 15.9479 3.43898 16.1919 3.68306L20.5669 8.05806C20.811 8.30214 20.811 8.69786 20.5669 8.94194L16.1919 13.3169C15.9479 13.561 15.5521 13.561 15.3081 13.3169C15.064 13.0729 15.064 12.6771 15.3081 12.4331L18.6161 9.125H8.875C8.52982 9.125 8.25 8.84518 8.25 8.5C8.25 8.15482 8.52982 7.875 8.875 7.875H18.6161L15.3081 4.56694C15.064 4.32286 15.064 3.92714 15.3081 3.68306Z" />
                     </svg>
-
-                </a>
+                </button>
             </div>
         </header>
     )

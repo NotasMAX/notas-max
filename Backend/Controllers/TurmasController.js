@@ -1,4 +1,5 @@
 import Turmas from "../Models/Turma.js";
+import Simulado from "../Models/Simulado.js";
 import SimuladosController from "./SimuladosController.js";
 import UsuariosController from "./UsuariosController.js";
 import { Types } from "mongoose";
@@ -267,4 +268,50 @@ export default class TurmasController {
             res.status(500).json({ message: "Erro ao remover aluno da turma", error });
         }
     }
+
+    static async getDesempenhoByTurma(req, res) {
+    const turmaId = req.params.id;
+    const ObjectId = Types.ObjectId;
+
+    if (!ObjectId.isValid(turmaId))
+      return res.status(422).json({ message: "ID da turma inválido" });
+
+    try {
+      const turma = await Turmas.findById(turmaId);
+      if (!turma) return res.status(404).json({ message: "Turma não encontrada" });
+
+      const medias = await Simulado.aggregate([
+        { $match: { turma_id: new ObjectId(turmaId) } },
+        { $unwind: "$conteudos" },
+        { $unwind: "$conteudos.resultados" },
+        {
+          $group: {
+            _id: "$bimestre",
+            media: { $avg: "$conteudos.resultados.nota" }
+          }
+        },
+        { $sort: { _id: 1 } }
+      ]);
+
+      const desempenho = [1, 2, 3, 4].map(bi => {
+        const f = medias.find(m => m._id === bi);
+        return {
+          bimestre: bi,
+          media: f?.media ?? 0
+        };
+      });
+
+      res.status(200).json({
+        turma: {
+          ano: turma.ano,
+          serie: turma.serie
+        },
+        desempenho
+      });
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Erro ao buscar desempenho da turma", error });
+    }
+  }
 }

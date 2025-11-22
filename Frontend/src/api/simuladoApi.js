@@ -1,11 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://localhost:5000/NotasMax",
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
+import api from "../utils/api.js";
 
 export const cadastrarSimulado = (payload) => api.post('/Simulado/Create', payload);
 export const getOne = (id) => api.get(`/Simulado/${id}`);

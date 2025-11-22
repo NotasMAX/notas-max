@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from "./components/Layout";
 import Turmas from "./pages/Turmas";
 import TurmasCadastrar from "./pages/TurmasCadastrar";
@@ -22,155 +23,268 @@ import ProfessorEditar from "./pages/ProfessorEditar";
 import ProfessorVisualizar from "./pages/ProfessorVisualizar";
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
+import AlunoDesempenho from "./pages/AlunoDesempenho";
+import TurmaDesempenho from "./pages/TurmaDesempenho";
+import NotFound from "./pages/NotFound";
 
-function App() {
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return <div>Carregando...</div>;
+  if (!user) return <Navigate to="/login" replace />;
+  return children;
+};
+
+const AdminRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return <div>Carregando...</div>;
+  if (!user) return <Navigate to="/login" replace />;
+  if (user && user.tipo_usuario !== 'administrador') return <div>Acesso negado.</div>;
+  return children;
+};
+
+const GuestRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return <div>Carregando...</div>;
+  if (user) return <Navigate to="/" replace />;
+  return children;
+};
+
+function AppRoutes() {
   return (
     <Routes>
 
-      <Route path="/reset-senha" element={<ResetSenha />} />
+      <Route path="/reset-senha" element={
+        <GuestRoute>
+          <ResetSenha />
+        </GuestRoute>
+      } />
 
-      <Route path="/Login" element={<Login />} />
-
-      <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+      <Route path="/Login" element={
+        <GuestRoute>
+          <Login />
+        </GuestRoute>
+      } />
 
       <Route path="/Home" element={
-        <Layout>
-          <Home />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <Home />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/" element={
-        <Layout>
-          <Home />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <Home />
+          </Layout>
+        </AdminRoute>
       } />
 
-      {/* Rotas de Turmas */}
+      <Route path="/recuperar-senha" element={
+        <GuestRoute>
+          <RecuperarSenha />
+        </GuestRoute>
+      } />
+
       <Route path="Turmas/Cadastrar" element={
-        <Layout>
-          <TurmasCadastrar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <TurmasCadastrar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="Turmas/" element={
-        <Layout>
-          <Turmas />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <Turmas />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="Turmas/:ano" element={
-        <Layout>
-          <Turmas />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <Turmas />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="Turma/Editar/:id" element={
-        <Layout>
-          <TurmasEditar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <TurmasEditar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="Turma/:id" element={
-        <Layout>
-          <TurmasSimulados />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <TurmasSimulados />
+          </Layout>
+        </AdminRoute>
       } />
 
       {/* Rotas de Simulados */}
       <Route path="/Simulados" element={
-        <Layout>
-          <Simulados />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <Simulados />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Simulados/:bimestre/:ano/:serie?" element={
-        <Layout>
-          <Simulados />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <Simulados />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Simulados/Cadastrar" element={
-        <Layout>
-          <SimuladosCadastrar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <SimuladosCadastrar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Simulado/Editar/:id" element={
-        <Layout>
-          <SimuladosEditar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <SimuladosEditar />
+          </Layout>
+        </AdminRoute>
       } />
 
       {/* Rotas de Matérias */}
       <Route path="/Materias/Cadastrar" element={
-        <Layout>
-          <MateriaCadastrar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <MateriaCadastrar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Materias" element={
-        <Layout>
-          <MateriaListar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <MateriaListar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Materias/Editar/:id" element={
-        <Layout>
-          <MateriaEditar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <MateriaEditar />
+          </Layout>
+        </AdminRoute>
       } />
 
       {/* Rotas de Alunos */}
       <Route path="/Alunos/Cadastrar" element={
-        <Layout>
-          <AlunoCadastrar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <AlunoCadastrar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Alunos" element={
-        <Layout>
-          <AlunoListar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <AlunoListar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Alunos/Visualizar/:id" element={
-        <Layout>
-          <AlunoVisualizar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <AlunoVisualizar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Alunos/Editar/:id" element={
-        <Layout>
-          <AlunoEditar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <AlunoEditar />
+          </Layout>
+        </AdminRoute>
       } />
 
       {/* Rotas de Professores */}
       <Route path="/Professores/Cadastrar" element={
-        <Layout>
-          <ProfessorCadastrar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <ProfessorCadastrar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Professores" element={
-        <Layout>
-          <ProfessorListar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <ProfessorListar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Professores/Visualizar/:id" element={
-        <Layout>
-          <ProfessorVisualizar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <ProfessorVisualizar />
+          </Layout>
+        </AdminRoute>
       } />
 
       <Route path="/Professores/Editar/:id" element={
-        <Layout>
-          <ProfessorEditar />
-        </Layout>
+        <AdminRoute>
+          <Layout>
+            <ProfessorEditar />
+          </Layout>
+        </AdminRoute>
       } />
 
-    </Routes >
+      <Route path="/Usuarios/Aluno/:id/desempenho" element={
+        <AdminRoute>
+          <Layout>
+            <AlunoDesempenho />
+          </Layout>
+        </AdminRoute>
+        
+      } />
+
+      <Route path="/Turma/:id/desempenho" element={
+        <AdminRoute>
+          <Layout>
+            <TurmaDesempenho />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/404" element={
+        <NotFound />
+      } />
+
+      <Route path="*" element={
+        <Navigate to="/404" replace />
+      } />
+
+    </Routes>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 }
 

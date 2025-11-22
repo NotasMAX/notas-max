@@ -2,42 +2,24 @@ import React, { useState } from "react";
 import styles from "../styles/Login.module.css";
 import logo from "../imgs/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useAuth } from '../context/AuthContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErro("");
 
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/NotasMax/Auth/login",
-        { email, senha },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      const { token, usuario } = response.data;
-
-      // Salva o token e o usuário no localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("usuario", JSON.stringify(usuario));
-
-      // Redireciona para a home
-      navigate("/home");
-    } catch (err) {
-      if (err.response && err.response.status === 401) {
-        setErro("E-mail ou senha incorretos.");
-      } else {
-        console.log(err);
-        setErro("Erro no servidor. Tente novamente mais tarde.");
-      }
+    const result = await loginUser(email, senha);
+    if (!result.ok) {
+      setErro(result.message || 'Erro ao fazer login');
+    } else {
+      navigate("/");
     }
   };
 

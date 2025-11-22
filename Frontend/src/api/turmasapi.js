@@ -1,11 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://localhost:5000/NotasMax",
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
+import api from "../utils/api";
 
 export const cadastrarTurma = (payload) => api.post("/Turmas/Cadastrar", payload);
 export const getAllTurmas = () => api.get("/Turmas");
@@ -16,5 +9,6 @@ export const addAluno = (payload) => api.patch(`/Turmas/Adicionar/Aluno`, payloa
 export const removeAluno = (turma_id, aluno_id) => api.delete(`/Turmas/Remover/Aluno?turma_id=${turma_id}&aluno_id=${aluno_id}`);
 export const addDisciplina = (payload) => api.post(`/Turmas/Adicionar/Disciplina`, payload);
 export const removeDisciplina = (id) => api.delete(`/Turmas/Remover/Disciplina?id=${id}`);
+export const getDesempenhoTurma = (turma_id) => api.get(`/Turma/${turma_id}/desempenho`);
 
 export default api;

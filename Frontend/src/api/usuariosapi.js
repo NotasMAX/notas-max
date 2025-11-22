@@ -1,11 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://localhost:5000/NotasMax",
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
+import api from "../utils/api";
 
 // Endpoints de Professores
 export const getProfessores = () => api.get("/Usuarios/Professores");
@@ -14,6 +7,7 @@ export const createProfessor = (data) => api.post("/Usuarios/Professor", data);
 // Endpoints de Alunos
 export const getAlunos = () => api.get("/Usuarios/Alunos");
 export const createAluno = (data) => api.post("/Usuarios/Aluno", data);
+export const getDesempenhoAluno = (aluno_id) => api.get(`/Usuarios/Aluno/${aluno_id}/desempenho`);
 
 // Endpoints Comuns (Alunos e Professores)
 export const getUsuario = (id) => api.get(`/Usuarios/Detalhes/${id}`);

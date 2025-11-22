@@ -3,47 +3,50 @@ import TurmasController from "../Controllers/TurmasController.js";
 import TurmaDisciplinasController from "../Controllers/TurmaDisciplinasController.js";
 import UsuariosController from "../Controllers/UsuariosController.js";
 import MateriasController from "../Controllers/MateriasController.js";
+import {authenticateToken, authorizeAdmin} from "../middlewares/authMiddleware.js";
 import SimuladosController from '../Controllers/SimuladosController.js';
 
 
 const routes = Router();
 
 //rotas de Turmas
-routes.get("/Turmas", TurmasController.getAll);
-routes.get("/Turma/:id", TurmasController.getOne);
-routes.get("/Turmas/Pesquisar/:ano", TurmasController.getByAno);
-routes.post("/Turmas/Cadastrar", TurmasController.create);
-routes.patch("/Turmas/Adicionar/Aluno", TurmasController.addAluno);
-routes.delete("/Turmas/Remover/Aluno", TurmasController.removeAluno);
-routes.post("/Turmas/Adicionar/Disciplina", TurmaDisciplinasController.create);
-routes.delete("/Turmas/Remover/Disciplina", TurmaDisciplinasController.remove);
+routes.get("/Turmas",authenticateToken, authorizeAdmin, TurmasController.getAll);
+routes.get("/Turma/:id",authenticateToken, authorizeAdmin, TurmasController.getOne);
+routes.get("/Turmas/Pesquisar/:ano",authenticateToken, authorizeAdmin, TurmasController.getByAno);
+routes.post("/Turmas/Cadastrar",authenticateToken, authorizeAdmin, TurmasController.create);
+routes.patch("/Turmas/Adicionar/Aluno",authenticateToken, authorizeAdmin, TurmasController.addAluno);
+routes.delete("/Turmas/Remover/Aluno",authenticateToken, authorizeAdmin, TurmasController.removeAluno);
+routes.get("/Turma/:id/desempenho", authenticateToken, authorizeAdmin,TurmasController.getDesempenhoByTurma);
+routes.post("/Turmas/Adicionar/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.create);
+routes.delete("/Turmas/Remover/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.remove);
 
 
-routes.get("/Usuarios/Professores", UsuariosController.listarProfessores);
-routes.get("/Usuarios/Alunos", UsuariosController.listarAlunos);
-routes.get("/Usuarios/Detalhes/:id", UsuariosController.getUsuario);
-routes.put("/Usuarios/Editar/:id", UsuariosController.atualizarUsuario);
-routes.post("/Usuarios/Professor", UsuariosController.cadastrarProfessor);
-routes.post("/Usuarios/Aluno", UsuariosController.cadastrarAluno);
+routes.get("/Usuarios/Professores",authenticateToken, authorizeAdmin, UsuariosController.listarProfessores);
+routes.get("/Usuarios/Alunos",authenticateToken, authorizeAdmin, UsuariosController.listarAlunos);
+routes.get("/Usuarios/Aluno/:id/desempenho", authenticateToken, authorizeAdmin, UsuariosController.getDesempenhoByAluno);
+routes.get("/Usuarios/Detalhes/:id",authenticateToken, authorizeAdmin, UsuariosController.getUsuario);
+routes.put("/Usuarios/Editar/:id",authenticateToken, authorizeAdmin, UsuariosController.atualizarUsuario);
+routes.post("/Usuarios/Professor",authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
+routes.post("/Usuarios/Aluno",authenticateToken, authorizeAdmin, UsuariosController.cadastrarAluno);
 
 
-routes.post("/Usuarios/CadastrarAluno", UsuariosController.createAluno); //Somente para testes ↓
-routes.get("/Usuarios/Buscar/Alunos", UsuariosController.getAlunoByNameOrEmail); 
-routes.get("/Usuarios/Buscar/Professores", UsuariosController.getProfessorByNameOrEmail);
-routes.get("/Usuarios/:id", UsuariosController.getOne);
+routes.post("/Usuarios/CadastrarAluno",authenticateToken, authorizeAdmin, UsuariosController.createAluno); //Somente para testes ↓
+routes.get("/Usuarios/Buscar/Alunos",authenticateToken, authorizeAdmin, UsuariosController.getAlunoByNameOrEmail); 
+routes.get("/Usuarios/Buscar/Professores",authenticateToken, authorizeAdmin, UsuariosController.getProfessorByNameOrEmail);
+routes.get("/Usuarios/:id",authenticateToken, authorizeAdmin, UsuariosController.getOne);
 
-routes.post("/Materias/Cadastrar", MateriasController.criarMateria);
-routes.get("/Materias", MateriasController.listarMaterias);
-routes.get("/Materia/:id", MateriasController.buscarMateriaPorId);
-routes.put("/Materias/Editar/:id", MateriasController.editarMateria);
-routes.get("/Materias/Buscar", MateriasController.getMateriaByName);
+routes.post("/Materias/Cadastrar",authenticateToken, authorizeAdmin, MateriasController.criarMateria);
+routes.get("/Materias",authenticateToken, authorizeAdmin, MateriasController.listarMaterias);
+routes.get("/Materia/:id",authenticateToken, authorizeAdmin, MateriasController.buscarMateriaPorId);
+routes.put("/Materias/Editar/:id",authenticateToken, authorizeAdmin, MateriasController.editarMateria);
+routes.get("/Materias/Buscar",authenticateToken, authorizeAdmin, MateriasController.getMateriaByName);
 
-routes.post('/Simulado/Create', SimuladosController.create);
-routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie', SimuladosController.findSimuladoByBimestreAnoSerie);
-routes.get('/Simulado/:id', SimuladosController.getOne);
-routes.get('/Simulados', SimuladosController.getAll);
-routes.get('/Turma/Simulado/:id', SimuladosController.getTurma);
-routes.patch('/Simulado/Editar/:id', SimuladosController.update);
+routes.post('/Simulado/Create',authenticateToken, authorizeAdmin, SimuladosController.create);
+routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie',authenticateToken, authorizeAdmin, SimuladosController.findSimuladoByBimestreAnoSerie);
+routes.get('/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getOne);
+routes.get('/Simulados',authenticateToken, authorizeAdmin, SimuladosController.getAll);
+routes.get('/Turma/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getTurma);
+routes.patch('/Simulado/Editar/:id',authenticateToken, authorizeAdmin, SimuladosController.update);
 
 export default routes;
 

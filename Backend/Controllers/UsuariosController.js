@@ -1,4 +1,6 @@
 import Usuario from "../Models/Usuario.js";
+import Turma from "../Models/Turma.js";
+import Simulado from "../Models/Simulado.js";
 import { Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -253,6 +255,65 @@ export default class UsuariosController {
 
     static async findUsuarioById(id) {
         return await Usuarios.findById(id);
+    }
+
+    static async getDesempenhoByAluno(req, res) {
+    const alunoId = req.params.id;
+    const ObjectId = Types.ObjectId;
+
+    if (!ObjectId.isValid(alunoId))
+        return res.status(422).json({ message: "Aluno inválido" });
+
+    try {
+        const aluno = await Usuario.findById(alunoId);
+
+        if (!aluno) {
+            return res.status(404).json({ message: "Aluno não encontrado" });
+        }
+
+        const turma = await Turma.findOne({ alunos: aluno._id });
+
+        let turmaNome = "Sem turma";
+
+        if (turma) {
+            turmaNome = `${turma.serie}º Ano - ${turma.ano}`;
+        }
+
+        const simulados = await Simulado.aggregate([
+            { $unwind: "$conteudos" },
+            { $unwind: "$conteudos.resultados" },
+            {
+                $match: {
+                    "conteudos.resultados.aluno_id": new ObjectId(alunoId)
+                }
+            },
+            {
+                $group: {
+                    _id: "$bimestre",
+                    media: { $avg: "$conteudos.resultados.nota" }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        const desempenho = [1, 2, 3, 4].map(bi => {
+            const d = simulados.find(s => s._id === bi);
+            return {
+                bimestre: bi,
+                media: d?.media ?? 0
+            };
+        });
+
+        return res.status(200).json({
+            alunoNome: aluno.nome,
+            turmaNome,
+            desempenho
+        });
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "Erro ao buscar desempenho", error });
+        }
     }
 };
 
