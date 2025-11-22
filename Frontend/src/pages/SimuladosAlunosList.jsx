@@ -20,6 +20,7 @@ export default function SimuladosAlunosList() {
                 setLoading(true);
                 const res = await getOne(id);
                 setSimulado(res.data.simulado);
+                console.log(res.data.simulado)
             } catch (err) {
                 console.error('Erro ao buscar simulado:', err);
                 setError(err);
@@ -32,9 +33,9 @@ export default function SimuladosAlunosList() {
     }, [id]);
 
 
-    const handleView = async (id) => {
+    const handleView = async (alunoId, simuladoId) => {
 
-        navigate(`/Simulados/Notas/${id}`);
+        navigate(`/Simulados/Notas/${simuladoId}/${alunoId}`);
 
     }
 
@@ -99,7 +100,7 @@ export default function SimuladosAlunosList() {
                             <SimuladoAlunoItem
                                 key={a._id}
                                 alunoResultado={a}
-                                onView={() => { handleView(a._id) }}
+                                onView={() => { handleView(a._id, simulado._id) }}
                             />
                         ))
 

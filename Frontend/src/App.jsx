@@ -71,13 +71,13 @@ function App() {
         </Layout>
       } />
 
-      <Route path="/Simulados/Notas/id" element={
+      <Route path="/Simulados/Notas/:simuladoId/:alunoId" element={
         <Layout>
           <SimuladoNotasPorSimulado />
         </Layout>
       } />
 
-      <Route path="/Simulados/Notas/Materia/id" element={
+      <Route path="/Simulados/Notas/Materia/:simuladoId/:alunoId" element={
         <Layout>
           <SimuladoNotasPorMateria />
         </Layout>

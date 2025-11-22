@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getOne as getProfessor } from "../api/usuarioApi.js";
-import { getOne as getMateria } from "../api/materiaApi.js";
+import { getProfessores as getProfessor } from "../api/usuariosapi.js";
+import { getMateriaById as getMateria } from "../api/materiaApi.js";
 
 export default function NotasCard({ simuladoResult, simuladoConteudo }) {
     const [materias, setMaterias] = useState({});
