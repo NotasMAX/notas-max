@@ -88,15 +88,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="Turmas/" element={
-        <AdminRoute>
-          <Layout>
-            <Turmas />
-          </Layout>
-        </AdminRoute>
-      } />
-
-      <Route path="Turmas/:ano" element={
+      <Route path="Turmas/:ano?" element={
         <AdminRoute>
           <Layout>
             <Turmas />
@@ -116,6 +108,14 @@ function AppRoutes() {
         <AdminRoute>
           <Layout>
             <TurmasSimulados />
+          </Layout>
+        </AdminRoute>
+      } />
+
+       <Route path="Turmas/Simulados/Notas/:simulado?/:aluno?" element={
+        <AdminRoute>
+          <Layout>
+            <SimuladosNotas />
           </Layout>
         </AdminRoute>
       } />

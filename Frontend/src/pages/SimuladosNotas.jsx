@@ -30,6 +30,9 @@ export default function SimuladosNotas() {
             fetchSimulado();
             fetchAluno();
         }
+         else{
+            console.log("Parâmetros de URL ausentes.");
+         }
     }, [simuladoURL, alunoURL]);
 
     useEffect(() => {
