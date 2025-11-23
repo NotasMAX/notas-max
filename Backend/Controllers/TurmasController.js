@@ -213,20 +213,17 @@ export default class TurmasController {
             if (turmaComAluno) {
                 return res.status(422).json({ message: `Aluno já está matriculado em outra turma no ano ${turma.ano}.` });
             }
-
             const aluno = await UsuariosController.findUsuarioById(alunoId);
 
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
-
+            console.log("passo 5");
             if (aluno.tipo_usuario !== "aluno") {
                 return res.status(422).json({ message: "O usuário informado não é um aluno." });
             }
-
             turma.alunos.push(alunoId);
             await turma.save();
-
             res.status(200).json({ message: "Aluno adicionado com sucesso", turma });
         } catch (error) {
             res.status(500).json({ message: "Erro ao adicionar aluno na turma", error });
