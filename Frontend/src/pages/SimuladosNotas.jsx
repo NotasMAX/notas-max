@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, use } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Style from '../styles/SimuladosNotas.module.css';;
 import { Toast } from 'primereact/toast';
-import { getOne as getOneSimulado, getSimuladosByTurma } from '../api/simuladoApi';
+import { getOne as getOneSimulado, getSimuladosByTurma, atualizarConteudos } from '../api/simuladoApi';
 import { getUsuario as getOneAluno } from '../api/usuariosapi';
 import { getOne as getOneTurma } from '../api/turmasapi';
 import SimuladosNotasForm from '../components/SimuladosNotasForm';
@@ -18,6 +18,8 @@ export default function SimuladosNotas() {
     const [Aluno, setAluno] = useState(null);
     const [Turma, setTurma] = useState(null);
     const [Response, setResponse] = useState(null);
+    const [proximoAluno, setProximoAluno] = useState(null);
+    const [anteriorAluno, setAnteriorAluno] = useState(null);
     const toast = useRef(null);
     const toastShown = useRef(false);
     const navigate = useNavigate();
@@ -26,6 +28,17 @@ export default function SimuladosNotas() {
     useEffect(() => {
         document.title = `NotasMAX - Lançamento de Notas`;
     }, []);
+
+    useEffect(() => {
+        if (location.state && location.state.message && !toastShown.current) {
+            const { message } = location.state;
+            if (toast && toast.current) {
+                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message, life: 3000 });
+                toastShown.current = true;
+            }
+            window.history.replaceState({}, '')
+        }
+    }, [location.state]);
 
     useEffect(() => {
         if (turmaURL) {
@@ -71,22 +84,23 @@ export default function SimuladosNotas() {
     useEffect(() => {
         if (!Turma) return;
         Turma.alunos.sort((a, b) => a.nome.localeCompare(b.nome));
+        setProximoAluno(Turma.alunos[Turma.alunos.findIndex(a => a._id === alunoURL) + 1] || null);
+        setAnteriorAluno(Turma.alunos[Turma.alunos.findIndex(a => a._id === alunoURL) - 1] || null);
         if (!simuladoURL && !alunoURL) {
             getSimuladosByTurma(turmaURL)
                 .then((response) => {
                     const simulados = response.data.simulados;
                     if (simulados.length > 0) {
                         const firstSimuladoId = simulados[0]._id;
-                        navigate(`/Turmas/${turmaURL}/Simulados/${firstSimuladoId}/Notas/${Turma.alunos[0]._id || ''}`, { replace: true });
+                        navigate(`/Turmas/${turmaURL}/Simulados/${firstSimuladoId}/Notas/${Turma.alunos[0]._id || ''}`);
                     }
                 });
         }
     }, [Turma, simuladoURL, alunoURL]);
 
     const handleFormSubmit = async (formData) => {
-        console.log(Turma);
-        alert("Formulário submetido!");
-        // Implementar lógica de submissão do formulário de notas
+        const resultado = await atualizarConteudos(Simulado._id, { conteudos: formData.conteudos })
+        navigate(`/Turmas/${turmaURL}/Simulados/${simuladoURL}/Notas/${proximoAluno._id}`, { replace: true, state: { message: resultado.data?.message || 'Notas atualizadas com sucesso', type: 'success' } });
     }
 
     return (
@@ -111,8 +125,8 @@ export default function SimuladosNotas() {
                 conteudosRecebidos={Simulado ? Simulado.conteudos : []}
                 onSubmit={handleFormSubmit}
                 aluno={Aluno}
-                proximoAluno={Turma ? (Turma.alunos[Turma.alunos.findIndex(a => a._id === alunoURL) + 1] || null) : null}
-                AlunoAnterior={Turma ? (Turma.alunos[Turma.alunos.findIndex(a => a._id === alunoURL) - 1] || null) : null}
+                proximoAluno={proximoAluno}
+                AlunoAnterior={anteriorAluno}
             />
         </div>
     );

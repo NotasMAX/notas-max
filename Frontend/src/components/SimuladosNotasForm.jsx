@@ -16,25 +16,33 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
     const navigate = useNavigate();
     const [NumeroQuestoes, setNumeroQuestoes] = useState();
     const [NumeroAcertos, setNumeroAcertos] = useState();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         setFormData({ ...formData, conteudos: conteudosRecebidos });
         setNumeroQuestoes(conteudosRecebidos.reduce((total, conteudo) => total + (conteudo.quantidade_questoes || 0), 0));
+        setLoading(false);
     }, [conteudosRecebidos]);
 
     useEffect(() => {
+        setLoading(true);
         if (response) {
             if (toast && toast.current) {
                 toast.current.show({ severity: 'error', summary: 'Erro', detail: response.message, life: 5000 });
             }
         }
+        setLoading(false);
     }, [response]);
 
     useEffect(() => {
+        setLoading(true);
         setNumeroAcertos(formData.conteudos.reduce((total, conteudo) => total + (conteudo.resultados?.acertos || 0), 0));
+        setLoading(false);
     }, [formData.conteudos]);
 
     const handleChange = (e) => {
+        setLoading(true);
         const updatedConteudos = formData.conteudos.map((conteudo) =>
             conteudo.turma_disciplina_id === e.turma_disciplina_id
                 ? e
@@ -42,10 +50,10 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
         );
         const newFormData = { ...formData, conteudos: updatedConteudos };
         setFormData(newFormData);
+        setLoading(false);
     }
 
     const handleSubmit = (e) => {
-        console.log("proxximo", proximoAluno, "anterior", AlunoAnterior)
         e.preventDefault();
         onSubmit(formData);
     }
@@ -115,7 +123,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                                 acceptLabel: 'Sim',
                                 rejectLabel: 'Não',
                                 accept: () => {
-                                    navigate(-1)
+                                    navigate((!AlunoAnterior) ? `/Turmas/Info/${initialData.turma_id}` : `/Turmas/${initialData.turma_id}/Simulados/${initialData._id}/Notas/${AlunoAnterior._id}`, { replace: true });
                                 },
                                 reject: () => {
                                     if (toast && toast.current) {
@@ -127,6 +135,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                         {(!AlunoAnterior) ? "Cancelar" : "Voltar ao anterior"}
                     </button>
                     <button
+                        disabled={loading}
                         type="submit"
                         className={Style.buttonPrimary}
                         ref={tooltipAvancar}

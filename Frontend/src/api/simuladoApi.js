@@ -7,5 +7,6 @@ export const getTurma = (id) => api.get(`/Turma/Simulado/${id}`)
 export const findSimuladoByBimestreAnoSerie = (bimestre, ano, serie) => api.get(`/Simulados/FindByBimestreAnoSerie/${bimestre}/${ano}/${serie}`);
 export const updateSimulado = (id, payload) => api.patch(`/Simulado/Editar/${id}`, payload);
 export const getSimuladosByTurma = (id) => api.get(`/Simulados/Turma/${id}`);
+export const atualizarConteudos = (id, payload) => api.patch(`/Simulado/AtualizarConteudos/${id}`, payload);
 
 export default api;

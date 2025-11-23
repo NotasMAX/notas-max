@@ -5,14 +5,15 @@ import { getOneDisciplina } from '../api/turmasapi';
 
 export default function SimuladosNotaItem({ conteudo, onUpdate, aluno, toast }) {
     const [Disciplina, setDisciplina] = useState(null);
-    const [acertos, setAcertos] = useState(conteudo?.resultados?.acertos || 0);
+    const [acertos, setAcertos] = useState(0);
 
     useEffect(() => {
-        if (conteudo) {
+        if (conteudo && aluno) {
             fetchDisciplina(conteudo.turma_disciplina_id);
-            setAcertos(conteudo.resultados?.acertos || 0);
+            const resultadoAluno = conteudo.resultados?.find(r => r.aluno_id === aluno._id);
+            setAcertos(resultadoAluno?.acertos || 0);
         }
-    }, [conteudo]);
+    }, [conteudo, aluno]);
 
     const handleChange = (e) => {
         const { value } = e.target;
@@ -26,7 +27,18 @@ export default function SimuladosNotaItem({ conteudo, onUpdate, aluno, toast }) 
         }
         const newAcertos = parseInt(value) || 0;
         setAcertos(newAcertos);
-        onUpdate({ ...conteudo, resultados: { ...conteudo.resultados, acertos: newAcertos, aluno_id: aluno._id } });
+
+        // Atualiza ou cria o resultado para o aluno
+        const resultadosAtualizados = conteudo.resultados ? [...conteudo.resultados] : [];
+        const indexResultado = resultadosAtualizados.findIndex(r => r.aluno_id === aluno._id);
+
+        if (indexResultado >= 0) {
+            resultadosAtualizados[indexResultado] = { ...resultadosAtualizados[indexResultado], acertos: newAcertos };
+        } else {
+            resultadosAtualizados.push({ aluno_id: aluno._id, acertos: newAcertos });
+        }
+
+        onUpdate({ ...conteudo, resultados: resultadosAtualizados });
     }
 
     const fetchDisciplina = async (id) => {

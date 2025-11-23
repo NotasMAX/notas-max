@@ -228,4 +228,25 @@ export default class SimuladosController {
         }
     }
 
+    static async atualizarConteudos(req, res) {
+        const { conteudos } = req.body;
+
+        if (!conteudos || conteudos.length <= 0)
+            return res.status(422).json({ message: "Informe os conteúdos com os resultados." });
+        try {
+            const simulado = await Simulado.findById(req.params.id);
+            if (!simulado)
+                return res.status(404).json({ message: 'Simulado não encontrado...' });
+
+            const simuladoAtualizado = await Simulado.findByIdAndUpdate(req.params.id, {
+                conteudos: conteudos
+            }, { new: true });
+
+            res.status(200).json({ message: 'Sucesso ao adicionar resultados', simulado: simuladoAtualizado });
+
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao adicionar resultados', error });
+        }
+
+    }
 }
