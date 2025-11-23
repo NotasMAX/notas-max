@@ -1,4 +1,6 @@
 import Style from "../styles/ButtonGroup.module.css";
+import { Tooltip } from "primereact/tooltip";
+import { useRef } from "react";
 
 export default function CardSimulado({ simulado, onView, onEdit }) {
   const formtDate = (date) => {
@@ -14,8 +16,15 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
     }).format(d);
   };
 
+  const tooltipRef = useRef(null);
+  const isEditable =
+    Date.now() - new Date(simulado.createdAt).getTime() <
+    16 * 24 * 60 * 60 * 1000;
+
   return (
     <div className="flex w-[49%] h-1/3 items-center justify-between rounded-lg border border-gray-300 bg-white px-8 py-3">
+      <Tooltip target={tooltipRef} position="top"/>
+
       <p className="w-1/3 flex gap-3 justify-start">
         Simulado {simulado.numero}
       </p>
@@ -25,7 +34,16 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
       </p>
 
       <div className="w-1/3 flex gap-3 justify-end">
-        <button className={Style.buttonSquare} onClick={onEdit}>
+        <button
+          ref={tooltipRef}
+          data-pr-tooltip={
+            isEditable
+              ? `Editar simulado Nº ${simulado.numero}`
+              : "Não é possível editar após 15 dias da criação"
+          }
+          className={Style.buttonSquare}
+          onClick={onEdit}
+        >
           <svg
             width="24"
             height="24"
@@ -53,7 +71,12 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
             />
           </svg>
         </button>
-        <button className={Style.buttonSquare} onClick={onView}>
+        <button
+          className={Style.buttonSquare}
+          onClick={onView}
+          ref={tooltipRef}
+          data-pr-tooltip={"Ver as notas dos alunos"}
+        >
           <svg
             width="24"
             height="24"
