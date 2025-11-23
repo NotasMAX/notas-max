@@ -162,7 +162,7 @@ export default class UsuariosController {
             return res.status(422).json({ message: "Id do aluno inválido" });
         }
         try {
-            const aluno = await Usuarios.findById(id);
+            const aluno = await Usuario.findById(id);
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
