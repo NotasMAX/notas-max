@@ -17,9 +17,6 @@ export const authenticateToken = (req, res, next) => {
         // 3. Anexar o payload do usuário
         req.user = decoded; 
 
-        // Atualizar a duração do token para 1 hora
-        res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 });
-
         next();
         
     } catch (err) {
