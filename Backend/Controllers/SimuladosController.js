@@ -242,7 +242,7 @@ export default class SimuladosController {
                 conteudos: conteudos
             }, { new: true });
 
-            res.status(200).json({ message: 'Sucesso ao adicionar resultados', simulado: simuladoAtualizado });
+            res.status(200).json({ message: 'Notas atualizadas com sucesso', simulado: simuladoAtualizado });
 
         } catch (error) {
             res.status(500).json({ message: 'Erro ao adicionar resultados', error });

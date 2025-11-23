@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { Toast } from 'primereact/toast';
 import { getAll } from '../api/simuladoApi.js';
 import { getOne } from '../api/turmasapi.js';
 import BimestreSections from '../components/BimestreSections.jsx';
@@ -14,6 +15,9 @@ export default function TurmasSimulados() {
     const [error, setError] = useState(null);
     const [turma, setTurma] = useState(null);
     const [filterBimestre, setFilterBimestre] = useState('all');
+    const toast = useRef(null);
+    const location = useLocation();
+    const toastShown = useRef(false);
 
     // Paginação por bimestre (2 grupos por página)
     const [page, setPage] = useState(1);
@@ -21,6 +25,14 @@ export default function TurmasSimulados() {
 
     // Reset página ao trocar filtro/rota
     useEffect(() => { setPage(1); }, [filterBimestre, id]);
+
+    useEffect(() => {
+        document.title = `NotasMAX - Simulados da Turma`;
+        if (location.state && location.state.message && !toastShown.current) {
+            toastShown.current = true;
+            toast.current.show({ severity: location.state.type || 'success', summary: 'Sucesso', detail: location.state.message, life: 3000 });
+        }
+    }, [location.state]);
 
     const loadTurma = async () => {
         try {
@@ -34,6 +46,7 @@ export default function TurmasSimulados() {
 
         }
     };
+
 
     const loadSimulados = async () => {
         try {
@@ -79,6 +92,7 @@ export default function TurmasSimulados() {
 
     return (
         <div>
+            <Toast ref={toast} />
             <div className='mt-5 flex justify-between'>
                 <div>
                     <h1 className='text-4xl font-bold text-[#043666]'>
