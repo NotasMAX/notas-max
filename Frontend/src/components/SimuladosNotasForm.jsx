@@ -37,7 +37,10 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
 
     useEffect(() => {
         setLoading(true);
-        setNumeroAcertos(formData.conteudos.reduce((total, conteudo) => total + (conteudo.resultados?.acertos || 0), 0));
+        setNumeroAcertos(formData.conteudos.reduce((total, conteudo) => {
+            const resultado = conteudo.resultados?.find(r => r.aluno_id === aluno?._id);
+            return total + (resultado?.acertos || 0);
+        }, 0));
         setLoading(false);
     }, [formData.conteudos]);
 
@@ -123,7 +126,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                                 acceptLabel: 'Sim',
                                 rejectLabel: 'Não',
                                 accept: () => {
-                                    navigate((!AlunoAnterior) ? `/Turmas/Info/${initialData.turma_id}` : `/Turmas/${initialData.turma_id}/Simulados/${initialData._id}/Notas/${AlunoAnterior._id}`, { replace: true });
+                                    navigate((!AlunoAnterior) ? `/Turmas/Info/${initialData.turma_id}` : `/Turmas/${initialData.turma_id}/Simulados/${initialData._id}/Notas/${AlunoAnterior._id}`, { replace: true , state: { message: 'Aluno anterior carregado com sucesso', type: 'warn' } });
                                 },
                                 reject: () => {
                                     if (toast && toast.current) {
@@ -141,7 +144,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                         ref={tooltipAvancar}
                         data-pr-tooltip={ (!proximoAluno) ? "Salvar as notas" : "Salvar as notas e avançar para o próximo aluno"}
                         data-pr-position="bottom"  >
-                        {(!proximoAluno) ? "Salvar" : "Salvar e avançar"}
+                        {(!proximoAluno) ? "Salvar e finalizar" : "Salvar e avançar"}
                     </button>
                 </div>
             </form >

@@ -7,7 +7,6 @@ import { getUsuario as getOneAluno } from '../api/usuariosapi';
 import { getOne as getOneTurma } from '../api/turmasapi';
 import SimuladosNotasForm from '../components/SimuladosNotasForm';
 
-
 export default function SimuladosNotas() {
     const {
         turma: turmaURL,
@@ -30,10 +29,11 @@ export default function SimuladosNotas() {
     }, []);
 
     useEffect(() => {
+        toastShown.current = false;
         if (location.state && location.state.message && !toastShown.current) {
-            const { message } = location.state;
+            const { message, type } = location.state;
             if (toast && toast.current) {
-                toast.current.show({ severity: 'success', summary: 'Sucesso', detail: message, life: 3000 });
+                toast.current.show({ severity: type, summary: 'Sucesso', detail: message, life: 3000 });
                 toastShown.current = true;
             }
             window.history.replaceState({}, '')
@@ -99,8 +99,18 @@ export default function SimuladosNotas() {
     }, [Turma, simuladoURL, alunoURL]);
 
     const handleFormSubmit = async (formData) => {
-        const resultado = await atualizarConteudos(Simulado._id, { conteudos: formData.conteudos })
-        navigate(`/Turmas/${turmaURL}/Simulados/${simuladoURL}/Notas/${proximoAluno._id}`, { replace: true, state: { message: resultado.data?.message || 'Notas atualizadas com sucesso', type: 'success' } });
+        try {
+            const resultado = await atualizarConteudos(Simulado._id, { conteudos: formData.conteudos })
+            if (proximoAluno) {
+                navigate(`/Turmas/${turmaURL}/Simulados/${simuladoURL}/Notas/${proximoAluno._id}`, { replace: true, state: { message: resultado.data?.message || 'Notas atualizadas com sucesso', type: 'success' } });
+            }
+            else {
+                navigate(`/Turmas/Info/${turmaURL}`, { replace: true, state: { message: resultado.data?.message || 'Notas atualizadas com sucesso', type: 'success' } });
+                return;
+            }
+        } catch (error) {
+            setResponse(error.response.data);
+        }
     }
 
     return (

@@ -28,7 +28,6 @@ export default function SimuladosNotaItem({ conteudo, onUpdate, aluno, toast }) 
         const newAcertos = parseInt(value) || 0;
         setAcertos(newAcertos);
 
-        // Atualiza ou cria o resultado para o aluno
         const resultadosAtualizados = conteudo.resultados ? [...conteudo.resultados] : [];
         const indexResultado = resultadosAtualizados.findIndex(r => r.aluno_id === aluno._id);
 
@@ -59,7 +58,7 @@ export default function SimuladosNotaItem({ conteudo, onUpdate, aluno, toast }) 
                 {Disciplina?.professor.nome}
             </div>
             <div className={Style.ContainerCol} >
-                <input name='quantidade_questoes' type="number" min="0" max="10" value={acertos} className={Style.QuestoesInput} onChange={handleChange} />
+                <input name='quantidade_questoes' type="number" min="0" max="100" value={acertos} className={Style.QuestoesInput} onChange={handleChange} />
             </div>
             <div className={Style.ContainerColAcoes}>
                 / {String(conteudo?.quantidade_questoes).padStart(2, '0')}
