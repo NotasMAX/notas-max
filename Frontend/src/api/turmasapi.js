@@ -9,5 +9,7 @@ export const addAluno = (payload) => api.patch(`/Turmas/Adicionar/Aluno`, payloa
 export const removeAluno = (turma_id, aluno_id) => api.delete(`/Turmas/Remover/Aluno?turma_id=${turma_id}&aluno_id=${aluno_id}`);
 export const addDisciplina = (payload) => api.post(`/Turmas/Adicionar/Disciplina`, payload);
 export const removeDisciplina = (id) => api.delete(`/Turmas/Remover/Disciplina?id=${id}`);
+export const getDesempenhoTurma = (turma_id) => api.get(`/Turma/${turma_id}/desempenho`);
+export const getDesempenhoMaterias = (turmaId, bimestre) => api.get(`/Turma/${turmaId}/desempenho-materias?bimestre=${bimestre}`);
 
 export default api;
