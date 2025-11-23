@@ -7,7 +7,7 @@ export default function TurmaItem({ turma, position }) {
     return (
         <div className={Style.TurmaContainer}>
             <Tooltip target={tooltipRef} mouseTrack mouseTrackLeft={10} />
-            <a href={`/Turma/${turma._id}`}        >
+            <a href={`/Turmas/Info/${turma._id}`}        >
                 <div className={(position === 1) ? Style.TurmaContainerHeaderYellow : Style.TurmaContainerHeaderBlue}> </div>
                 <div className={Style.TurmaContainerBody}>
                     <div className={Style.TurmaContainerSerie}>{turma.serie}º EM</div>
@@ -15,7 +15,7 @@ export default function TurmaItem({ turma, position }) {
             </a>
             <Link
                 ref={tooltipRef}
-                to={`/Turma/Editar/${turma._id}`}
+                to={`/Turmas/Editar/${turma._id}`}
                 aria-label={`Editar turma ${turma._id}`}
                 data-pr-tooltip={`Editar turma`}>
             <svg className={Style.TurmaContainerEditIcon} width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">

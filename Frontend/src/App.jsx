@@ -104,7 +104,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="Turma/Editar/:id" element={
+      <Route path="Turmas/Editar/:id" element={
         <AdminRoute>
           <Layout>
             <TurmasEditar />
@@ -112,7 +112,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="Turma/:id" element={
+      <Route path="Turmas/Info/:id" element={
         <AdminRoute>
           <Layout>
             <TurmasSimulados />
@@ -153,7 +153,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="/Simulado/Editar/:id" element={
+      <Route path="/Simulados/Editar/:id" element={
         <AdminRoute>
           <Layout>
             <SimuladosEditar />
