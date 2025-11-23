@@ -1,5 +1,7 @@
 import Turmas from "../Models/Turma.js";
 import Simulado from "../Models/Simulado.js";
+import TurmaDisciplina from "../Models/TurmaDisciplina.js";
+import Materia from "../Models/Materia.js";
 import SimuladosController from "./SimuladosController.js";
 import UsuariosController from "./UsuariosController.js";
 import { Types } from "mongoose";
@@ -314,4 +316,75 @@ export default class TurmasController {
       res.status(500).json({ message: "Erro ao buscar desempenho da turma", error });
     }
   }
+
+  static async getDesempenhoMaterias(req, res) {
+    const { id } = req.params; 
+    const bimestre = Number(req.query.bimestre) || 1;
+
+    if (!Types.ObjectId.isValid(id)) {
+        return res.status(422).json({ message: "Id da turma inválido" });
+    }
+
+    try {
+        const turma = await Turmas.findById(id);
+        if (!turma) {
+            return res.status(404).json({ message: "Turma não encontrada." });
+        }
+
+        const disciplinas = await TurmaDisciplina.find({ turma_id: id });
+
+        if (disciplinas.length === 0) {
+            return res.status(200).json({
+                turma,
+                materias: []
+            });
+        }
+
+        const disciplinaToMateria = {};
+        for (const d of disciplinas) {
+            const materia = await Materia.findById(d.materia_id);
+            disciplinaToMateria[d._id.toString()] = materia?.nome || "Sem nome";
+        }
+
+        const simulados = await Simulado.find({
+            turma_id: id,
+            bimestre
+        });
+
+        const materiasData = {};
+
+        for (const sim of simulados) {
+            for (const conteudo of sim.conteudos) {
+                
+                const td_id = conteudo.turma_disciplina_id.toString();
+
+                if (!materiasData[td_id]) {
+                    materiasData[td_id] = { soma: 0, qtd: 0 };
+                }
+
+                for (const r of conteudo.resultados) {
+                    materiasData[td_id].soma += r.nota;
+                    materiasData[td_id].qtd += 1;
+                }
+            }
+        }
+
+        const materiasFinal = Object.keys(materiasData).map(td_id => {
+            const { soma, qtd } = materiasData[td_id];
+            return {
+                nome: disciplinaToMateria[td_id] || "Desconhecida",
+                media: qtd > 0 ? Number((soma / qtd).toFixed(2)) : 0
+            };
+        });
+
+        return res.status(200).json({
+            turma,
+            materias: materiasFinal
+        });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Erro interno", error: err });
+        }
+    }
 }

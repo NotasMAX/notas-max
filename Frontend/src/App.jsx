@@ -25,6 +25,7 @@ import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
 import AlunoDesempenho from "./pages/AlunoDesempenho";
 import TurmaDesempenho from "./pages/TurmaDesempenho";
+import TurmasAcertosPorMateria from "./pages/TurmasAcertosPorMateria";
 import NotFound from "./pages/NotFound";
 
 const ProtectedRoute = ({ children }) => {
@@ -264,6 +265,14 @@ function AppRoutes() {
         <AdminRoute>
           <Layout>
             <TurmaDesempenho />
+          </Layout>
+        </AdminRoute>
+      } /> 
+
+      <Route path="/Turma/:id/desempenho-materias" element={
+        <AdminRoute>
+          <Layout>
+            <TurmasAcertosPorMateria />
           </Layout>
         </AdminRoute>
       } />

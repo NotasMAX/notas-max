@@ -17,6 +17,7 @@ routes.post("/Turmas/Cadastrar",authenticateToken, authorizeAdmin, TurmasControl
 routes.patch("/Turmas/Adicionar/Aluno",authenticateToken, authorizeAdmin, TurmasController.addAluno);
 routes.delete("/Turmas/Remover/Aluno",authenticateToken, authorizeAdmin, TurmasController.removeAluno);
 routes.get("/Turma/:id/desempenho", authenticateToken, authorizeAdmin,TurmasController.getDesempenhoByTurma);
+routes.get("/Turma/:id/desempenho-materias", authenticateToken, authorizeAdmin, TurmasController.getDesempenhoMaterias);
 routes.post("/Turmas/Adicionar/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.create);
 routes.delete("/Turmas/Remover/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.remove);
 

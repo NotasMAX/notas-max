@@ -1,74 +1,64 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Chart from "react-apexcharts";
-import { getDesempenhoTurma } from "../api/turmasapi";
+import { getDesempenhoMaterias } from "../api/turmasapi";
 
-export default function TurmaDesempenho() {
+export default function TurmaAcertosPorMateria() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [dados, setDados] = useState([
-    { bimestre: 1, media: 0 },
-    { bimestre: 2, media: 0 },
-    { bimestre: 3, media: 0 },
-    { bimestre: 4, media: 0 },
-  ]);
-
+  const [materias, setMaterias] = useState([]);
   const [turmaInfo, setTurmaInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [bimestreSelecionado, setBimestreSelecionado] = useState(1);
+  const [bimestre, setBimestre] = useState(1);
 
   useEffect(() => {
     async function load() {
+      setLoading(true);
       try {
-        const res = await getDesempenhoTurma(id);
+        const res = await getDesempenhoMaterias(id, bimestre);
 
-        setTurmaInfo(res.data.turma);
-
-        const desempenho = res.data.desempenho ?? [];
-
-        const preenchido = [1, 2, 3, 4].map(bi => {
-          const found = desempenho.find(d => d.bimestre === bi);
-          return { bimestre: bi, media: found?.media ?? 0 };
-        });
-
-        setDados(preenchido);
+        setMaterias(res.data.materias || []);
+        setTurmaInfo(res.data.turma || null);
 
       } catch (err) {
-        console.error("Erro ao buscar desempenho da turma:", err);
+        console.error("Erro ao buscar desempenho por matéria:", err);
       } finally {
         setLoading(false);
       }
     }
 
     load();
-  }, [id]);
+  }, [id, bimestre]);
 
-  const categories = ["1º Bi", "2º Bi", "3º Bi", "4º Bi"];
-  const valores = dados.map(d => d.media);
+  const categorias = materias.map(m => m?.nome ?? "Indefinido");
+  const valores = materias.map(m => Number(m?.media ?? 0));
+
+  const maiorValor = valores.length > 0 ? Math.max(...valores) : 0;
 
   const options = {
-    chart: { id: "desempenho-turma", toolbar: { show: false } },
-    xaxis: { categories },
+    chart: { id: "acertos-materias", toolbar: { show: false } },
+    xaxis: { categories: categorias },
     yaxis: {
       max: 10,
       tickAmount: 5,
-      labels: { formatter: v => Number(v).toFixed(1) }
+      labels: { formatter: (v) => Number(v).toFixed(1) }
     },
     plotOptions: {
-      bar: { distributed: true, borderRadius: 8, columnWidth: "50%" }
+      bar: { distributed: true, borderRadius: 8, columnWidth: "45%" }
     },
     dataLabels: { enabled: false },
-    colors: valores.map((v, i) =>
-      (i + 1) === bimestreSelecionado ? "#1778F2" : "#CFE9FF"
+    colors: valores.map((v) =>
+      v === maiorValor ? "#1778F2" : "#CFE9FF"
     )
   };
 
-  const series = [{ name: "Média", data: valores }];
+  const series = [{ name: "Média de acertos", data: valores }];
 
   return (
     <div className="p-6 max-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-1">Desempenho da turma ao longo dos bimestres</h1>
+
+      <h1 className="text-2xl font-bold mb-1">Acertos da turma por matéria</h1>
 
       <p className="text-gray-600 mb-4">
         Turma:{" "}
@@ -80,8 +70,8 @@ export default function TurmaDesempenho() {
       <div className="flex justify-end mb-4">
         <select
           className="border px-3 py-2 rounded"
-          value={bimestreSelecionado}
-          onChange={(e) => setBimestreSelecionado(Number(e.target.value))}
+          value={bimestre}
+          onChange={(e) => setBimestre(Number(e.target.value))}
         >
           <option value={1}>1º Bimestre</option>
           <option value={2}>2º Bimestre</option>
