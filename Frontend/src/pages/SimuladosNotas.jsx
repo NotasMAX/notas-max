@@ -2,13 +2,15 @@ import React, { useEffect, useState, useRef, use } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Style from '../styles/SimuladosNotas.module.css';;
 import { Toast } from 'primereact/toast';
-import { getOne as getOneSimulado } from '../api/simuladoApi';
+import { getOne as getOneSimulado, getSimuladosByTurma } from '../api/simuladoApi';
 import { getUsuario as getOneAluno } from '../api/usuariosapi';
 import { getOne as getOneTurma } from '../api/turmasapi';
 import SimuladosNotasForm from '../components/SimuladosNotasForm';
 
+
 export default function SimuladosNotas() {
     const {
+        turma: turmaURL,
         simulado: simuladoURL,
         aluno: alunoURL
     } = useParams();
@@ -26,20 +28,17 @@ export default function SimuladosNotas() {
     }, []);
 
     useEffect(() => {
+        if (turmaURL) {
+            fetchTurma(turmaURL);
+        }
+    }, [turmaURL]);
+
+    useEffect(() => {
         if (simuladoURL && alunoURL) {
             fetchSimulado();
             fetchAluno();
         }
-         else{
-            console.log("Parâmetros de URL ausentes.");
-         }
     }, [simuladoURL, alunoURL]);
-
-    useEffect(() => {
-        if (Simulado?.turma_id) {
-            fetchTurma(Simulado.turma_id);
-        }
-    }, [Simulado]);
 
     const fetchSimulado = async () => {
         try {
@@ -69,8 +68,23 @@ export default function SimuladosNotas() {
         }
     }
 
+    useEffect(() => {
+        if (!Turma) return;
+        Turma.alunos.sort((a, b) => a.nome.localeCompare(b.nome));
+        if (!simuladoURL && !alunoURL) {
+            getSimuladosByTurma(turmaURL)
+                .then((response) => {
+                    const simulados = response.data.simulados;
+                    if (simulados.length > 0) {
+                        const firstSimuladoId = simulados[0]._id;
+                        navigate(`/Turmas/${turmaURL}/Simulados/${firstSimuladoId}/Notas/${Turma.alunos[0]._id || ''}`, { replace: true });
+                    }
+                });
+        }
+    }, [Turma, simuladoURL, alunoURL]);
+
     const handleFormSubmit = async (formData) => {
-        console.log(formData);
+        console.log(Turma);
         alert("Formulário submetido!");
         // Implementar lógica de submissão do formulário de notas
     }
@@ -87,7 +101,7 @@ export default function SimuladosNotas() {
             </div>
             <div className={Style.SimuladosHeaderContainer}>
                 <h2 className={Style.SimuladosHeader}>Lançamento de Notas - {Turma?.serie}º EM</h2>
-                <p className={Style.SimuladosAlert}>Lançamento de notas individual.</p>
+                <p className={Style.SimuladosAlert}>Lançamento de notas em lote, insira o numero de acerto do aluno e clique em Salvar para ir para o proximo aluno da turma</p>
                 <h3 className={Style.SimuladosSubHeader}>{Aluno ? `${Aluno.nome} (${Aluno.email})` : 'Carregando aluno...'}</h3>
             </div>
 
@@ -97,8 +111,9 @@ export default function SimuladosNotas() {
                 conteudosRecebidos={Simulado ? Simulado.conteudos : []}
                 onSubmit={handleFormSubmit}
                 aluno={Aluno}
+                proximoAluno={Turma ? (Turma.alunos[Turma.alunos.findIndex(a => a._id === alunoURL) + 1] || null) : null}
+                AlunoAnterior={Turma ? (Turma.alunos[Turma.alunos.findIndex(a => a._id === alunoURL) - 1] || null) : null}
             />
-
         </div>
     );
 }

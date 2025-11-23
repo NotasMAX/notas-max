@@ -45,6 +45,7 @@ routes.get('/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosControlle
 routes.get('/Simulados',authenticateToken, authorizeAdmin, SimuladosController.getAll);
 routes.get('/Turma/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getTurma);
 routes.patch('/Simulado/Editar/:id',authenticateToken, authorizeAdmin, SimuladosController.update);
+routes.get('/Simulados/Turma/:id',authenticateToken, authorizeAdmin, SimuladosController.getSimuladosByTurma);
 
 export default routes;
 

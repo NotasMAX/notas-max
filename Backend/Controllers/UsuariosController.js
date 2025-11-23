@@ -199,7 +199,11 @@ export default class UsuariosController {
     }
 
     static async findUsuarioById(id) {
-        return await Usuario.findById(id);
+        try {
+            return await Usuario.findById(id);
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async getDesempenhoByAluno(req, res) {

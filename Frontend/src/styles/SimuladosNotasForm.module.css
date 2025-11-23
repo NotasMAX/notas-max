@@ -38,7 +38,7 @@
 
 
 .buttonGroup {
-     @apply flex justify-center space-x-[1rem] mt-[2rem];
+     @apply space-x-[1rem] mt-[2rem] w-full flex justify-end;
 }
 
 .buttonPrimary {

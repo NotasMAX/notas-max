@@ -112,7 +112,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-       <Route path="Turmas/Simulados/Notas/:simulado?/:aluno?" element={
+       <Route path="Turmas/:turma/Simulados/:simulado?/Notas/:aluno?" element={
         <AdminRoute>
           <Layout>
             <SimuladosNotas />

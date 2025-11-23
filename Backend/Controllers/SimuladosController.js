@@ -1,6 +1,7 @@
 import Simulado from '../Models/Simulado.js';
-import Turmas from "../Models/Turma.js";
+import './TurmasController.js';
 import { Types } from 'mongoose';
+import TurmasController from './TurmasController.js';
 
 export default class SimuladosController {
     static async create(req, res) {
@@ -201,4 +202,30 @@ export default class SimuladosController {
             res.status(500).json({ message: 'erro ao atualizar simulado', error });
         }
     }
+
+    static async getSimuladosByTurma(req, res) {
+        try {
+            const id = req.params.id;
+            const ObjectId = Types.ObjectId;
+
+            if (!ObjectId.isValid(id))
+                return res.status(422).json({ message: "Id da turma invalido", id });
+
+            const turmaExists = await TurmasController.BuscarTurma({ _id: id });
+
+            if (!turmaExists)
+                return res.status(422).json({ message: "Turma não encontrada" });
+
+            const simulados = await Simulado.find().where({ turma_id: id });
+
+            if (!simulados || simulados.length === 0)
+                return res.status(404).json({ message: 'Simulados não encontrados.' });
+
+            res.status(200).json({ simulados });
+
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar simulado', error });
+        }
+    }
+
 }
