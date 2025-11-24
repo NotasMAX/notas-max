@@ -252,7 +252,7 @@ export default class TurmasController {
                 return res.status(422).json({ message: "Aluno não está nesta turma." });
             }
 
-            const simuladosComAluno = await SimuladosController.findSimuladoByAlunoId(aluno_id);
+            const simuladosComAluno = await SimuladosController.findSimuladoByAlunoId(aluno_id, turma_id);
             if (!simuladosComAluno || simuladosComAluno.length > 0) {
                 return res.status(422).json({
                     message: "Não é possível remover o aluno pois ele possui resultados em simulados."
