@@ -13,6 +13,9 @@ import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
+import SimuladosAlunosList from "./pages/SimuladosAlunosList";
+import SimuladoNotasPorMateria from "./pages/SimuladoNotasPorMateria";
+import SimuladoNotasPorSimulado from "./pages/SimuladoNotasPorSimulado";
 import AlunoCadastrar from "./pages/AlunoCadastrar";
 import AlunoListar from "./pages/AlunoListar";
 import AlunoEditar from "./pages/AlunoEditar";
@@ -112,7 +115,7 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      <Route path="Turma/Editar/:id" element={
+      <Route path="Turmas/Editar/:id" element={
         <AdminRoute>
           <Layout>
             <TurmasEditar />
@@ -120,6 +123,12 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
+      <Route path="Turmas/Simulado/:id" element={
+        <Layout>
+          <TurmasSimulados />
+        </Layout>
+      } />
+      
       <Route path="Turma/:id" element={
         <AdminRoute>
           <Layout>
@@ -128,7 +137,12 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      {/* Rotas de Simulados */}
+      <Route path="Turmas/Simulado/Aluno/:id" element={
+        <Layout>
+          <SimuladosAlunosList />
+        </Layout>
+      } />
+        
       <Route path="/Simulados" element={
         <AdminRoute>
           <Layout>
@@ -161,7 +175,18 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
-      {/* Rotas de Matérias */}
+      <Route path="/Simulados/Notas/:simuladoIdParams/:bimestre/:alunoId" element={
+        <Layout>
+          <SimuladoNotasPorSimulado />
+        </Layout>
+      } />
+
+      <Route path="/Simulados/Notas/Materia/:simuladoIdParams/:bimestre/:alunoId" element={
+        <Layout>
+          <SimuladoNotasPorMateria />
+        </Layout>
+      } />
+
       <Route path="/Materias/Cadastrar" element={
         <AdminRoute>
           <Layout>

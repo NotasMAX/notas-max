@@ -3,13 +3,12 @@ import TurmasController from "../Controllers/TurmasController.js";
 import TurmaDisciplinasController from "../Controllers/TurmaDisciplinasController.js";
 import UsuariosController from "../Controllers/UsuariosController.js";
 import MateriasController from "../Controllers/MateriasController.js";
-import {authenticateToken, authorizeAdmin} from "../middlewares/authMiddleware.js";
+import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
 import SimuladosController from '../Controllers/SimuladosController.js';
 
 
 const routes = Router();
 
-//rotas de Turmas
 routes.get("/Turmas",authenticateToken, authorizeAdmin, TurmasController.getAll);
 routes.get("/Turma/:id",authenticateToken, authorizeAdmin, TurmasController.getOne);
 routes.get("/Turmas/Pesquisar/:ano",authenticateToken, authorizeAdmin, TurmasController.getByAno);
@@ -46,7 +45,8 @@ routes.post('/Simulado/Create',authenticateToken, authorizeAdmin, SimuladosContr
 routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie',authenticateToken, authorizeAdmin, SimuladosController.findSimuladoByBimestreAnoSerie);
 routes.get('/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getOne);
 routes.get('/Simulados',authenticateToken, authorizeAdmin, SimuladosController.getAll);
-routes.get('/Turma/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getTurma);
+routes.get('/Turmas/ByTurma/:turma_id', authenticateToken, authorizeAdmin, SimuladosController.getByTurma);
+routes.get('/Simulado/getByAluno/:aluno_id/:bimestre', authenticateToken, authorizeAdmin, SimuladosController.getByAlunoAndBimestre);
 routes.patch('/Simulado/Editar/:id',authenticateToken, authorizeAdmin, SimuladosController.update);
 
 export default routes;
