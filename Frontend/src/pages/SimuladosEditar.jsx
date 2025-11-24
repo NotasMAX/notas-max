@@ -35,7 +35,7 @@ export default function SimuladosEditar() {
         fetchSimulado();
     }, [id]);
 
-    const handleCreate = async (formData) => {
+    const handleEdit = async (formData) => {
         try {
             const result = await updateSimulado(id, formData);
             const turma = await getOneTurma(formData.turma_id);
@@ -51,7 +51,7 @@ export default function SimuladosEditar() {
     return (
         <div className={Style.SimuladosCadastrarContainer}>
             <h2 className={Style.SimuladosHeader} >Editar Simulado</h2>
-            <SimuladosEditarForm onSubmit={handleCreate} response={response} simulado={simulado} />
+            <SimuladosEditarForm onSubmit={handleEdit} response={response} simulado={simulado} />
         </div>
     );
 }
