@@ -120,7 +120,8 @@ export default function SimuladosAlunosList() {
 
         <button
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => navigate(`/Turmas/Editar/${id}`)}
+          onClick={() => (
+            navigate(`/Turmas/Editar/${simulado.turma._id}`))}
         >
           <svg
             width="24"
@@ -152,7 +153,7 @@ export default function SimuladosAlunosList() {
         </button>
         <button
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => navigate(`/Simulado/Editar/${id}`)}
+          onClick={() => navigate(`/Simulados/Editar/${id}`)}
         >
           <svg
             width="24"
