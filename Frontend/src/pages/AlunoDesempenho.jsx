@@ -101,7 +101,7 @@ export default function AlunoDesempenho() {
         <Chart options={options} series={series} type="bar" height={340} />
       )}
 
-      <div className="mt-6">
+      <div className="mt-6 flex justify-end">
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={() => navigate(-1)}

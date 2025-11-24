@@ -65,46 +65,261 @@ export default class SimuladosController {
     }
 
     static async getOne(req, res) {
+        const id = req.params.id;
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+
         try {
-            const id = req.params.id;
-            const ObjectId = Types.ObjectId;
+            const simulado = await Simulado.aggregate([
+                { $match: { _id: new ObjectId(id) } },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: { path: "$turma", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField:
+                            'turma.alunos',
+                        foreignField: '_id',
+                        as: 'turma.alunosDetalhes'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$conteudos", preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
+                    }
+                },
+                { $unwind: { path: "$conteudos.turma_disciplina", preserveNullAndEmptyArrays: true } },
+                {
+                    $group: {
+                        _id: { simulado_id: "$_id", conteudo_id: "$conteudos._id" },
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudo: {
+                            $first: {
+                                _id: "$conteudos._id",
+                                turma_disciplina_id: "$conteudos.turma_disciplina_id",
+                                turma_disciplina: {
+                                    _id: "$conteudos.turma_disciplina._id",
+                                    turma_id: "$conteudos.turma_disciplina.turma_id",
+                                    professor_id: "$conteudos.turma_disciplina.professor_id",
+                                    materia_id: "$conteudos.turma_disciplina.materia_id"
+                                },
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                peso: "$conteudos.peso",
+                                resultados: "$conteudos.resultados"
+                            }
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id.simulado_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudos: { $push: "$conteudo" }
+                    }
+                },
+                {
+                    $addFields: {
+                        "turma.alunos": {
+                            $map: {
+                                input: "$turma.alunosDetalhes",
+                                as: "aluno",
+                                in: {
+                                    _id: "$$aluno._id",
+                                    nome: "$$aluno.nome",
+                                    email: "$$aluno.email",
+                                    resultados: {
+                                        $map: {
+                                            input: "$conteudos",
+                                            as: "conteudo",
+                                            in: {
+                                                conteudo_id: "$$conteudo._id",
+                                                disciplina: "$$conteudo.turma_disciplina.materia_id", // ou outro campo se quiser nome depois de outro lookup
+                                                quantidade_questoes: "$$conteudo.quantidade_questoes",
+                                                resultado: {
+                                                    $arrayElemAt: [
+                                                        {
+                                                            $filter: {
+                                                                input: "$$conteudo.resultados",
+                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
+                                                            }
+                                                        },
+                                                        0
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        numero: 1,
+                        tipo: 1,
+                        bimestre: 1,
+                        data_realizacao: 1,
+                        turma: { _id: 1, ano: 1, serie: 1, alunos: 1 },
+                        conteudos: 1
+                    }
+                }
+            ]);
 
-            if (!ObjectId.isValid(id))
-                return res.status(422).json({ message: "Id de simulado invalido", id });
+            if (!simulado || simulado.length === 0)
+                return res.status(404).json({ message: 'Simulado não encontrado' });
 
-            const simulado = await Simulado.findById(id);
-
-            if (!simulado)
-                return res.status(404).json({ message: 'Simulado não encontrado...' });
-
-            res.status(200).json({ simulado });
-
+            res.status(200).json({ simulado: simulado[0] });
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao buscar simulado', error });
+            console.error('Erro:', error);
+            res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
     }
 
-    static async getTurma(req, res) {
+    static async getByTurma(req, res) {
+
+        const id = req.params.turma_id;
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+
         try {
-            const id = req.params.id;
-            const ObjectId = Types.ObjectId;
 
-            if (!ObjectId.isValid(id))
-                return res.status(422).json({ message: "Id de simulado invalido", id });
+            const simulados = await Simulado.find({ turma_id: id });
+            res.status(200).json({ simulados });
 
-            // pega o simulado só com turma_id
-            const simulado = await Simulado.findById(id).select('turma_id');
-            if (!simulado)
-                return res.status(404).json({ message: 'Simulado não encontrado...' });
-
-            // busca a turma e retorna apenas os alunos
-            const turma = await Turmas.findById(simulado.turma_id).select('alunos');
-            if (!turma)
-                return res.status(404).json({ message: 'Turma não encontrada...' });
-
-            return res.status(200).json({ alunos: turma.alunos });
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao buscar turma', error });
+            res.status(500).json({ message: 'Erro ao buscar simulado por turma', error });
+        }
+    }
+
+    static async getByAlunoAndBimestre(req, res) {
+        const id = req.params.aluno_id;
+        const bimestre = Number(req.params.bimestre);
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de Aluno inválido", id });
+
+        try {
+            const simulados = await Simulado.aggregate([
+                {
+                    $match: {
+                        "conteudos.resultados.aluno_id": new ObjectId(id),
+                        bimestre: bimestre
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: '$turma' },
+                { $unwind: '$conteudos' },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'conteudos.turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.materia'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.materia', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.turma_disciplina.professor_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.professor'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.professor', preserveNullAndEmptyArrays: true } },
+                {
+                    $addFields: {
+                        "conteudos.resultado_aluno": {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: "$conteudos.resultados",
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(id)] }
+                                    }
+                                },
+                                0
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudos: {
+                            $push: {
+                                turma_disciplina: {
+                                    _id: "$conteudos.turma_disciplina._id",
+                                    turma_id: "$conteudos.turma_disciplina.turma_id",
+                                    professor_id: "$conteudos.turma_disciplina.professor_id",
+                                    professor: "$conteudos.turma_disciplina.professor.nome",
+                                    materia_id: "$conteudos.turma_disciplina.materia_id",
+                                    materia: "$conteudos.turma_disciplina.materia.nome",
+                                },
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                peso: "$conteudos.peso",
+                                resultado: "$conteudos.resultado_aluno"
+                            }
+                        }
+                    }
+                },
+                { $sort: { data_realizacao: -1, numero: -1 } }
+            ]);
+
+            res.status(200).json({ simulados });
+        } catch (error) {
+            console.error('Erro ao buscar simulados do aluno:', error);
+            res.status(500).json({ message: 'Erro ao buscar simulado por aluno', error: error.message });
         }
     }
 
