@@ -62,10 +62,6 @@ export default function Simulados() {
 
     const fetchSimulados = async () => {
         try {
-            if ( !bimestreURL || !anoURL || !serieURL ) {
-                setSimulados([]);
-                return;
-            }
             findSimuladoByBimestreAnoSerie(bimestreURL, anoURL, serieURL).then((response) => {
                 const data = response.data;
                 setSimulados(data.simulados || []);
