@@ -7,7 +7,7 @@ import SimuladosNotaItem from "./SimuladosNotaItem";
 import { Tooltip } from "primereact/tooltip";
 
 
-export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, proximoAluno, AlunoAnterior, quantidadeAlunos, alunoAtual }) {
+export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, proximoAluno, AlunoAnterior, quantidadeAlunos, turma_id, alunoAtual }) {
     const [formData, setFormData] = useState(initialData || {
         conteudos: conteudosRecebidos
     });
@@ -129,7 +129,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                                 acceptLabel: 'Sim',
                                 rejectLabel: 'Não',
                                 accept: () => {
-                                    navigate((!AlunoAnterior) ? `/Turmas/Info/${initialData.turma_id}` : `/Turmas/${initialData.turma_id}/Simulados/${initialData._id}/Notas/${AlunoAnterior._id}`, { replace: true , state: { message: 'Aluno anterior carregado com sucesso', type: 'warn' } });
+                                    navigate((!AlunoAnterior) ? `/Turmas/Info/${turma_id}` : `/Turmas/${turma_id}/Simulados/${initialData._id}/Notas/${AlunoAnterior._id}`, { replace: true , state: { message: (!AlunoAnterior) ? 'Alterações canceladas' : 'Aluno anterior carregado com sucesso', type: 'warn' } });
                                 },
                                 reject: () => {
                                     if (toast && toast.current) {

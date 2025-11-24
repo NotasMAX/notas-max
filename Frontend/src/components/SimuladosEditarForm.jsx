@@ -52,7 +52,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
     const fetchSimuladoConteudos = async () => {
 
         try {
-            const turma = (await getOne(simulado.turma_id)).data.turma;
+            const turma = (await getOne(simulado.turma._id)).data.turma;
             setTurma(turma);
             const conteudos = [];
             simulado.conteudos.forEach(simulado => {
@@ -67,8 +67,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
                         });
                     }
                 });
-            });
-
+            }); 
             setFormData({
                 numero: simulado.numero || 0,
                 tipo: simulado.tipo || "",
@@ -187,10 +186,10 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
                 error = true;
                 return;
             }
-            if (element.value > 10) {
+            if (element.value > 100) {
                 element.reportValidity();
                 element.focus();
-                element.setCustomValidity("A quantidade de questões não pode ser maior que 10.");
+                element.setCustomValidity("A quantidade de questões não pode ser maior que 100.");
                 error = true;
                 return;
             }

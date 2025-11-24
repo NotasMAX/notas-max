@@ -1,0 +1,11 @@
+.ListRow {
+    @apply flex py-2 px-4 gap-2 rounded-lg border-gray-300 items-center;
+}
+
+.ListCol4{
+    @apply w-1/4
+}
+
+.ListCol3{
+    @apply w-1/3
+}

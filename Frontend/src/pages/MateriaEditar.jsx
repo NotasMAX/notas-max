@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MateriasForm from '../components/MateriaForm';
 import { getMateriaById, editarMateria } from '../api/materiaApi';
+import Style from '../styles/MateriaForm.module.css';
 
 export default function MateriaEditar() {
     const { id } = useParams();
@@ -52,8 +53,8 @@ export default function MateriaEditar() {
     if (error) return <div className="p-4 text-red-600">{error}</div>;
 
     return (
-        <div className="p-4 bg-white">
-            <h2 className="mb-4">Editar Matéria</h2>
+        <div className={Style.pageContainer}>
+            <h2 className={Style.pageTitle}>Editar Matéria</h2>
             {initialData ? (
                 <MateriasForm initialData={initialData} onSubmit={handleUpdate} />
             ) : (

@@ -5,5 +5,4 @@ async function main(){
     console.log("Conectou mongodb");
 }
 main().catch((err)=>console.log(err));
-
 export default mongoose;

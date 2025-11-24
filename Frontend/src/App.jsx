@@ -13,10 +13,22 @@ import MateriaListar from "./pages/MateriaListar";
 import MateriaEditar from "./pages/MateriaEditar";
 import Simulados from "./pages/Simulados";
 import TurmasSimulados from "./pages/TurmasSimulados";
+import SimuladosAlunosList from "./pages/SimuladosAlunosList";
+import SimuladoNotasPorMateria from "./pages/SimuladoNotasPorMateria";
+import SimuladoNotasPorSimulado from "./pages/SimuladoNotasPorSimulado";
+import AlunoCadastrar from "./pages/AlunoCadastrar";
+import AlunoListar from "./pages/AlunoListar";
+import AlunoEditar from "./pages/AlunoEditar";
+import AlunoVisualizar from "./pages/AlunoVisualizar";
+import ProfessorCadastrar from "./pages/ProfessorCadastrar";
+import ProfessorListar from "./pages/ProfessorListar";
+import ProfessorEditar from "./pages/ProfessorEditar";
+import ProfessorVisualizar from "./pages/ProfessorVisualizar";
 import SimuladosCadastrar from "./pages/SimuladosCadastrar";
 import SimuladosEditar from "./pages/SimuladosEditar";
 import AlunoDesempenho from "./pages/AlunoDesempenho";
 import TurmaDesempenho from "./pages/TurmaDesempenho";
+import TurmasAcertosPorMateria from "./pages/TurmasAcertosPorMateria";
 import NotFound from "./pages/NotFound";
 import SimuladosNotas from "./pages/SimuladosNotas";
 
@@ -105,6 +117,12 @@ function AppRoutes() {
       } />
 
       <Route path="Turmas/Info/:id" element={
+        <Layout>
+          <TurmasSimulados />
+        </Layout>
+      } />
+      
+      <Route path="Turma/:id" element={
         <AdminRoute>
           <Layout>
             <TurmasSimulados />
@@ -120,6 +138,13 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
+
+      <Route path="Turmas/Simulado/Aluno/:id" element={
+        <Layout>
+          <SimuladosAlunosList />
+        </Layout>
+      } />
+        
       <Route path="/Simulados" element={
         <AdminRoute>
           <Layout>
@@ -161,6 +186,18 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
+      <Route path="/Simulados/Notas/:simuladoIdParams/:bimestre/:alunoId" element={
+        <Layout>
+          <SimuladoNotasPorSimulado />
+        </Layout>
+      } />
+
+      <Route path="/Simulados/Notas/Materia/:simuladoIdParams/:bimestre/:alunoId" element={
+        <Layout>
+          <SimuladoNotasPorMateria />
+        </Layout>
+      } />
+
       <Route path="/Materias/Cadastrar" element={
         <AdminRoute>
           <Layout>
@@ -185,6 +222,72 @@ function AppRoutes() {
         </AdminRoute>
       } />
 
+      {/* Rotas de Alunos */}
+      <Route path="/Alunos/Cadastrar" element={
+        <AdminRoute>
+          <Layout>
+            <AlunoCadastrar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Alunos" element={
+        <AdminRoute>
+          <Layout>
+            <AlunoListar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Alunos/Visualizar/:id" element={
+        <AdminRoute>
+          <Layout>
+            <AlunoVisualizar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Alunos/Editar/:id" element={
+        <AdminRoute>
+          <Layout>
+            <AlunoEditar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      {/* Rotas de Professores */}
+      <Route path="/Professores/Cadastrar" element={
+        <AdminRoute>
+          <Layout>
+            <ProfessorCadastrar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Professores" element={
+        <AdminRoute>
+          <Layout>
+            <ProfessorListar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Professores/Visualizar/:id" element={
+        <AdminRoute>
+          <Layout>
+            <ProfessorVisualizar />
+          </Layout>
+        </AdminRoute>
+      } />
+
+      <Route path="/Professores/Editar/:id" element={
+        <AdminRoute>
+          <Layout>
+            <ProfessorEditar />
+          </Layout>
+        </AdminRoute>
+      } />
+
       <Route path="/Usuarios/Aluno/:id/desempenho" element={
         <AdminRoute>
           <Layout>
@@ -198,6 +301,14 @@ function AppRoutes() {
         <AdminRoute>
           <Layout>
             <TurmaDesempenho />
+          </Layout>
+        </AdminRoute>
+      } /> 
+
+      <Route path="/Turma/:id/desempenho-materias" element={
+        <AdminRoute>
+          <Layout>
+            <TurmasAcertosPorMateria />
           </Layout>
         </AdminRoute>
       } />
