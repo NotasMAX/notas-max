@@ -52,7 +52,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
     const fetchSimuladoConteudos = async () => {
 
         try {
-            const turma = (await getOne(simulado.turma._id)).data.turma;
+            const turma = (await getOne(simulado.turma_id)).data.turma;
             setTurma(turma);
             const conteudos = [];
             simulado.conteudos.forEach(simulado => {

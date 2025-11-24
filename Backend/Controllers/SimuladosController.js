@@ -64,6 +64,22 @@ export default class SimuladosController {
 
     }
 
+    static async getOneSimple(req, res) {
+        const id = req.params.id;
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+        try {
+            const simulado = await Simulado.findById(id);
+            if (!simulado)
+                return res.status(404).json({ message: 'Simulado não encontrado' });
+            res.status(200).json({ simulado });
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar simulado', error });
+        }
+    }
+
+
     static async getOne(req, res) {
         const id = req.params.id;
         const ObjectId = Types.ObjectId;
@@ -187,7 +203,8 @@ export default class SimuladosController {
                         bimestre: 1,
                         data_realizacao: 1,
                         turma: { _id: 1, ano: 1, serie: 1, alunos: 1 },
-                        conteudos: 1
+                        conteudos: 1,
+                        createdAt: 1
                     }
                 }
             ]);
