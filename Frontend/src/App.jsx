@@ -111,14 +111,6 @@ function AppRoutes() {
       <Route path="Turmas/Editar/:id" element={
         <AdminRoute>
           <Layout>
-            <Turmas />
-          </Layout>
-        </AdminRoute>
-      } />
-
-      <Route path="Turmas/Editar/:id" element={
-        <AdminRoute>
-          <Layout>
             <TurmasEditar />
           </Layout>
         </AdminRoute>

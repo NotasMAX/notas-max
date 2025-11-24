@@ -161,6 +161,7 @@ export default function SimuladosNotas() {
                 AlunoAnterior={anteriorAluno}
                 quantidadeAlunos={Turma ? Turma.alunos.length : 0}
                 alunoAtual={Turma ? Turma.alunos.findIndex(a => a._id === alunoURL) + 1 : 0}
+                turma_id={turmaURL}
             />
         </div>
     );
