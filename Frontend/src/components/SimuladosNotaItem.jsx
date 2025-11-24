@@ -34,9 +34,7 @@ export default function SimuladosNotaItem({ conteudo, onUpdate, aluno, toast }) 
         if (indexResultado >= 0) {
             resultadosAtualizados[indexResultado] = { ...resultadosAtualizados[indexResultado], acertos: newAcertos, nota: (( 10 / conteudo.quantidade_questoes ) * newAcertos), notificacao_enviada: "pendente" };
         } else {
-            if (toast && toast.current) {
-                toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Resultado do aluno não encontrado para este conteúdo.', life: 3000 });
-            }
+            resultadosAtualizados.push({ aluno_id: aluno._id, acertos: newAcertos, nota: (( 10 / conteudo.quantidade_questoes ) * newAcertos), notificacao_enviada: "pendente" });
         }
 
         onUpdate({ ...conteudo, resultados: resultadosAtualizados });

@@ -45,6 +45,7 @@ export default function TurmasPesquisaForm({ initialData, onSubmit }) {
                     <select
                         required
                         name="ano"
+                        id="Ano"
                         value={String(formData.ano)}
                         className={Style.formSelect}
                         onChange={handleChange}

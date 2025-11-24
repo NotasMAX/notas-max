@@ -6,6 +6,7 @@ import { getOne as getOneSimulado, getSimuladosByTurma, atualizarConteudos } fro
 import { getUsuario as getOneAluno } from '../api/usuariosapi';
 import { getOne as getOneTurma } from '../api/turmasapi';
 import SimuladosNotasForm from '../components/SimuladosNotasForm';
+import SimuladosNotasPesquisarForm from '../components/SimuladosNotasPesquisarForm';
 
 export default function SimuladosNotas() {
     const {
@@ -14,6 +15,7 @@ export default function SimuladosNotas() {
         aluno: alunoURL
     } = useParams();
     const [Simulado, setSimulado] = useState(null);
+    const [Simulados, setSimulados] = useState([]);
     const [Aluno, setAluno] = useState(null);
     const [Turma, setTurma] = useState(null);
     const [Response, setResponse] = useState(null);
@@ -43,6 +45,7 @@ export default function SimuladosNotas() {
     useEffect(() => {
         if (turmaURL) {
             fetchTurma(turmaURL);
+            fetchSimuladosByTurma(turmaURL);
         }
     }, [turmaURL]);
 
@@ -59,6 +62,15 @@ export default function SimuladosNotas() {
             setSimulado(simuladoResponse.data.simulado || []);
         } catch (error) {
             console.error("Erro ao buscar simulados:", error);
+        }
+    }
+
+    const fetchSimuladosByTurma = async (id) => {
+        try {
+            const simuladosResponse = await getSimuladosByTurma(id);
+            setSimulados(simuladosResponse.data.simulados || []);
+        } catch (error) {
+            console.error("Erro ao buscar simulados da turma:", error);
         }
     }
 
@@ -96,6 +108,9 @@ export default function SimuladosNotas() {
                     }
                 });
         }
+        if (simuladoURL && !alunoURL) {
+            navigate(`/Turmas/${turmaURL}/Simulados/${simuladoURL}/Notas/${Turma.alunos[0]._id || ''}`);
+        }
     }, [Turma, simuladoURL, alunoURL]);
 
     const handleFormSubmit = async (formData) => {
@@ -126,7 +141,14 @@ export default function SimuladosNotas() {
             <div className={Style.SimuladosHeaderContainer}>
                 <h2 className={Style.SimuladosHeader}>Lançamento de Notas - {Turma?.serie}º EM</h2>
                 <p className={Style.SimuladosAlert}>Lançamento de notas em lote, insira o numero de acerto do aluno e clique em Salvar para ir para o proximo aluno da turma</p>
+            </div>
+            <div className={Style.SubHeaderContainer}>
                 <h3 className={Style.SimuladosSubHeader}>{Aluno ? `${Aluno.nome} (${Aluno.email})` : 'Carregando aluno...'}</h3>
+                <SimuladosNotasPesquisarForm
+                    simulados={Simulados}
+                    simulado={Simulado}
+                    turma_id={turmaURL}
+                />
             </div>
 
             <SimuladosNotasForm

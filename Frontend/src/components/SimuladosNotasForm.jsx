@@ -6,6 +6,7 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import SimuladosNotaItem from "./SimuladosNotaItem";
 import { Tooltip } from "primereact/tooltip";
 
+
 export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, proximoAluno, AlunoAnterior, quantidadeAlunos, alunoAtual }) {
     const [formData, setFormData] = useState(initialData || {
         conteudos: conteudosRecebidos
@@ -66,8 +67,6 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
             <Toast ref={toast} />
             <Tooltip target={tooltipVoltar} className="text-center" />
             <Tooltip target={tooltipAvancar} className="text-center" />
-
-            <ConfirmDialog />
             <form onSubmit={handleSubmit} className={Style.FormContainer}>
                 <div className={Style.ContainerHeader}>
                     <div className={Style.ContainerCol}>

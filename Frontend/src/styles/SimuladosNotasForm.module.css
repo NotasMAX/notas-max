@@ -3,7 +3,7 @@
 }
 
 .ContainerHeader {
-     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-4 items-center gap-[1rem] bg-[#F5F5F5] mt-[1rem];
+     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-4 items-center gap-[1rem] bg-[#F5F5F5] mt-[2rem];
      grid-template-columns: 1fr 1fr 12rem 3rem;
 }
 

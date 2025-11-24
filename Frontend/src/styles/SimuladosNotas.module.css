@@ -22,7 +22,11 @@
   @apply text-[#043666];
 }
 
+.SubHeaderContainer{
+     @apply flex justify-between items-center lg:flex-row flex-col lg:items-end mt-[0rem];
+}
+
 .SimuladosSubHeader{
-     @apply text-[1.5rem] font-inter mt-[2rem] text-[#404040];
+     @apply text-[1.5rem] font-inter  text-[#404040];
 }
 
