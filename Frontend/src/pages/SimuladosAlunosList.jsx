@@ -87,7 +87,7 @@ export default function SimuladosAlunosList() {
           className={`${ButtonStyle.buttonSecondarySmall} ${
             algumAlunoRealizou() ? "opacity-90 cursor-not-allowed" : ""
           }`}
-          onClick={() => !algumAlunoRealizou() && navigate()}
+          onClick={() => !algumAlunoRealizou() && navigate(`/Turmas/${simulado.turma._id}/Simulados/${simulado._id}/Notas`)}
           disabled={algumAlunoRealizou()}
           data-pr-tooltip={
             algumAlunoRealizou()
@@ -255,7 +255,7 @@ export default function SimuladosAlunosList() {
         <div className="flex gap-4 items-end">
           <button
             className={ButtonStyle.buttonSecondary}
-            onClick={() => navigate(`/Turmas/Simulado/${simulado.turma._id}`)}
+            onClick={() => navigate(`/Turmas/Info/${simulado.turma._id}`)}
           >
             Voltar a lista de simulados
           </button>
