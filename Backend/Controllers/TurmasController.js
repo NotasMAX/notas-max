@@ -27,8 +27,8 @@ export default class TurmasController {
             return res.status(422).json({ message: "O ano deve ser um número." });
         }
         const currentYear = new Date().getFullYear();
-        if (ano < currentYear - 50 || ano > currentYear + 1) {
-            return res.status(422).json({ message: `Insira um ano entre ${currentYear - 50} e ${currentYear + 1}.`, campo: "ano" });
+        if (ano < 1950 || ano > currentYear + 1) {
+            return res.status(422).json({ message: `Insira um ano entre 1950 e ${currentYear + 1}.`, campo: "ano" });
         }
         try {
             const turmaExists = await Turmas.findOne({ serie, ano });
