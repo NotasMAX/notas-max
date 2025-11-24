@@ -18,21 +18,28 @@ export default function SimuladosEditar() {
 
     const navigate = useNavigate();
     const [response, setResponse] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 
     const fetchSimulado = async () => {
         try {
             const result = await getOne(id);
-            setSimulado(result.data.simulado);
+            const simulado = result.data.simulado;
+
+            if (!(Date.now() - new Date(simulado.createdAt).getTime() < (16 * 24 * 60 * 60 * 1000))) {
+                navigate(`/Simulados/`);
+                return;
+            }
+            setSimulado(simulado);
         } catch (error) {
-            setResponse(
-                error.response?.data?.message || 'Erro ao carregar simulado'
-            );
+            navigate(`/Simulados/`);
         }
     }
 
     useEffect(() => {
+        setLoading(true);
         fetchSimulado();
+        setLoading(false);
     }, [id]);
 
     const handleEdit = async (formData) => {
@@ -49,9 +56,10 @@ export default function SimuladosEditar() {
     };
 
     return (
-        <div className={Style.SimuladosCadastrarContainer}>
-            <h2 className={Style.SimuladosHeader} >Editar Simulado</h2>
-            <SimuladosEditarForm onSubmit={handleEdit} response={response} simulado={simulado} />
-        </div>
+        (loading ? <p>Loading...</p> :
+            <div className={Style.SimuladosCadastrarContainer}>
+                <h2 className={Style.SimuladosHeader} >Editar Simulado</h2>
+                <SimuladosEditarForm onSubmit={handleEdit} response={response} simulado={simulado} />
+            </div>)
     );
 }
