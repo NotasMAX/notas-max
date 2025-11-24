@@ -32,7 +32,7 @@ export default class SimuladosController {
             if (!conteudos || conteudos.length <= 0)
                 return res.status(422).json({ message: "Informe as disciplinas." });
 
-            const turmaExists = await Turmas.exists({ _id: turma_id });
+            const turmaExists = await TurmasController.BuscarTurma({ _id: turma_id });
             if (!turmaExists)
                 return res.status(422).json({ message: "Turma não encontrada" });
 
@@ -399,6 +399,12 @@ export default class SimuladosController {
             if (!existingSimulado) {
                 return res.status(422).json({ message: "Simulado não existe" });
             }
+
+            const existingSimuladoNumero = await Simulado.findOne({ numero, bimestre, turma_id });
+            if (existingSimuladoNumero && existingSimuladoNumero._id.toString() !== req.params.id) {
+                return res.status(422).json({ message: "Já existe um simulado com este número e bimestre para a turma" });
+            }
+
             if (!conteudos || conteudos.length <= 0)
                 return res.status(422).json({ message: "Informe as disciplinas." });
 
