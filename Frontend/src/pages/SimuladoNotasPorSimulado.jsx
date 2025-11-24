@@ -83,7 +83,7 @@ export default function SimuladoNotasPorSimulado({}) {
       <div className={StyleTitle.titleContent}>
         <div>
           <h1 className={StyleTitle.titlePage}>
-            Notas Aluno(a) - {aluno.nome}
+            Notas Aluno(a) - {(aluno) ? aluno.nome : ""}
           </h1>
           <p className={StyleTitle.subtitlePage}>
             Lista com o números de acertos, separado pelas materias
