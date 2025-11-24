@@ -6,13 +6,16 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 export default function SimuladosNotasPesquisarForm({ onSubmit, simulados, simulado, turma_id }) {
     const [formData, setFormData] = useState({
         simulado_id: "",
+        bimestre: 0
     });
     const navigate = useNavigate();
+
     useEffect(() => {
         if (simulado) {
             setFormData(prev => ({
                 ...prev,
-                simulado_id: simulado._id
+                simulado_id: simulado._id,
+                bimestre: simulado.bimestre
             }));
         }
     }, [simulado]);
@@ -37,9 +40,56 @@ export default function SimuladosNotasPesquisarForm({ onSubmit, simulados, simul
             return;
         }
     }
+
+    const handleChangeBimestre = (e) => {
+        const { value } = e.target;
+
+        if (value == simulado?.bimestre){
+            setFormData(prev => ({
+                ...prev,
+                bimestre: simulado.bimestre,
+                simulado_id: simulado._id
+            }));
+            return;
+        }
+
+        setFormData(prev => ({
+            ...prev,
+            bimestre: value,
+            simulado_id: ""
+        }));
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(formData);
+    }
+
     return (
-        <form className={Style.formContainer}>
+        <form className={Style.formContainer} onSubmit={handleSubmit}>
             <ConfirmDialog />
+            <div className={Style.formContainerOption}>
+                <label htmlFor="bimestre" className={Style.formLabel}>Bimestre</label>
+                <div className={Style.formSelectContainer}>
+                    <select
+                        required
+                        name="bimestre"
+                        id="bimestre"
+                        value={String(formData.bimestre)}
+                        className={Style.formSelect}
+                        onChange={handleChangeBimestre}
+                    >
+                        {simulados.map(simulado => (
+                            <option className={Style.formOption} key={simulado.bimestre} value={simulado.bimestre}>
+                                {simulado.bimestre}º Bimestre
+                            </option>
+                        ))}
+                    </select>
+                    <svg className={Style.formSelectArrow} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z" />
+                    </svg>
+                </div>
+            </div>
             <div className={Style.formContainerOption}>
                 <label htmlFor="Simulado" className={Style.formLabel}>Simulado</label>
                 <div className={Style.formSelectContainer}>
@@ -51,7 +101,8 @@ export default function SimuladosNotasPesquisarForm({ onSubmit, simulados, simul
                         className={Style.formSelect}
                         onChange={handleChange}
                     >
-                        {simulados.map(simulado => (
+                        <option className={Style.formOption} value="" disabled>Selecione</option>
+                        {simulados.filter(s => s.bimestre == formData.bimestre).map(simulado => (
                             <option className={Style.formOption} key={simulado._id} value={simulado._id}>
                                 Simulado {simulado.numero}
                             </option>
