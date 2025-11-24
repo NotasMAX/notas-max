@@ -137,6 +137,8 @@ export default function SimuladosNotas() {
                 aluno={Aluno}
                 proximoAluno={proximoAluno}
                 AlunoAnterior={anteriorAluno}
+                quantidadeAlunos={Turma ? Turma.alunos.length : 0}
+                alunoAtual={Turma ? Turma.alunos.findIndex(a => a._id === alunoURL) + 1 : 0}
             />
         </div>
     );

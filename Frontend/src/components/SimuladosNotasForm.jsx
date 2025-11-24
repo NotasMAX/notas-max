@@ -6,7 +6,7 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import SimuladosNotaItem from "./SimuladosNotaItem";
 import { Tooltip } from "primereact/tooltip";
 
-export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, proximoAluno, AlunoAnterior }) {
+export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, proximoAluno, AlunoAnterior, quantidadeAlunos, alunoAtual }) {
     const [formData, setFormData] = useState(initialData || {
         conteudos: conteudosRecebidos
     });
@@ -110,6 +110,10 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                         / {String(NumeroQuestoes).padStart(2, '0')}
                     </div>
                 </div>
+                <div className={Style.ContainerButtons}>
+                <div className={Style.AlunosInfo} >
+                    Nº de alunos: {String(alunoAtual).padStart(2, '0')} / {quantidadeAlunos}
+                    </div>
                 <div className={Style.buttonGroup}>
                     <button
                         type="button"
@@ -146,6 +150,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                         data-pr-position="bottom"  >
                         {(!proximoAluno) ? "Salvar e finalizar" : "Salvar e avançar"}
                     </button>
+                </div>
                 </div>
             </form >
         </div >
