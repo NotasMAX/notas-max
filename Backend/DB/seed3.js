@@ -88,8 +88,8 @@ const seedDatabase = async () => {
                 telefone_responsavel: "11987654332"
             },
             {
-                nome: "Evelyn Rocha",
-                email: "evelyn.rocha@student.com",
+                nome: "Carolina Rocha",
+                email: "carolina.rocha@student.com",
                 telefone_contato: "11987654333",
                 senha: senhaHash,
                 tipo_usuario: "aluno",
@@ -133,7 +133,7 @@ const seedDatabase = async () => {
             {
                 serie: 1,
                 ano: 2025,
-                alunos: alunosIds.slice(0, 5) // Ana, Bruno, Camila, Diego, Evelyn
+                alunos: alunosIds.slice(0, 5) // Ana, Bruno, Camila, Diego, Carolina
             },
             {
                 serie: 2,
