@@ -21,7 +21,10 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
 
     useEffect(() => {
         setLoading(true);
-        setFormData({ ...formData, conteudos: conteudosRecebidos });
+        const sortedConteudos = conteudosRecebidos.sort((a, b) =>
+            (a.turma_disciplina?.materia_id || "").localeCompare(b.turma_disciplina?.materia_id || "")
+        );
+        setFormData({ ...formData, conteudos: sortedConteudos });
         setNumeroQuestoes(conteudosRecebidos.reduce((total, conteudo) => total + (conteudo.quantidade_questoes || 0), 0));
         setLoading(false);
     }, [conteudosRecebidos]);

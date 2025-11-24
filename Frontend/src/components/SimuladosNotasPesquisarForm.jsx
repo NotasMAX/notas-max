@@ -79,8 +79,8 @@ export default function SimuladosNotasPesquisarForm({ onSubmit, simulados, simul
                         className={Style.formSelect}
                         onChange={handleChangeBimestre}
                     >
-                        {simulados.map(simulado => (
-                            <option className={Style.formOption} key={simulado.bimestre} value={simulado.bimestre}>
+                        {simulados.map((simulado, index) => (
+                            <option className={Style.formOption} key={`bimestre-${simulado._id}-${index}`} value={simulado.bimestre}>
                                 {simulado.bimestre}º Bimestre
                             </option>
                         ))}
