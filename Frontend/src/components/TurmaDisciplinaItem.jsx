@@ -27,7 +27,8 @@ export default function TurmaDisciplinaItem({ disciplina, toast, onClick }) {
             }
         } catch (error) {
             if (toast && toast.current) {
-                toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Falha ao excluir disciplina', life: 3000 });
+                console.log(error);
+                toast.current.show({ severity: 'error', summary: 'Erro', detail: error.response.data.message, life: 3000 });
             }
         }
     }
