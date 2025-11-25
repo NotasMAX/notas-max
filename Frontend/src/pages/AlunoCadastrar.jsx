@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import AlunoForm from '../components/AlunoForm';
 import { createAluno } from '../api/usuariosapi';
 import Style from '../styles/AlunoForm.module.css';
+import { Toast } from 'primereact/toast';
+import { useToast } from '../hooks/useToast';
 
 export default function AlunoCadastrar() {
 
@@ -11,19 +13,22 @@ export default function AlunoCadastrar() {
     }, []);
 
     const navigate = useNavigate();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const handleCreate = async (formData) => {
         try {
             await createAluno(formData);
+            showSuccessOnRedirect('Aluno cadastrado com sucesso!');
             navigate('/Alunos');
         } catch (error) {
             console.error("Erro ao cadastrar aluno:", error);
-            alert("Erro ao cadastrar aluno.");
+            showError(error.response?.data?.error || "Erro ao cadastrar aluno.");
         }
     };
 
     return (
         <div className={Style.pageContainer}>
+            <Toast ref={toast} />
             <h2 className={Style.pageTitle}>Cadastrar Aluno</h2>
             <AlunoForm onSubmit={handleCreate} />
         </div>

@@ -50,9 +50,9 @@ export default function AlunoForm({ initialData, onSubmit, isEditMode = true }) 
         }
 
         // Senha é obrigatória apenas no cadastro (não na edição)
-        if (!initialData && !formData.senha.trim()) {
-            newErrors.senha = "Campo obrigatório";
-        }
+        //if (!initialData && !formData.senha.trim()) {
+          //  newErrors.senha = "Campo obrigatório";
+        //}
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -125,7 +125,7 @@ export default function AlunoForm({ initialData, onSubmit, isEditMode = true }) 
             </div>
 
             {/* Senha - Apenas no cadastro */}
-            {!initialData && (
+            {/*{!initialData && (
                 <div className={Style.formGroup}>
                     <label className={Style.formLabel}>Senha</label>
                     <input
@@ -138,7 +138,7 @@ export default function AlunoForm({ initialData, onSubmit, isEditMode = true }) 
                     />
                     {errors.senha && <span className={Style.spanError}>{errors.senha}</span>}
                 </div>
-            )}
+            )}*/}
 
             {/* Nome Responsável e Telefone Responsável - Lado a lado */}
             <div className={Style.formRow}>

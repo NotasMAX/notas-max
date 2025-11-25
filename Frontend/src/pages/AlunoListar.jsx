@@ -3,8 +3,12 @@ import { getAlunos } from '../api/usuariosapi';
 import { useNavigate } from 'react-router-dom';
 import Style from '../styles/AlunoListar.module.css';
 import Pagination from '../components/Pagination';
+import { Toast } from 'primereact/toast';
+import { useToast } from '../hooks/useToast';
 
 export default function AlunoListar() {
+	const { toast } = useToast(); // Adiciona o hook para mostrar toast de redirect
+
 	useEffect(() => {
 		document.title = 'NotasMAX - Listar Alunos';
 	}, []);
@@ -56,6 +60,7 @@ export default function AlunoListar() {
 
 	return (
 		<div className={Style.pageContainer}>
+			<Toast ref={toast} />
 			<h2 className={Style.pageHeader}>Alunos</h2>
 
 			<div className={Style.headerContainer}>
