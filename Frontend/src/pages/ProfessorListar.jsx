@@ -61,7 +61,7 @@ export default function ProfessorListar() {
 	return (
 		<div className={Style.pageContainer}>
 			<Toast ref={toast} />
-			<h2 className={Style.pageHeader}>Professor</h2>
+			<h2 className={Style.pageHeader}>Professores</h2>
 
 			<div className={Style.headerContainer}>
 				<a href="/Professores/Cadastrar" className={Style.linkCadastrar}>
