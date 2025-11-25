@@ -58,7 +58,7 @@ export default function TurmaDisciplinaForm({ initialData, onSubmit, toast, turm
         }
         else {
             getProfessores().then(response => {
-                setProfessores(response.data.professores);
+                setProfessores(response.data);
             }).catch(error => {
                 console.error("Erro ao buscar professores:", error);
             });
