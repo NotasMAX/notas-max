@@ -5,6 +5,8 @@ import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import SimuladosNotaItem from "./SimuladosNotaItem";
 import { Tooltip } from "primereact/tooltip";
+import StyleButton from "../styles/ButtonGroup.module.css";
+
 
 
 export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, proximoAluno, AlunoAnterior, quantidadeAlunos, turma_id, alunoAtual }) {
@@ -122,7 +124,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                         ref={tooltipVoltar}
                         data-pr-tooltip={(!AlunoAnterior) ? "Cancelar as Alterações" : "Cancelar as alterações e voltar ao aluno anterior"}
                         data-pr-position="bottom"
-                        className={Style.buttonSecondary}
+                        className={StyleButton.buttonSecondary}
                         onClick={() => {
                             confirmDialog({
                                 message: `Deseja realmente ${(!AlunoAnterior) ? "cancelar as alterações?" : "voltar? As alterações não serão salvas."}`,
@@ -146,7 +148,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                     <button
                         disabled={loading}
                         type="submit"
-                        className={Style.buttonPrimary}
+                        className={StyleButton.buttonPrimary}
                         ref={tooltipAvancar}
                         data-pr-tooltip={ (!proximoAluno) ? "Salvar as notas" : "Salvar as notas e avançar para o próximo aluno"}
                         data-pr-position="bottom"  >

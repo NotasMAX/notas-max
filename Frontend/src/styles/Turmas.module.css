@@ -1,5 +1,5 @@
 .TurmasHeader {
-     @apply text-[2.125rem] font-bold font-inter;
+     @apply text-4xl font-bold text-[#043666];
 }
 
 .TurmasAlert {

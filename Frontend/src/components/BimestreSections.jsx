@@ -10,7 +10,7 @@ export default function BimestreSections({ simulados }) {
   };
 
   const handleEdit = async (id) => {
-    navigate(`/Simulado/Editar/${id}`);
+    navigate(`/Simulados/Editar/${id}`);
   };
 
   return (

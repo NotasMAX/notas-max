@@ -5,6 +5,7 @@ import { createAluno } from '../api/usuariosapi';
 import Style from '../styles/AlunoForm.module.css';
 import { Toast } from 'primereact/toast';
 import { useToast } from '../hooks/useToast';
+import StyleTitle from '../styles/Title.module.css';
 
 export default function AlunoCadastrar() {
 
@@ -28,8 +29,9 @@ export default function AlunoCadastrar() {
 
     return (
         <div className={Style.pageContainer}>
+
             <Toast ref={toast} />
-            <h2 className={Style.pageTitle}>Cadastrar Aluno</h2>
+            <h2 className={StyleTitle.titlePage}>Cadastrar Aluno</h2>
             <AlunoForm onSubmit={handleCreate} />
         </div>
     );

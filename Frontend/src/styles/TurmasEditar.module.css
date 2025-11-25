@@ -1,5 +1,5 @@
 .TurmasEditarHeader {
-     @apply text-[2.125rem] font-bold font-inter mb-6;
+     @apply text-4xl font-bold text-[#043666];
 }
 
 

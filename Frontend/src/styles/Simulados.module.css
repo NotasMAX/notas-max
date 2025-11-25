@@ -1,9 +1,9 @@
 .SimuladosHeader {
-     @apply text-[2.125rem] font-bold font-inter;
+     @apply text-4xl font-bold text-[#043666];
 }
 
 .SimuladosAlert {
-     @apply font-medium font-inter text-[1.25rem] mt-2;
+     @apply text-gray-800;
 }
 
 .SimuladosContainer {
