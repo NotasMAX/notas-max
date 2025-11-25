@@ -5,7 +5,6 @@ import { getDesempenhoAluno } from "../api/usuariosapi";
 import StyleTitle from '../styles/Title.module.css';
 import StyleButton from '../styles/ButtonGroup.module.css';
 
-
 export default function AlunoDesempenho() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -18,40 +17,49 @@ export default function AlunoDesempenho() {
   ]);
 
   const [alunoInfo, setAlunoInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const [turmasAluno, setTurmasAluno] = useState([]);
+  const [anoSelecionado, setAnoSelecionado] = useState("");
   const [bimestreSelecionado, setBimestreSelecionado] = useState(1);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
+      setLoading(true);
+
       try {
-        const res = await getDesempenhoAluno(id);
+        const res = await getDesempenhoAluno(
+          id,
+          anoSelecionado || undefined,
+          undefined
+        );
 
         setAlunoInfo({
           nome: res.data.alunoNome ?? "Desconhecido",
-          turma: res.data.turmaNome ?? "Não informado"
+          turma: res.data.turmaNome ?? "Não informado",
         });
 
-        const desempenho = res.data.desempenho ?? [];
+        setTurmasAluno(res.data.turmasDoAluno);
 
-        const preenchido = [1, 2, 3, 4].map(bi => {
-          const found = desempenho.find(d => Number(d.bimestre) === bi);
-          return { bimestre: bi, media: found?.media ? Number(found.media) : 0 };
-        });
+        if (!anoSelecionado && res.data.turmasDoAluno?.length > 0) {
+          const ultimoAno = res.data.turmasDoAluno.at(-1).ano;
+          setAnoSelecionado(ultimoAno);
+        }
 
-        setDados(preenchido);
-
+        setDados(res.data.desempenho);
       } catch (err) {
-        console.error("Erro ao buscar desempenho:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
     }
 
     load();
-  }, [id]);
+  }, [id, anoSelecionado]);
 
   const categories = ["1º Bi", "2º Bi", "3º Bi", "4º Bi"];
-  const valores = dados.map(d => d.media);
+  const valores = dados.map((d) => d.media);
 
   const options = {
     chart: { id: "desempenho-aluno", toolbar: { show: false } },
@@ -59,57 +67,67 @@ export default function AlunoDesempenho() {
     yaxis: {
       max: 10,
       tickAmount: 5,
-      labels: { formatter: v => Number(v).toFixed(1) }
+      labels: { formatter: (v) => Number(v).toFixed(1) },
     },
     plotOptions: {
-      bar: { distributed: true, borderRadius: 8, columnWidth: "50%" }
+      bar: { distributed: true, borderRadius: 8, columnWidth: "50%" },
     },
     dataLabels: { enabled: false },
     colors: valores.map((v, i) =>
-      (i + 1) === bimestreSelecionado ? "#1778F2" : "#CFE9FF"
-    )
+      i + 1 === bimestreSelecionado ? "#1778F2" : "#CFE9FF"
+    ),
   };
 
   const series = [{ name: "Média", data: valores }];
 
   return (
     <div className="p-6 max-2xl mx-auto">
-
       <h1 className={StyleTitle.titlePage}>Desempenho do aluno por bimestre</h1>
 
       <p className={StyleTitle.subtitlePage}>
         Aluno: <strong>{alunoInfo?.nome ?? "..."}</strong>
         &nbsp;&nbsp;
-        Turma: <strong>{alunoInfo?.turma}</strong>
+        Turma atual: <strong>{alunoInfo?.turma}</strong>
       </p>
 
-      <div className="flex justify-between items-center mb-4">
-        <div></div>
-        <div>
-          <select
-            className="border px-3 py-2 rounded"
-            value={bimestreSelecionado}
-            onChange={(e) => setBimestreSelecionado(Number(e.target.value))}
-          >
-            <option value={1}>1º Bimestre</option>
-            <option value={2}>2º Bimestre</option>
-            <option value={3}>3º Bimestre</option>
-            <option value={4}>4º Bimestre</option>
-          </select>
-        </div>
+      <div className="flex justify-end items-center mb-4 gap-4">
+        <select
+          className="border px-3 py-2 rounded"
+          value={anoSelecionado}
+          onChange={(e) => setAnoSelecionado(Number(e.target.value))}
+        >
+          <option value="">Selecione o ano</option>
+          {turmasAluno.map((t) => (
+            <option key={t.id} value={t.ano}>
+              {t.serie}º Ano - {t.ano}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="border px-3 py-2 rounded"
+          value={bimestreSelecionado}
+          onChange={(e) => setBimestreSelecionado(Number(e.target.value))}
+        >
+          <option value={1}>1º Bimestre</option>
+          <option value={2}>2º Bimestre</option>
+          <option value={3}>3º Bimestre</option>
+          <option value={4}>4º Bimestre</option>
+        </select>
       </div>
 
-      {loading ? (
-        <div>Carregando...</div>
-      ) : (
-        <Chart options={options} series={series} type="bar" height={340} />
-      )}
+      <div style={{ height: 340 }}>
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              Carregando...
+            </div>
+          ) : (
+            <Chart options={options} series={series} type="bar" height={340} />
+          )}
+      </div>
 
       <div className="mt-6 flex justify-end">
-        <button
-          className={StyleButton.buttonPrimary}
-          onClick={() => navigate(-1)}
-        >
+        <button className={StyleButton.buttonPrimary} onClick={() => navigate(-1)}>
           Voltar
         </button>
       </div>

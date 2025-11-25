@@ -7,7 +7,10 @@ export const createProfessor = (data) => api.post("/Usuarios/Professor", data);
 // Endpoints de Alunos
 export const getAlunos = () => api.get("/Usuarios/Alunos");
 export const createAluno = (data) => api.post("/Usuarios/Aluno", data);
-export const getDesempenhoAluno = (aluno_id) => api.get(`/Usuarios/Aluno/${aluno_id}/desempenho`);
+export const getDesempenhoAluno = (aluno_id, ano, turmaId, bimestre) =>
+  api.get(`/Usuarios/Aluno/${aluno_id}/desempenho`, {
+    params: { ano, turmaId, bimestre }
+  });
 
 // Endpoints Comuns (Alunos e Professores)
 export const getUsuario = (id) => api.get(`/Usuarios/Detalhes/${id}`);
