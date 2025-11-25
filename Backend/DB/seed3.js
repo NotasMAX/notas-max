@@ -23,8 +23,8 @@ const seedDatabase = async () => {
 
         const usuariosData = [
             {
-                nome: "Admin User",
-                email: "admin@exemplo.com",
+                nome: "Carlos Mendonça",
+                email: "cassinotte@gmail.com",
                 telefone_contato: "11987654321",
                 senha: senhaHash,
                 tipo_usuario: "administrador"

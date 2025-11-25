@@ -61,7 +61,7 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path="/reset-senha" element={
+          <Route path="/reset" element={
             <GuestRoute>
               <ResetSenha />
             </GuestRoute>

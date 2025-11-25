@@ -13,7 +13,9 @@ const usuarioSchema = new Schema({
     default: "aluno",
   },
   telefone_responsavel: { type: String },
-  nome_responsavel: { type: String, trim: true }, 
+  nome_responsavel: { type: String, trim: true },
+  resetToken: { type: String, select: false, default: null },
+  resetTokenExpiry: { type: Date, select: false, default: null }, 
 }, {
   timestamps: true,
   strict: true
