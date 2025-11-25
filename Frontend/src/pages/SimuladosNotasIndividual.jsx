@@ -5,7 +5,7 @@ import { Toast } from 'primereact/toast';
 import { getOne as getOneSimulado, getSimuladosByTurma, atualizarConteudos } from '../api/simuladoApi';
 import { getUsuario as getOneAluno } from '../api/usuariosapi';
 import { getOne as getOneTurma } from '../api/turmasapi';
-import SimuladosNotasForm from '../components/SimuladosNotasForm';
+import SimuladosNotasForm from '../components/SimuladosNotasIndividualForm';
 import SimuladosNotasPesquisarIndividualForm from '../components/SimuladosNotasPesquisarIndividualForm';
 
 export default function SimuladosNotasIndividual() {
