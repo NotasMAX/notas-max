@@ -238,19 +238,31 @@ export default class SimuladosController {
     }
 
     static async getByAlunoAndBimestre(req, res) {
-        const id = req.params.aluno_id;
-        const bimestre = Number(req.params.bimestre);
+        const aluno_id = req.params.aluno;
+        const simulado_id = req.params.simulado;
+        const bimestre = Number(req.params.bimestre); // Converter para número
+
         const ObjectId = Types.ObjectId;
 
-        if (!ObjectId.isValid(id))
-            return res.status(422).json({ message: "Id de Aluno inválido", id });
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de Aluno inválido", aluno_id });
+
+        if (!ObjectId.isValid(simulado_id))
+            return res.status(422).json({ message: "Id de Simulado inválido", simulado_id });
+
+        if (!bimestre || isNaN(bimestre) || bimestre <= 0)
+            return res.status(422).json({ message: "Informe um bimestre válido (número positivo)" });
+
+        const turma_id = await Simulado.findOne({ _id: simulado_id }).then(s => s ? s.turma_id : null);
+        console.log("Turma ID:", turma_id);
 
         try {
             const simulados = await Simulado.aggregate([
                 {
                     $match: {
-                        "conteudos.resultados.aluno_id": new ObjectId(id),
-                        bimestre: bimestre
+                        "conteudos.resultados.aluno_id": new ObjectId(aluno_id),
+                        bimestre: bimestre,
+                        turma_id: turma_id
                     }
                 },
                 {
@@ -297,7 +309,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(id)] }
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
                                 },
                                 0
@@ -332,7 +344,7 @@ export default class SimuladosController {
                 },
                 { $sort: { data_realizacao: -1, numero: -1 } }
             ]);
-
+            console.log(simulados);
             res.status(200).json({ simulados });
         } catch (error) {
             console.error('Erro ao buscar simulados do aluno:', error);

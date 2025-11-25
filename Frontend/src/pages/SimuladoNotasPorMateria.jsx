@@ -43,7 +43,7 @@ export default function SimuladoNotasPorMateria() {
 
     const loadSimulados = async () => {
       try {
-        const res = await getByAlunoAndBimestre(alunoId, bimestre);
+        const res = await getByAlunoAndBimestre(alunoId, bimestre, simuladoIdParams);
         setSimulados(res.data.simulados || []);
         setLoading(false);
       } catch (e) {
@@ -63,25 +63,6 @@ export default function SimuladoNotasPorMateria() {
     }
   }, [simulados]);
 
-  const totalResultados = () => {
-    const simuladoAtual = simulados.find((s) => s._id === simuladoId);
-    if (!simuladoAtual?.conteudos || simuladoAtual.tipo !== "objetivo")
-      return 0;
-
-    return simuladoAtual.conteudos.reduce((total, conteudo) => {
-      return total + (conteudo.resultado.acertos || 0);
-    }, 0);
-  };
-
-  const totalQuestoes = () => {
-    const simuladoAtual = simulados.find((s) => s._id === simuladoId);
-    if (!simuladoAtual?.conteudos || simuladoAtual.tipo !== "objetivo")
-      return 0;
-
-    return simuladoAtual.conteudos.reduce((total, conteudo) => {
-      return total + (conteudo.quantidade_questoes || 0);
-    }, 0);
-  };
 
   const obterMaterias = () => {
     const materiasSet = new Set();
@@ -219,7 +200,7 @@ export default function SimuladoNotasPorMateria() {
         </div>
       </div>
 
-      <div className="flex gap-3">
+      {/* <div className="flex gap-3">
         <button
           className={ButtonStyle.buttonSecondarySmall}
           onClick={() => navigate()}
@@ -258,7 +239,7 @@ export default function SimuladoNotasPorMateria() {
           </svg>
           Média Materia
         </button>
-      </div>
+      </div> */}
 
       <div className="mb-2 flex justify-between">
         <div className={ButtonStyle.formSelectContainer}>
@@ -323,8 +304,7 @@ export default function SimuladoNotasPorMateria() {
 
         <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
           <div className="w-3/4">
-            Total de Acertos -{" "}
-            {materias.find((m) => m.id === materiaSelecionada)?.nome || ""}
+            Total de Acertos
           </div>
           <div className="flex w-1/4 gap-3">
             <p className="w-1/12">{totalResultadosMateria()}</p>
@@ -334,27 +314,18 @@ export default function SimuladoNotasPorMateria() {
         </div>
 
         <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
-          <div className="w-3/4">Total de Acertos Geral</div>
-          <div className="flex w-1/4 gap-3">
-            <p className="w-1/12">{totalResultados()}</p>
-            <p className="w-1/12">/</p>
-            <p className="w-1/12">{totalQuestoes()}</p>
-          </div>
-        </div>
-
-        <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
           <div className="w-1/2">Média Objetiva</div>
-          <div className="w-1/2">{calcularMediaObjetiva()}</div>
+          <div className="w-1/2">{calcularMediaObjetiva().toFixed(2).replace('.', ',')}</div>
         </div>
 
         <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
           <div className="w-1/2">Média Dissertativa</div>
-          <div className="w-1/2">{calcularMediaDissertativa()}</div>
+          <div className="w-1/2">{calcularMediaDissertativa().toFixed(2).replace('.', ',')}</div>
         </div>
 
         <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
           <div className="w-1/2">Nota Final</div>
-          <div className="w-1/2">{calcularNotaFinal()}</div>
+          <div className="w-1/2">{calcularNotaFinal().toFixed(2).replace('.', ',')}</div>
         </div>
       </div>
 

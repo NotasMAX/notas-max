@@ -42,7 +42,7 @@ export default function SimuladoNotasPorSimulado({}) {
 
     const loadSimulados = async () => {
       try {
-        const res = await getByAlunoAndBimestre(alunoId, bimestre);
+        const res = await getByAlunoAndBimestre(alunoId, bimestre, simuladoIdParams);
         setSimulados(res.data.simulados || []);
         setLoading(false);
       } catch (e) {

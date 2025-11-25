@@ -44,7 +44,7 @@ routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie',authenticat
 routes.get('/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getOne);
 routes.get('/Simulados',authenticateToken, authorizeAdmin, SimuladosController.getAll);
 routes.get('/Turmas/ByTurma/:turma_id', authenticateToken, authorizeAdmin, SimuladosController.getByTurma);
-routes.get('/Simulado/getByAluno/:aluno_id/:bimestre', authenticateToken, authorizeAdmin, SimuladosController.getByAlunoAndBimestre);
+routes.get('/Simulado/getByAluno/:aluno/:bimestre/:simulado', authenticateToken, authorizeAdmin, SimuladosController.getByAlunoAndBimestre);
 routes.patch('/Simulado/Editar/:id',authenticateToken, authorizeAdmin, SimuladosController.update);
 routes.get('/Simulados/Turma/:id',authenticateToken, authorizeAdmin, SimuladosController.getSimuladosByTurma);
 routes.patch('/Simulado/AtualizarConteudos/:id',authenticateToken, authorizeAdmin, SimuladosController.atualizarConteudos);
