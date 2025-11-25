@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MateriasForm from '../components/MateriaForm';
 import { getMateriaById, editarMateria } from '../api/materiaApi';
+import Style from '../styles/MateriaForm.module.css';
+import { Toast } from 'primereact/toast';
+import { useToast } from '../hooks/useToast';
 
 export default function MateriaEditar() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const [initialData, setInitialData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -23,7 +27,10 @@ export default function MateriaEditar() {
                 if (mounted) setInitialData(res.data || null);
             } catch (err) {
                 console.error('Erro ao carregar matéria:', err);
-                if (mounted) setError('Erro ao carregar matéria.');
+                if (mounted) {
+                    setError('Erro ao carregar matéria.');
+                    showError('Erro ao carregar matéria.');
+                }
             } finally {
                 if (mounted) setLoading(false);
             }
@@ -33,6 +40,7 @@ export default function MateriaEditar() {
         else {
             setError('ID de matéria inválido.');
             setLoading(false);
+            showError('ID de matéria inválido.');
         }
 
         return () => { mounted = false; };
@@ -41,10 +49,17 @@ export default function MateriaEditar() {
     const handleUpdate = async (formData) => {
         try {
             await editarMateria(id, formData);
+            showSuccessOnRedirect('Matéria atualizada com sucesso!');
             navigate('/Materias');
         } catch (err) {
             console.error('Erro ao atualizar matéria:', err);
-            alert('Erro ao atualizar matéria.');
+            
+            // Verifica se é erro de duplicata (409)
+            if (err.response?.status === 409) {
+                showError(err.response.data.error || 'Já existe uma matéria cadastrada com este nome.');
+            } else {
+                showError('Erro ao atualizar matéria.');
+            }
         }
     };
 
@@ -52,8 +67,9 @@ export default function MateriaEditar() {
     if (error) return <div className="p-4 text-red-600">{error}</div>;
 
     return (
-        <div className="p-4 bg-white">
-            <h2 className="mb-4">Editar Matéria</h2>
+        <div>
+            <Toast ref={toast} />
+            <h2 className={Style.pageTitle}>Editar Matéria</h2>
             {initialData ? (
                 <MateriasForm initialData={initialData} onSubmit={handleUpdate} />
             ) : (

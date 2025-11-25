@@ -39,15 +39,13 @@ export default function MateriasForm({ initialData, onSubmit }) {
 
         // Remove espaços extras
         formData.nome = formData.nome.trim();
-
-        console.log(formData);
         onSubmit(formData);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label className={Style.formLabel}>Descritivo:</label>
+        <form onSubmit={handleSubmit} className={Style.form}>
+            <div className={Style.formGroup}>
+                <label className={Style.formLabel}>Descritivo</label>
                 <input
                     type="text"
                     required
@@ -55,21 +53,21 @@ export default function MateriasForm({ initialData, onSubmit }) {
                     value={formData.nome}
                     className={Style.formInput}
                     onChange={handleChange}
-                    placeholder="Digite o nome da matéria"
+                    placeholder=""
                 />
+                <span className={Style.spanError} id="nomeError"></span>
             </div>
-            <span className="spanError" id="nomeError"></span>
 
             <div className={Style.buttonGroup}>
-                <button type="submit" className={Style.buttonPrimary}>
-                    Salvar
-                </button>
                 <button
                     type="button"
                     className={Style.buttonSecondary}
                     onClick={() => navigate(-1)}
                 >
-                    Cancelar
+                    Voltar
+                </button>
+                <button type="submit" className={Style.buttonPrimary}>
+                    Salvar
                 </button>
             </div>
         </form>

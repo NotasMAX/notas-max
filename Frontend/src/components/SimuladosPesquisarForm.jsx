@@ -42,6 +42,7 @@ export default function SimuladosPesquisarForm({ initialData, onSubmit }) {
                         <select
                             required
                             name="bimestre"
+                            id="bimestre"
                             value={String(formData.bimestre)}
                             className={Style.formSelect}
                             onChange={handleChange}
@@ -63,6 +64,7 @@ export default function SimuladosPesquisarForm({ initialData, onSubmit }) {
                 <div className={Style.formSelectContainer}>
                     <select
                         required
+                        id="serie"
                         name="serie"
                         value={String(formData.serie)}
                         className={Style.formSelect}
@@ -86,6 +88,7 @@ export default function SimuladosPesquisarForm({ initialData, onSubmit }) {
                     <select
                         required
                         name="ano"
+                        id="ano"
                         value={String(formData.ano)}
                         className={Style.formSelect}
                         onChange={handleChange}

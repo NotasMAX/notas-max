@@ -95,4 +95,75 @@ export default class TurmaDisciplinasController {
             res.status(500).json({ message: "Erro ao remover disciplina", error });
         }
     }
+
+    static async getOne(req, res) {
+        const { turma_disciplina_id } = req.params;
+        const ObjectId = Types.ObjectId;
+
+        if (!turma_disciplina_id) {
+            return res.status(422).json({ message: "Preencha o id da disciplina." });
+        }
+        if (!ObjectId.isValid(turma_disciplina_id)) {
+            return res.status(422).json({ message: "Id da disciplina inválido" });
+        }
+
+        try {
+            const disciplina = await TurmaDisciplina.aggregate([
+                {
+                    $match: { _id: new ObjectId(turma_disciplina_id) }
+                },
+                {
+                    $lookup: {
+                        from: "usuarios",
+                        localField: "professor_id",
+                        foreignField: "_id",
+                        as: "professor"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "materias",
+                        localField: "materia_id",
+                        foreignField: "_id",
+                        as: "materia"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$professor",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$materia",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        turma_id: 1,
+                        professor: {
+                            _id: "$professor._id",
+                            nome: "$professor.nome"
+                        },
+                        materia: {
+                            _id: "$materia._id",
+                            nome: "$materia.nome"
+                        },
+                        createdAt: 1,
+                        updatedAt: 1
+                    }
+                }
+            ]);
+
+            if (!disciplina || disciplina.length === 0) {
+                return res.status(404).json({ message: "Disciplina não encontrada." });
+            }
+            res.status(200).json({ disciplina: disciplina[0] });
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar a disciplina", error });
+        }
+    }
 }

@@ -3,13 +3,12 @@ import TurmasController from "../Controllers/TurmasController.js";
 import TurmaDisciplinasController from "../Controllers/TurmaDisciplinasController.js";
 import UsuariosController from "../Controllers/UsuariosController.js";
 import MateriasController from "../Controllers/MateriasController.js";
-import {authenticateToken, authorizeAdmin} from "../middlewares/authMiddleware.js";
+import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
 import SimuladosController from '../Controllers/SimuladosController.js';
 
 
 const routes = Router();
 
-//rotas de Turmas
 routes.get("/Turmas",authenticateToken, authorizeAdmin, TurmasController.getAll);
 routes.get("/Turma/:id",authenticateToken, authorizeAdmin, TurmasController.getOne);
 routes.get("/Turmas/Pesquisar/:ano",authenticateToken, authorizeAdmin, TurmasController.getByAno);
@@ -17,9 +16,10 @@ routes.post("/Turmas/Cadastrar",authenticateToken, authorizeAdmin, TurmasControl
 routes.patch("/Turmas/Adicionar/Aluno",authenticateToken, authorizeAdmin, TurmasController.addAluno);
 routes.delete("/Turmas/Remover/Aluno",authenticateToken, authorizeAdmin, TurmasController.removeAluno);
 routes.get("/Turma/:id/desempenho", authenticateToken, authorizeAdmin,TurmasController.getDesempenhoByTurma);
+routes.get("/Turma/:id/desempenho-materias", authenticateToken, authorizeAdmin, TurmasController.getDesempenhoMaterias);
 routes.post("/Turmas/Adicionar/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.create);
 routes.delete("/Turmas/Remover/Disciplina",authenticateToken, authorizeAdmin, TurmaDisciplinasController.remove);
-
+routes.get("/Turmas/Disciplinas/:turma_disciplina_id",authenticateToken, authorizeAdmin, TurmaDisciplinasController.getOne);
 
 routes.get("/Usuarios/Professores",authenticateToken, authorizeAdmin, UsuariosController.listarProfessores);
 routes.get("/Usuarios/Alunos",authenticateToken, authorizeAdmin, UsuariosController.listarAlunos);
@@ -29,8 +29,6 @@ routes.put("/Usuarios/Editar/:id",authenticateToken, authorizeAdmin, UsuariosCon
 routes.post("/Usuarios/Professor",authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
 routes.post("/Usuarios/Aluno",authenticateToken, authorizeAdmin, UsuariosController.cadastrarAluno);
 
-
-routes.post("/Usuarios/CadastrarAluno",authenticateToken, authorizeAdmin, UsuariosController.createAluno); //Somente para testes ↓
 routes.get("/Usuarios/Buscar/Alunos",authenticateToken, authorizeAdmin, UsuariosController.getAlunoByNameOrEmail); 
 routes.get("/Usuarios/Buscar/Professores",authenticateToken, authorizeAdmin, UsuariosController.getProfessorByNameOrEmail);
 routes.get("/Usuarios/:id",authenticateToken, authorizeAdmin, UsuariosController.getOne);
@@ -45,8 +43,12 @@ routes.post('/Simulado/Create',authenticateToken, authorizeAdmin, SimuladosContr
 routes.get('/Simulados/FindByBimestreAnoSerie/:bimestre/:ano/:serie',authenticateToken, authorizeAdmin, SimuladosController.findSimuladoByBimestreAnoSerie);
 routes.get('/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getOne);
 routes.get('/Simulados',authenticateToken, authorizeAdmin, SimuladosController.getAll);
-routes.get('/Turma/Simulado/:id',authenticateToken, authorizeAdmin, SimuladosController.getTurma);
+routes.get('/Turmas/ByTurma/:turma_id', authenticateToken, authorizeAdmin, SimuladosController.getByTurma);
+routes.get('/Simulado/getByAluno/:aluno/:bimestre/:simulado', authenticateToken, authorizeAdmin, SimuladosController.getByAlunoAndBimestre);
 routes.patch('/Simulado/Editar/:id',authenticateToken, authorizeAdmin, SimuladosController.update);
+routes.get('/Simulados/Turma/:id',authenticateToken, authorizeAdmin, SimuladosController.getSimuladosByTurma);
+routes.patch('/Simulado/AtualizarConteudos/:id',authenticateToken, authorizeAdmin, SimuladosController.atualizarConteudos);
+routes.get('/Simulado/Simple/:id', authenticateToken, authorizeAdmin, SimuladosController.getOneSimple);
 
 export default routes;
 

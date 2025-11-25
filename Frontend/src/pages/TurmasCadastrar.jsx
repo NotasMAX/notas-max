@@ -18,7 +18,7 @@ export default function TurmasCadastrar() {
 
         try {
             const result = await cadastrarTurma(formData);
-            navigate(`/Turmas/${formData.ano}`, { replace: true, state: { message: result.data?.message || 'Turma cadastrada com sucesso', type: 'success' } });
+            navigate(`/Turmas/Editar/${result.data.novaTurma._id}`, { replace: true, state: { message: result.data?.message || 'Turma cadastrada com sucesso', type: 'success' } });
         } catch (error) {
             setResponse(error.response.data);
         }

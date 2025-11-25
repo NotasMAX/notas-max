@@ -2,6 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import MateriasForm from '../components/MateriaForm';
 import { cadastrarMateria } from '../api/materiaApi';
+import Style from '../styles/MateriaForm.module.css';
+import { Toast } from 'primereact/toast';
+import { useToast } from '../hooks/useToast';
 
 export default function MateriasCadastrar() {
 
@@ -10,20 +13,29 @@ export default function MateriasCadastrar() {
     }, []);
 
     const navigate = useNavigate();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const handleCreate = async (formData) => {
         try {
             await cadastrarMateria(formData);
-            navigate('/');
+            showSuccessOnRedirect('Matéria cadastrada com sucesso!');
+            navigate('/Materias');
         } catch (error) {
             console.error("Erro ao criar a matéria:", error);
-            alert("Erro ao criar a matéria.");
+            
+            // Verifica se é erro de duplicata (409)
+            if (error.response?.status === 409) {
+                showError(error.response.data.error || "Já existe uma matéria cadastrada com este nome.");
+            } else {
+                showError("Erro ao criar a matéria.");
+            }
         }
     };
 
     return (
-        <div className="p-4 bg-white">
-            <h2>Nova Matéria</h2>
+        <div>
+            <Toast ref={toast} />
+            <h2 className={Style.pageTitle}>Cadastrar Materia</h2>
             <MateriasForm onSubmit={handleCreate} />
         </div>
     );

@@ -4,13 +4,20 @@ import Simulado from "../Models/Simulado.js";
 import { Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
+const SENHA_PADRAO = "123"; //apenas para uso em testes
+
 export default class UsuariosController {
 
     static async cadastrarProfessor(req, res) {
         try {
             const { nome, email, telefone_contato, senha } = req.body;
 
-            const senhaHash = await bcrypt.hash(senha, 12);
+            const emailExistente = await Usuario.findOne({ email });
+            if (emailExistente) {
+                return res.status(409).json({ error: "Email já cadastrado." });
+            }
+
+            const senhaHash = await bcrypt.hash(SENHA_PADRAO, 12);
 
             const novoProfessor = await Usuario.create({
                 nome,
@@ -28,7 +35,6 @@ export default class UsuariosController {
             });
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao cadastrar professor." });
         }
     }
@@ -37,8 +43,13 @@ export default class UsuariosController {
         try {
             const { nome, email, telefone_contato, senha, nome_responsavel, telefone_responsavel } = req.body;
 
+            const emailExistente = await Usuario.findOne({ email });
+            if (emailExistente) {
+                return res.status(409).json({ error: "Email já cadastrado." });
+            }
+
             // Criptografar senha com salt 12
-            const senhaHash = await bcrypt.hash(senha, 12);
+            const senhaHash = await bcrypt.hash(SENHA_PADRAO, 12);
 
             const novoAluno = await Usuario.create({
                 nome,
@@ -60,7 +71,6 @@ export default class UsuariosController {
             });
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao cadastrar aluno." });
         }
     }
@@ -70,11 +80,10 @@ export default class UsuariosController {
             const professores = await Usuario.find(
                 { tipo_usuario: "professor" },
                 "nome email telefone_contato"
-            );
+            ).sort("nome");
 
             return res.status(200).json(professores);
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao buscar professores." });
         }
     }
@@ -84,11 +93,9 @@ export default class UsuariosController {
             const alunos = await Usuario.find(
                 { tipo_usuario: "aluno" },
                 "nome email telefone_contato"
-            );
-
+            ).sort("nome");
             return res.status(200).json(alunos);
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao buscar alunos." });
         }
     }
@@ -113,7 +120,6 @@ export default class UsuariosController {
             return res.status(200).json(resto);
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao buscar o usuário." });
         }
     }
@@ -150,62 +156,7 @@ export default class UsuariosController {
             return res.status(200).json(usuarioAtualizado);
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao atualizar usuário." });
-        }
-    }
-
-    //METODOS ANTIGOS/TESTE
-
-    static async createAluno(req, res) { //Somente para testes
-        const {
-            nome,
-            email,
-            telefone_contato,
-            senha,
-            tipo_usuario,
-            telefone_responsavel
-        } = req.body;
-
-        const usuario = new Usuarios({
-            nome,
-            email,
-            telefone_contato,
-            senha,
-            tipo_usuario,
-            telefone_responsavel
-        });
-
-        try {
-            const novoUsuario = await usuario.save();
-            res.status(200).json({ message: "Usuário inserido com sucesso!", novoUsuario });
-        }
-        catch (error) {
-            res.status(500).json({ message: "Problema ao inserir o Usuário", error });
-        }
-    }
-
-    static async getAllAlunos(req, res) {
-        try {
-            const alunos = await Usuarios.find({}).where({ tipo_usuario: "aluno" }).sort("nome");
-            if (!alunos || alunos.length === 0) {
-                return res.status(404).json({ message: "Nenhum aluno encontrado." });
-            }
-            res.status(200).json({ alunos });
-        } catch (error) {
-            res.status(500).json({ message: "Erro ao buscar todos os alunos", error });
-        }
-    }
-
-    static async getAllProfessores(req, res) {
-        try {
-            const professores = await Usuarios.find({}).where({ tipo_usuario: "professor" }).sort("nome");
-            if (!professores || professores.length === 0) {
-                return res.status(404).json({ message: "Nenhum professor encontrado." });
-            }
-            res.status(200).json({ professores });
-        } catch (error) {
-            res.status(500).json({ message: "Erro ao buscar todos os professores", error });
         }
     }
 
@@ -217,7 +168,7 @@ export default class UsuariosController {
             return res.status(422).json({ message: "Id do aluno inválido" });
         }
         try {
-            const aluno = await Usuarios.findById(id);
+            const aluno = await Usuario.findById(id);
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
@@ -233,7 +184,7 @@ export default class UsuariosController {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
-            const alunos = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" }).sort("nome");
+            const alunos = await Usuario.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "aluno" }).sort("nome");
             res.status(200).json({ alunos });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar o Aluno", error });
@@ -246,7 +197,7 @@ export default class UsuariosController {
             return res.status(422).json({ message: "Texto de busca inválido" });
         }
         try {
-            const professores = await Usuarios.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "professor" }).sort("nome");
+            const professores = await Usuario.find({ $or: [{ nome: { $regex: text, $options: "i" } }, { email: { $regex: text, $options: "i" } }] }).where({ tipo_usuario: "professor" }).sort("nome");
             res.status(200).json({ professores });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar o Professor", error });
@@ -254,39 +205,61 @@ export default class UsuariosController {
     }
 
     static async findUsuarioById(id) {
-        return await Usuarios.findById(id);
+        try {
+            return await Usuario.findById(id);
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async getDesempenhoByAluno(req, res) {
-    const alunoId = req.params.id;
-    const ObjectId = Types.ObjectId;
+        const alunoId = req.params.id;
+        const { ano, turmaId, bimestre } = req.query;
 
-    if (!ObjectId.isValid(alunoId))
-        return res.status(422).json({ message: "Aluno inválido" });
+        if (!Types.ObjectId.isValid(alunoId))
+            return res.status(422).json({ message: "Aluno inválido" });
 
-    try {
-        const aluno = await Usuario.findById(alunoId);
+        try {
+            const aluno = await Usuario.findById(alunoId);
+            if (!aluno) return res.status(404).json({ message: "Aluno não encontrado" });
 
-        if (!aluno) {
-            return res.status(404).json({ message: "Aluno não encontrado" });
-        }
+            const turmasAluno = await Turma.find({ alunos: aluno._id });
 
-        const turma = await Turma.findOne({ alunos: aluno._id });
+            let turmaNome = "Sem turma";
+            let turmaAtual = turmasAluno.at(-1);
 
-        let turmaNome = "Sem turma";
+            if (turmaAtual)
+                turmaNome = `${turmaAtual.serie}º Ano - ${turmaAtual.ano}`;
 
-        if (turma) {
-            turmaNome = `${turma.serie}º Ano - ${turma.ano}`;
-        }
+            const matchSimulado = {
+                "conteudos.resultados.aluno_id": new Types.ObjectId(alunoId)
+            };
+
+            if (turmaId && Types.ObjectId.isValid(turmaId)) {
+                matchSimulado.turma_id = new Types.ObjectId(turmaId);
+            }
+
+            if (ano) {
+                matchSimulado["turma.ano"] = Number(ano);
+            }
+
+            if (bimestre) {
+                matchSimulado.bimestre = Number(bimestre);
+            }
 
         const simulados = await Simulado.aggregate([
-            { $unwind: "$conteudos" },
-            { $unwind: "$conteudos.resultados" },
             {
-                $match: {
-                    "conteudos.resultados.aluno_id": new ObjectId(alunoId)
+                $lookup: {
+                    from: "turmas",
+                    localField: "turma_id",
+                    foreignField: "_id",
+                    as: "turma"
                 }
             },
+            { $unwind: "$turma" },
+            { $unwind: "$conteudos" },
+            { $unwind: "$conteudos.resultados" },
+            { $match: matchSimulado },
             {
                 $group: {
                     _id: "$bimestre",
@@ -298,20 +271,21 @@ export default class UsuariosController {
 
         const desempenho = [1, 2, 3, 4].map(bi => {
             const d = simulados.find(s => s._id === bi);
-            return {
-                bimestre: bi,
-                media: d?.media ?? 0
-            };
+            return { bimestre: bi, media: d?.media ?? 0 };
         });
 
         return res.status(200).json({
             alunoNome: aluno.nome,
             turmaNome,
+            turmasDoAluno: turmasAluno.map(t => ({
+                id: t._id,
+                serie: t.serie,
+                ano: t.ano
+            })),
             desempenho
         });
 
         } catch (error) {
-            console.log(error);
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }

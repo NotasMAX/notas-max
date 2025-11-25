@@ -1,0 +1,67 @@
+/* Container da página */
+.pageContainer {
+  @apply p-6 bg-white min-h-screen;
+}
+
+/* Título da página */
+.pageTitle {
+  @apply text-4xl font-bold text-[#043666];
+}
+
+/* Formulário */
+.form {
+  @apply max-w-4xl;
+}
+
+/* Grupo do formulário */
+.formGroup {
+  @apply mb-6 flex-1;
+}
+
+/* Linha com dois campos lado a lado */
+.formRow {
+  @apply flex flex-col lg:flex-row gap-4 mb-6;
+}
+
+/* Label */
+.formLabel {
+  @apply block text-[0.875rem] font-medium font-inter text-[#404040] mb-2;
+}
+
+/* Input */
+.formInput {
+  @apply w-full border border-gray-300 rounded-lg px-4 py-3 text-[0.875rem] font-inter text-[#404040] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+}
+
+.formInput:disabled {
+  @apply bg-gray-50 cursor-not-allowed;
+}
+
+.formInput::placeholder {
+  @apply text-gray-400;
+}
+
+/* Input somente leitura (para visualização) */
+.formInputReadonly {
+  @apply w-full border border-gray-300 rounded-lg px-4 py-3 text-[0.875rem] font-inter text-[#404040] bg-gray-50;
+}
+
+/* Mensagem de erro */
+.spanError {
+  @apply text-red-600 text-xs mt-1 block;
+}
+
+/* Grupo de botões */
+.buttonGroup {
+  @apply flex items-center justify-end gap-3 mt-8;
+}
+
+/* Botão primário (Salvar) */
+.buttonPrimary {
+  @apply bg-blue-500 hover:bg-blue-600 text-white font-medium text-[0.875rem] px-6 py-2.5 rounded-lg transition-colors;
+}
+
+/* Botão secundário (Voltar) */
+.buttonSecondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-[#404040] font-medium text-[0.875rem] px-6 py-2.5 rounded-lg transition-colors;
+}

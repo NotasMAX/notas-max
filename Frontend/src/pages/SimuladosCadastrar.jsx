@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SimuladosForm from '../components/SimuladosForm';
 import { useState, useEffect } from 'react';
 import Style from '../styles/SimuladosCadastrar.module.css';
+import StyleTitle from '../styles/Title.module.css';
 import { cadastrarSimulado } from '../api/simuladoApi';
 import { getOne } from '../api/turmasapi';
 
@@ -31,7 +32,7 @@ export default function SimuladosCadastrar() {
 
     return (
         <div className={Style.SimuladosCadastrarContainer}>
-            <h2 className={Style.SimuladosHeader} >Cadastrar Novo Simulado</h2>
+            <h2 className={StyleTitle.titlePage} >Cadastrar Novo Simulado</h2>
             <SimuladosForm onSubmit={handleCreate} response={response} />
         </div>
     );

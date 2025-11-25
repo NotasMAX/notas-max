@@ -15,7 +15,6 @@ export default function Simulados() {
         serie: serieURL,
     } = useParams();
     const [Simulados, setSimulados] = useState([]);
-    let firstLoad = true;
     const toast = useRef(null);
     const toastShown = useRef(false);
     const navigate = useNavigate();
@@ -24,23 +23,20 @@ export default function Simulados() {
     useEffect(() => {
         document.title = `NotasMAX - Simulados`;
 
-        if (firstLoad) {
-            firstLoad = false;
-            if (!bimestreURL && !serieURL && !anoURL) {
-                const month = new Date().getMonth() + 1;
-                let currentBimestre;
-                let currentAno = new Date().getFullYear();
-                if (month >= 2 && month <= 4) {
-                    currentBimestre = 1;
-                } else if (month >= 5 && month <= 7) {
-                    currentBimestre = 2;
-                } else if (month >= 8 && month <= 10) {
-                    currentBimestre = 3;
-                } else {
-                    currentBimestre = 4;
-                }
-                navigate(`/Simulados/${currentBimestre}/${currentAno}`, { replace: true });
+        if (!bimestreURL && !serieURL && !anoURL) {
+            const month = new Date().getMonth() + 1;
+            let currentBimestre;
+            let currentAno = new Date().getFullYear();
+            if (month >= 2 && month <= 4) {
+                currentBimestre = 1;
+            } else if (month >= 5 && month <= 7) {
+                currentBimestre = 2;
+            } else if (month >= 8 && month <= 10) {
+                currentBimestre = 3;
+            } else {
+                currentBimestre = 4;
             }
+            navigate(`/Simulados/${currentBimestre}/${currentAno}`, { replace: true });
         }
 
         if (location.state && !toastShown.current) {
@@ -53,11 +49,13 @@ export default function Simulados() {
             }
             window.history.replaceState({}, '')
         }
-    }, []);
+    }, [location]);
 
     useEffect(() => {
+        if (bimestreURL && anoURL){
         document.title = `NotasMAX - Simulados -` + (serieURL ? ` ${serieURL}º EM` : '') + ` - ${bimestreURL}º Bimestre ${anoURL}`;
         fetchSimulados();
+        }
     }, [bimestreURL, anoURL, serieURL]);
 
     const fetchSimulados = async () => {
@@ -104,7 +102,7 @@ export default function Simulados() {
                     <div className={Style.ContainerCol}>
                         Data Realização
                     </div>
-                        <div className={Style.ContainerCol}>
+                    <div className={Style.ContainerCol}>
                         Data Criação
                     </div>
                     <div className={Style.ContainerColAcoes}>

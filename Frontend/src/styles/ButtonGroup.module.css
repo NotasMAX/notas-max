@@ -1,3 +1,16 @@
+.buttonPrimary {
+    @apply flex gap-3 items-center cursor-pointer rounded-lg border border-blue-600 bg-[#1C86EB] px-6 py-2 text-center text-sm text-white transition hover:bg-[#50AAFF]
+}
+
+.buttonSecondary {
+    @apply cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-2 text-center text-sm text-gray-800 transition hover:bg-gray-200
+}
+
+.buttonSecondary svg {
+    fill: #4B5563;
+    stroke: #4B5563;
+}
+
 .buttonSecondarySmall {
     @apply cursor-pointer rounded-lg flex gap-3 border border-gray-300 bg-white px-3 py-1 text-center font-semibold items-center text-sm text-gray-600 transition hover:bg-gray-200
 }
@@ -14,6 +27,26 @@
     @apply rounded-lg border border-gray-300 p-1 cursor-pointer transition hover:bg-gray-200
 }
 
-.select {
-    @apply cursor-pointer rounded-lg flex gap-3 border border-gray-300 bg-white px-3 py-1 text-center font-semibold items-center text-lg text-gray-600 transition hover:bg-gray-200
+.formSelectContainer {
+      @apply relative lg:mr-[2.5rem] w-fit;
+}
+
+.formSelect {
+    @apply rounded-md h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none pl-4 pr-[3rem];
+}
+
+.formOption {
+    @apply text-[1.25rem] font-medium font-inter mb-6 text-[#404040] text-left;
+}
+
+.formSelectArrow {
+    @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
+}
+
+.formSelectArrowRight {
+    @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
+}
+
+.formSelectArrowRightLarge {
+    @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
 }
