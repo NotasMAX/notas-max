@@ -12,6 +12,11 @@ export default class UsuariosController {
         try {
             const { nome, email, telefone_contato, senha } = req.body;
 
+            const emailExistente = await Usuario.findOne({ email });
+            if (emailExistente) {
+                return res.status(409).json({ error: "Email já cadastrado." });
+            }
+
             const senhaHash = await bcrypt.hash(SENHA_PADRAO, 12);
 
             const novoProfessor = await Usuario.create({
@@ -38,6 +43,11 @@ export default class UsuariosController {
     static async cadastrarAluno(req, res) {
         try {
             const { nome, email, telefone_contato, senha, nome_responsavel, telefone_responsavel } = req.body;
+
+            const emailExistente = await Usuario.findOne({ email });
+            if (emailExistente) {
+                return res.status(409).json({ error: "Email já cadastrado." });
+            }
 
             // Criptografar senha com salt 12
             const senhaHash = await bcrypt.hash(SENHA_PADRAO, 12);
