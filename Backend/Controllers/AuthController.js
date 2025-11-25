@@ -54,6 +54,5 @@ export const login = async (req, res) => {
 
 export const logout = async(req, res)=>{
     res.clearCookie("jwt");
-    console.log("Cookies apagado:");
     return res.status(200).json({message:"Logout com sucesso"});
 };

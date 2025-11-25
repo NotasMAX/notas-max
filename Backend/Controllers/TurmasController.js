@@ -220,7 +220,6 @@ export default class TurmasController {
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
-            console.log("passo 5");
             if (aluno.tipo_usuario !== "aluno") {
                 return res.status(422).json({ message: "O usuário informado não é um aluno." });
             }
@@ -309,7 +308,6 @@ export default class TurmasController {
             });
 
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: "Erro ao buscar desempenho da turma", error });
     }
   }

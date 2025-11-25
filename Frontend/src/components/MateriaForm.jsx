@@ -39,8 +39,6 @@ export default function MateriasForm({ initialData, onSubmit }) {
 
         // Remove espaços extras
         formData.nome = formData.nome.trim();
-
-        console.log(formData);
         onSubmit(formData);
     };
 

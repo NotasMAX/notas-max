@@ -30,7 +30,6 @@ export default function SimuladoNotasPorMateria() {
       try {
         const res = await getUsuario(alunoId);
         setAluno(res.data);
-        console.log(res.data);
       } catch (e) {
         setError(e.message || "Erro ao carregar informações de aluno");
       }

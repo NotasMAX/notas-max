@@ -262,7 +262,6 @@ export default class UsuariosController {
             });
 
         } catch (error) {
-            console.log(error);
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }
