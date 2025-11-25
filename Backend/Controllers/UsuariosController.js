@@ -35,7 +35,6 @@ export default class UsuariosController {
             });
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao cadastrar professor." });
         }
     }
@@ -72,7 +71,6 @@ export default class UsuariosController {
             });
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao cadastrar aluno." });
         }
     }
@@ -86,7 +84,6 @@ export default class UsuariosController {
 
             return res.status(200).json(professores);
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao buscar professores." });
         }
     }
@@ -99,7 +96,6 @@ export default class UsuariosController {
             ).sort("nome");
             return res.status(200).json(alunos);
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao buscar alunos." });
         }
     }
@@ -124,7 +120,6 @@ export default class UsuariosController {
             return res.status(200).json(resto);
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao buscar o usuário." });
         }
     }
@@ -161,7 +156,6 @@ export default class UsuariosController {
             return res.status(200).json(usuarioAtualizado);
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ error: "Erro ao atualizar usuário." });
         }
     }
@@ -292,7 +286,6 @@ export default class UsuariosController {
         });
 
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }

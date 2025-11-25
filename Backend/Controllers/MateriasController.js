@@ -26,7 +26,6 @@ export default class MateriasController {
             const novaMateria = await Materia.create({ nome: nome.trim() });
             return res.status(201).json(novaMateria);
         } catch (error) {
-            console.error("Erro ao criar matéria:", error);
             return res.status(500).json({ error: "Erro ao criar matéria." });
         }
     }
@@ -37,7 +36,6 @@ export default class MateriasController {
             const materias = await Materia.find().sort("nome");
             return res.status(200).json({ materias });
         } catch (error) {
-            console.error("Erro ao listar matérias:", error);
             return res.status(500).json({ error: "Erro ao listar matérias." });
         }
     }
@@ -59,7 +57,6 @@ export default class MateriasController {
 
             return res.status(200).json(materia);
         } catch (error) {
-            console.error("Erro ao buscar matéria:", error);
             return res.status(500).json({ error: "Erro ao buscar matéria." });
         }
     }
@@ -102,7 +99,6 @@ export default class MateriasController {
 
             return res.status(200).json(materiaAtualizada);
         } catch (error) {
-            console.error("Erro ao editar matéria:", error);
             return res.status(500).json({ error: "Erro ao editar matéria." });
         }
     }
@@ -122,7 +118,6 @@ export default class MateriasController {
 
             return res.status(200).json({ materias });
         } catch (error) {
-            console.error("Erro ao buscar matéria:", error);
             return res.status(500).json({ error: "Erro ao buscar matéria." });
         }
     }

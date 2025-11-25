@@ -214,7 +214,6 @@ export default class SimuladosController {
 
             res.status(200).json({ simulado: simulado[0] });
         } catch (error) {
-            console.error('Erro:', error);
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
     }
@@ -254,7 +253,6 @@ export default class SimuladosController {
             return res.status(422).json({ message: "Informe um bimestre válido (número positivo)" });
 
         const turma_id = await Simulado.findOne({ _id: simulado_id }).then(s => s ? s.turma_id : null);
-        console.log("Turma ID:", turma_id);
 
         try {
             const simulados = await Simulado.aggregate([
@@ -344,10 +342,8 @@ export default class SimuladosController {
                 },
                 { $sort: { data_realizacao: -1, numero: -1 } }
             ]);
-            console.log(simulados);
             res.status(200).json({ simulados });
         } catch (error) {
-            console.error('Erro ao buscar simulados do aluno:', error);
             res.status(500).json({ message: 'Erro ao buscar simulado por aluno', error: error.message });
         }
     }

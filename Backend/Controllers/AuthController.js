@@ -49,7 +49,6 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Erro no login:", error);
     res.status(500).json({ message: "Erro interno no servidor." });
   }
 };
@@ -89,7 +88,6 @@ export const forgotPassword = async (req, res) => {
     try {
       await sendPasswordResetEmail(usuario.email, resetToken);
     } catch (emailError) {
-      console.error("Falha ao enviar o email de redefinição:", emailError);
       
       if (emailError.code === 'ESOCKET' || emailError.code === 'EHOSTUNREACH' || emailError.code === 'ENOTFOUND' || emailError.code === 'EDNS') {
         return res.status(503).json({ 
@@ -109,7 +107,6 @@ export const forgotPassword = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Erro no forgotPassword:", error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });
   }
 };
@@ -146,7 +143,6 @@ export const resetPassword = async (req, res) => {
       message: 'Senha redefinida com sucesso! Você já pode fazer login com sua nova senha.'
     });
   } catch (error) {
-    console.error('Erro na redefinição de senha:', error);
-    return res.status(500).json({ message: 'Erro interno do servidor.' });
+      return res.status(500).json({ message: 'Erro interno do servidor.' });
   }
 };
