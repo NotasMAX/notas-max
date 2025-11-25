@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Chart from "react-apexcharts";
 import { getDesempenhoTurma } from "../api/turmasapi";
+import StyleTitle from '../styles/Title.module.css';
+
 
 export default function TurmaDesempenho() {
   const { id } = useParams();
@@ -68,7 +70,7 @@ export default function TurmaDesempenho() {
 
   return (
     <div className="p-6 max-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-1">Desempenho da turma ao longo dos bimestres</h1>
+      <h1 className={StyleTitle.titlePage}>Desempenho da turma ao longo dos bimestres</h1>
 
       <p className="text-gray-600 mb-4">
         Turma:{" "}

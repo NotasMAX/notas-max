@@ -101,7 +101,7 @@ async function seed() {
           return {
             turma_disciplina_id: td._id,
             quantidade_questoes: 20,
-            peso: 1.0,
+            peso: 100,
             resultados
           };
         });

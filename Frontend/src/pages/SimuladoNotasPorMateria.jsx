@@ -44,10 +44,7 @@ export default function SimuladoNotasPorMateria() {
     const loadSimulados = async () => {
       try {
         const res = await getByAlunoAndBimestre(alunoId, bimestre);
-        const simuladosObjetivos = res.data.simulados.filter(
-          (simulado) => simulado.tipo === "objetivo"
-        );
-        setSimulados(simuladosObjetivos || []);
+        setSimulados(res.data.simulados || []);
         setLoading(false);
       } catch (e) {
         setError(e.message || "Erro ao carregar lista de simulados");
@@ -57,7 +54,6 @@ export default function SimuladoNotasPorMateria() {
     loadSimulados();
   }, [alunoId, bimestre]);
 
-  // Novo useEffect para selecionar automaticamente a primeira matéria
   useEffect(() => {
     if (simulados.length > 0 && !materiaSelecionada) {
       const materias = obterMaterias();
@@ -69,7 +65,8 @@ export default function SimuladoNotasPorMateria() {
 
   const totalResultados = () => {
     const simuladoAtual = simulados.find((s) => s._id === simuladoId);
-    if (!simuladoAtual?.conteudos || simuladoAtual.tipo !== "objetivo") return 0;
+    if (!simuladoAtual?.conteudos || simuladoAtual.tipo !== "objetivo")
+      return 0;
 
     return simuladoAtual.conteudos.reduce((total, conteudo) => {
       return total + (conteudo.resultado.acertos || 0);
@@ -78,7 +75,8 @@ export default function SimuladoNotasPorMateria() {
 
   const totalQuestoes = () => {
     const simuladoAtual = simulados.find((s) => s._id === simuladoId);
-    if (!simuladoAtual?.conteudos || simuladoAtual.tipo !== "objetivo") return 0;
+    if (!simuladoAtual?.conteudos || simuladoAtual.tipo !== "objetivo")
+      return 0;
 
     return simuladoAtual.conteudos.reduce((total, conteudo) => {
       return total + (conteudo.quantidade_questoes || 0);
@@ -104,24 +102,97 @@ export default function SimuladoNotasPorMateria() {
 
     return Array.from(materiasSet)
       .map((m) => JSON.parse(m))
-      .sort((a, b) => a.nome.localeCompare(b.nome)); // Ordena alfabeticamente
+      .sort((a, b) => a.nome.localeCompare(b.nome));
   };
 
   const materias = obterMaterias();
 
   const calcularMediaObjetiva = () => {
-   
-    return 0
+    return simulados
+      .filter((simulado) => simulado.tipo === "objetivo")
+      .reduce((total, simulado) => {
+        const conteudosDoAluno =
+          simulado.conteudos?.filter(
+            (conteudo) =>
+              conteudo.resultado?.aluno_id === alunoId &&
+              conteudo.turma_disciplina.materia_id === materiaSelecionada
+          ) || [];
+
+        const somaNotas = conteudosDoAluno.reduce((acc, conteudo) => {
+          const acertos = conteudo.resultado?.acertos || 0;
+          const peso = conteudo.peso || 0;
+          const nota = (acertos * peso) / 100;
+          return acc + nota;
+        }, 0);
+
+        return total + somaNotas;
+      }, 0);
   };
 
   const calcularMediaDissertativa = () => {
+    return simulados
+      .filter((simulado) => simulado.tipo === "dissertativo")
+      .reduce((total, simulado) => {
+        const conteudosDoAluno =
+          simulado.conteudos?.filter(
+            (conteudo) =>
+              conteudo.resultado?.aluno_id === alunoId &&
+              conteudo.turma_disciplina.materia_id === materiaSelecionada
+          ) || [];
 
-    return 0; 
+        const somaNotas = conteudosDoAluno.reduce((acc, conteudo) => {
+          const acertos = conteudo.resultado?.acertos || 0;
+          const peso = conteudo.peso || 0;
+          const nota = (acertos * peso) / 100;
+          return acc + nota;
+        }, 0);
+
+        return total + somaNotas;
+      }, 0);
   };
 
   const calcularNotaFinal = () => {
+    return calcularMediaDissertativa() + calcularMediaObjetiva();
+  };
 
-    return 0;
+  const totalResultadosMateria = () => {
+    if (!materiaSelecionada) return 0;
+
+    return simulados.reduce((total, simulado) => {
+      const conteudosDaMateria =
+        simulado.conteudos?.filter(
+          (conteudo) =>
+            conteudo.turma_disciplina?.materia_id === materiaSelecionada &&
+            (conteudo.resultado?.aluno_id === alunoId ||
+              conteudo.resultados?.some((r) => r.aluno === alunoId))
+        ) || [];
+
+      const acertosDaMateria = conteudosDaMateria.reduce((acc, conteudo) => {
+        return acc + (conteudo.resultado?.acertos || 0);
+      }, 0);
+
+      return total + acertosDaMateria;
+    }, 0);
+  };
+
+  const totalQuestoesMateria = () => {
+    if (!materiaSelecionada) return 0;
+
+    return simulados.reduce((total, simulado) => {
+      const conteudosDaMateria =
+        simulado.conteudos?.filter(
+          (conteudo) =>
+            conteudo.turma_disciplina?.materia_id === materiaSelecionada &&
+            (conteudo.resultado?.aluno_id === alunoId ||
+              conteudo.resultados?.some((r) => r.aluno === alunoId))
+        ) || [];
+
+      const questoesDaMateria = conteudosDaMateria.reduce((acc, conteudo) => {
+        return acc + (conteudo.quantidade_questoes || 0);
+      }, 0);
+
+      return total + questoesDaMateria;
+    }, 0);
   };
 
   if (loading) return <p>Carregando...</p>;
@@ -149,8 +220,11 @@ export default function SimuladoNotasPorMateria() {
       </div>
 
       <div className="flex gap-3">
-        <button className={ButtonStyle.buttonSecondarySmall} onClick={() => (navigate())}>
-            <svg
+        <button
+          className={ButtonStyle.buttonSecondarySmall}
+          onClick={() => navigate()}
+        >
+          <svg
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -248,7 +322,19 @@ export default function SimuladoNotasPorMateria() {
         </div>
 
         <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
-          <div className="w-3/4">Total de Acertos</div>
+          <div className="w-3/4">
+            Total de Acertos -{" "}
+            {materias.find((m) => m.id === materiaSelecionada)?.nome || ""}
+          </div>
+          <div className="flex w-1/4 gap-3">
+            <p className="w-1/12">{totalResultadosMateria()}</p>
+            <p className="w-1/12">/</p>
+            <p className="w-1/12">{totalQuestoesMateria()}</p>
+          </div>
+        </div>
+
+        <div className="flex w-full bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 items-center">
+          <div className="w-3/4">Total de Acertos Geral</div>
           <div className="flex w-1/4 gap-3">
             <p className="w-1/12">{totalResultados()}</p>
             <p className="w-1/12">/</p>

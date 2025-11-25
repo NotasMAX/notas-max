@@ -4,6 +4,7 @@ import Style from "../styles/SimuladosNotasForm.module.css";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import SimuladosNotaItem from "./SimuladosNotaItem";
+import StyleButton from "../styles/ButtonGroup.module.css";
 
 
 export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, simulado_id, bimestre }) {
@@ -111,7 +112,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                     <div className={Style.buttonGroup}>
                         <button
                             type="button"
-                            className={Style.buttonSecondary}
+                            className={StyleButton.buttonSecondary}
                             onClick={() => {
                                 confirmDialog({
                                     message: `Deseja realmente cancelar as alterações? As alterações não serão salvas.`,
@@ -135,7 +136,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                         <button
                             disabled={loading}
                             type="submit"
-                            className={Style.buttonPrimary}>
+                            className={StyleButton.buttonPrimary}>
                             Salvar e finalizar
                         </button>
                     </div>

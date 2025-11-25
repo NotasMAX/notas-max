@@ -84,16 +84,9 @@ export default function SimuladosAlunosList() {
       <div className="flex gap-3">
         <button
           ref={tooltipRef}
-          className={`${ButtonStyle.buttonSecondarySmall} ${
-            algumAlunoRealizou() ? "opacity-90 cursor-not-allowed" : ""
-          }`}
-          onClick={() => !algumAlunoRealizou() && navigate(`/Turmas/${simulado.turma._id}/Simulados/${simulado._id}/Notas`)}
-          disabled={algumAlunoRealizou()}
-          data-pr-tooltip={
-            algumAlunoRealizou()
-              ? "As notas já foram lançadas"
-              : "Realizar o lançamentos de notas"
-          }
+          className={ButtonStyle.buttonSecondarySmall}
+          onClick={() => navigate()}
+          data-pr-tooltip={"Realizar o lançamentos de notas"}
         >
           <svg
             width="24"
@@ -120,8 +113,7 @@ export default function SimuladosAlunosList() {
 
         <button
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => (
-            navigate(`/Turmas/Editar/${simulado.turma._id}`))}
+          onClick={() => navigate(`/Turmas/Editar/${simulado.turma._id}`)}
         >
           <svg
             width="24"
@@ -183,7 +175,8 @@ export default function SimuladosAlunosList() {
           </svg>
           Editar Simulado
         </button>
-        <button className={ButtonStyle.buttonSecondarySmall}>
+        <button className={ButtonStyle.buttonSecondarySmall}
+        onClick={() => navigate(`/Turma/${simulado.turma._id}/desempenho-materias`)}>
           <svg
             width="24"
             height="24"
