@@ -14,10 +14,19 @@ export default function RecuperarSenha() {
   const handleSubmit = async (dados) => {
     try {
       await forgot(dados.email);
-    } finally {
       navigate('/login', { state: { message: 'Se o e-mail informado for válido, um token de recuperação de senha será enviado para sua caixa de entrada.', type: 'info' } });
-    };
-  }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Erro ao processar requisição';
+      const errorType = error.response?.data?.errorType;
+
+      if (errorType === 'CONNECTION_ERROR' || error.response?.status === 503) {
+        toast.current?.show({ severity: 'error', summary: 'Erro de Conexão', detail: 'Sem conexão com a internet. Verifique sua conexão e tente novamente.', life: 5000 });
+      } else {
+        toast.current?.show({ severity: 'error', summary: 'Erro', detail: errorMessage, life: 5000 });
+      }
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Toast ref={toast} />

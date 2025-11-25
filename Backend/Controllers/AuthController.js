@@ -85,12 +85,24 @@ export const forgotPassword = async (req, res) => {
       resetTokenExpiry: resetTokenExpiry
     });
 
-    // Enviar Email (ENVIAMOS O TOKEN NÃO HASHED)
-    sendPasswordResetEmail(usuario.email, resetToken).catch(err => {
-      console.error("Falha ao enviar o email de redefinição:", err);
-    });
+    try {
+      await sendPasswordResetEmail(usuario.email, resetToken);
+    } catch (emailError) {
+      console.error("Falha ao enviar o email de redefinição:", emailError);
+      
+      if (emailError.code === 'ESOCKET' || emailError.code === 'EHOSTUNREACH' || emailError.code === 'ENOTFOUND' || emailError.code === 'EDNS') {
+        return res.status(503).json({ 
+          message: 'Erro de conexão com a internet. Verifique sua conexão e tente novamente.',
+          errorType: 'CONNECTION_ERROR'
+        });
+      }
 
-    // Resposta de Sucesso Final
+      return res.status(500).json({ 
+        message: 'Erro ao enviar email de redefinição. Tente novamente mais tarde.',
+        errorType: 'EMAIL_ERROR'
+      });
+    }
+
     return res.status(200).json({
       message: "Se o e-mail informado for válido, um token de recuperação de senha será enviado para sua caixa de entrada."
     });
