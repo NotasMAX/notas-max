@@ -13,16 +13,13 @@ export default function ProfessorCadastrar() {
     }, []);
 
     const navigate = useNavigate();
-    const { toast, showSuccess, showError } = useToast();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const handleCreate = async (formData) => {
         try {
             await createProfessor(formData);
-            showSuccess('Professor cadastrado com sucesso!');
-            
-            setTimeout(() => {
-                navigate('/Professores');
-            }, 1000);
+            showSuccessOnRedirect('Professor cadastrado com sucesso!');
+            navigate('/Professores');
         } catch (error) {
             console.error("Erro ao cadastrar professor:", error);
             showError(error.response?.data?.error || "Erro ao cadastrar professor.");

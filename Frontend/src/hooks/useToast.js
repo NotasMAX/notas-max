@@ -1,7 +1,29 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 export const useToast = () => {
     const toast = useRef(null);
+
+    // Verifica se há mensagem pendente no sessionStorage
+    useEffect(() => {
+        const pendingMessage = sessionStorage.getItem('toastMessage');
+        const pendingSeverity = sessionStorage.getItem('toastSeverity');
+        
+        if (pendingMessage && pendingSeverity) {
+            // Aguarda um pouco para garantir que o componente foi montado
+            setTimeout(() => {
+                toast.current?.show({
+                    severity: pendingSeverity,
+                    summary: pendingSeverity === 'success' ? 'Sucesso' : 'Erro',
+                    detail: pendingMessage,
+                    life: 3000
+                });
+            }, 100);
+            
+            // Limpa a mensagem do sessionStorage
+            sessionStorage.removeItem('toastMessage');
+            sessionStorage.removeItem('toastSeverity');
+        }
+    }, []);
 
     const showSuccess = (message = 'Operação realizada com sucesso!') => {
         toast.current?.show({
@@ -39,5 +61,24 @@ export const useToast = () => {
         });
     };
 
-    return { toast, showSuccess, showError, showInfo, showWarn };
+    // Função para agendar toast após navegação
+    const showSuccessOnRedirect = (message) => {
+        sessionStorage.setItem('toastMessage', message);
+        sessionStorage.setItem('toastSeverity', 'success');
+    };
+
+    const showErrorOnRedirect = (message) => {
+        sessionStorage.setItem('toastMessage', message);
+        sessionStorage.setItem('toastSeverity', 'error');
+    };
+
+    return { 
+        toast, 
+        showSuccess, 
+        showError, 
+        showInfo, 
+        showWarn,
+        showSuccessOnRedirect,
+        showErrorOnRedirect
+    };
 };

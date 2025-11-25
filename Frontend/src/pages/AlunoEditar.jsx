@@ -9,7 +9,7 @@ import { useToast } from '../hooks/useToast';
 export default function AlunoEditar() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { toast, showSuccess, showError } = useToast();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
     const [aluno, setAluno] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,11 +40,8 @@ export default function AlunoEditar() {
     const handleUpdate = async (formData) => {
         try {
             await updateUsuario(id, formData);
-            showSuccess('Aluno atualizado com sucesso!');
-            
-            setTimeout(() => {
-                navigate('/Alunos');
-            }, 1000);
+            showSuccessOnRedirect('Aluno atualizado com sucesso!');
+            navigate('/Alunos');
         } catch (error) {
             console.error("Erro ao atualizar aluno:", error);
             showError(error.response?.data?.error || "Erro ao atualizar aluno.");

@@ -13,17 +13,13 @@ export default function MateriasCadastrar() {
     }, []);
 
     const navigate = useNavigate();
-    const { toast, showSuccess, showError } = useToast();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const handleCreate = async (formData) => {
         try {
             await cadastrarMateria(formData);
-            showSuccess('Matéria cadastrada com sucesso!');
-            
-            // Aguarda 1 segundo antes de redirecionar para o usuário ver o toast
-            setTimeout(() => {
-                navigate('/Materias');
-            }, 1000);
+            showSuccessOnRedirect('Matéria cadastrada com sucesso!');
+            navigate('/Materias');
         } catch (error) {
             console.error("Erro ao criar a matéria:", error);
             

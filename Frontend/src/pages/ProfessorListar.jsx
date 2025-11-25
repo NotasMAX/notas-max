@@ -3,8 +3,12 @@ import { getProfessores } from '../api/usuariosapi';
 import { useNavigate } from 'react-router-dom';
 import Style from '../styles/ProfessorListar.module.css';
 import Pagination from '../components/Pagination';
+import { Toast } from 'primereact/toast';
+import { useToast } from '../hooks/useToast';
 
 export default function ProfessorListar() {
+	const { toast } = useToast(); // Adiciona o hook para mostrar toast de redirect
+	
 	useEffect(() => {
 		document.title = 'NotasMAX - Listar Professores';
 	}, []);
@@ -56,7 +60,8 @@ export default function ProfessorListar() {
 
 	return (
 		<div className={Style.pageContainer}>
-			<h2 className={Style.pageHeader}>Professores</h2>
+			<Toast ref={toast} />
+			<h2 className={Style.pageHeader}>Professor</h2>
 
 			<div className={Style.headerContainer}>
 				<a href="/Professores/Cadastrar" className={Style.linkCadastrar}>

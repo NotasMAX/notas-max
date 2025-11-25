@@ -9,7 +9,7 @@ import { useToast } from '../hooks/useToast';
 export default function ProfessorEditar() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { toast, showSuccess, showError } = useToast();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
     const [professor, setProfessor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,11 +40,8 @@ export default function ProfessorEditar() {
     const handleUpdate = async (formData) => {
         try {
             await updateUsuario(id, formData);
-            showSuccess('Professor atualizado com sucesso!');
-            
-            setTimeout(() => {
-                navigate('/Professores');
-            }, 1000);
+            showSuccessOnRedirect('Professor atualizado com sucesso!');
+            navigate('/Professores');
         } catch (error) {
             console.error("Erro ao atualizar professor:", error);
             showError(error.response?.data?.error || "Erro ao atualizar professor.");

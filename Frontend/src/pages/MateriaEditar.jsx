@@ -9,7 +9,7 @@ import { useToast } from '../hooks/useToast';
 export default function MateriaEditar() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { toast, showSuccess, showError } = useToast();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const [initialData, setInitialData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -49,12 +49,8 @@ export default function MateriaEditar() {
     const handleUpdate = async (formData) => {
         try {
             await editarMateria(id, formData);
-            showSuccess('Matéria atualizada com sucesso!');
-            
-            // Aguarda 1 segundo antes de redirecionar para o usuário ver o toast
-            setTimeout(() => {
-                navigate('/Materias');
-            }, 1000);
+            showSuccessOnRedirect('Matéria atualizada com sucesso!');
+            navigate('/Materias');
         } catch (err) {
             console.error('Erro ao atualizar matéria:', err);
             

@@ -13,16 +13,13 @@ export default function AlunoCadastrar() {
     }, []);
 
     const navigate = useNavigate();
-    const { toast, showSuccess, showError } = useToast();
+    const { toast, showError, showSuccessOnRedirect } = useToast();
 
     const handleCreate = async (formData) => {
         try {
             await createAluno(formData);
-            showSuccess('Aluno cadastrado com sucesso!');
-            
-            setTimeout(() => {
-                navigate('/Alunos');
-            }, 1000);
+            showSuccessOnRedirect('Aluno cadastrado com sucesso!');
+            navigate('/Alunos');
         } catch (error) {
             console.error("Erro ao cadastrar aluno:", error);
             showError(error.response?.data?.error || "Erro ao cadastrar aluno.");

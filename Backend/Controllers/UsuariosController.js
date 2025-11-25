@@ -4,13 +4,15 @@ import Simulado from "../Models/Simulado.js";
 import { Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
+const SENHA_PADRAO = "123"; //apenas para uso em testes
+
 export default class UsuariosController {
 
     static async cadastrarProfessor(req, res) {
         try {
             const { nome, email, telefone_contato, senha } = req.body;
 
-            const senhaHash = await bcrypt.hash(senha, 12);
+            const senhaHash = await bcrypt.hash(SENHA_PADRAO, 12);
 
             const novoProfessor = await Usuario.create({
                 nome,
@@ -38,7 +40,7 @@ export default class UsuariosController {
             const { nome, email, telefone_contato, senha, nome_responsavel, telefone_responsavel } = req.body;
 
             // Criptografar senha com salt 12
-            const senhaHash = await bcrypt.hash(senha, 12);
+            const senhaHash = await bcrypt.hash(SENHA_PADRAO, 12);
 
             const novoAluno = await Usuario.create({
                 nome,
