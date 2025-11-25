@@ -1,8 +1,10 @@
 import Style from "../styles/ButtonGroup.module.css";
 import { Tooltip } from "primereact/tooltip";
 import { useRef } from "react";
+import {  useNavigate } from 'react-router-dom';
 
 export default function CardSimulado({ simulado, onView, onEdit }) {
+  const navigate = useNavigate();
   const formtDate = (date) => {
     if (!date) return "-";
 
@@ -42,7 +44,8 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
               : "Não é possível editar após 15 dias da criação"
           }
           className={Style.buttonSquare}
-          onClick={onEdit}
+          onClick={() => isEditable && navigate(`/Simulados/Editar/${simulado._id}`)}
+          disabled={!isEditable}
         >
           <svg
             width="24"
