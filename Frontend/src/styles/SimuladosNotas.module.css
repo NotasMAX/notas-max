@@ -10,7 +10,7 @@
      @apply flex justify-between mb-6 lg:flex-row flex-col lg:items-center;
 }
 .SimuladosInfo {
-    @apply rounded-md h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none mt-3 flex items-center justify-center float-right text-[#727272] px-[1.5rem];
+    @apply border border-gray-500 rounded-md px-4 py-2 inline-block text-gray-500;
 }
 
 .ContainerHeader {

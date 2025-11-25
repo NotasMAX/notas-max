@@ -57,7 +57,7 @@ export default function TurmasSimulados() {
             setError(null);
 
             const res = await getByTurma(id);
-
+            
             setSimulados(res.data.simulados);
         } catch (e) {
 
