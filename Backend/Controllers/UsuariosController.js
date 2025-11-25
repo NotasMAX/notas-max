@@ -220,58 +220,79 @@ export default class UsuariosController {
 
     static async getDesempenhoByAluno(req, res) {
         const alunoId = req.params.id;
-        const ObjectId = Types.ObjectId;
+        const { ano, turmaId, bimestre } = req.query;
 
-        if (!ObjectId.isValid(alunoId))
+        if (!Types.ObjectId.isValid(alunoId))
             return res.status(422).json({ message: "Aluno inválido" });
 
         try {
             const aluno = await Usuario.findById(alunoId);
+            if (!aluno) return res.status(404).json({ message: "Aluno não encontrado" });
 
-            if (!aluno) {
-                return res.status(404).json({ message: "Aluno não encontrado" });
-            }
-
-            const turma = await Turma.findOne({ alunos: aluno._id });
+            const turmasAluno = await Turma.find({ alunos: aluno._id });
 
             let turmaNome = "Sem turma";
+            let turmaAtual = turmasAluno.at(-1);
 
-            if (turma) {
-                turmaNome = `${turma.serie}º Ano - ${turma.ano}`;
+            if (turmaAtual)
+                turmaNome = `${turmaAtual.serie}º Ano - ${turmaAtual.ano}`;
+
+            const matchSimulado = {
+                "conteudos.resultados.aluno_id": new Types.ObjectId(alunoId)
+            };
+
+            if (turmaId && Types.ObjectId.isValid(turmaId)) {
+                matchSimulado.turma_id = new Types.ObjectId(turmaId);
             }
 
-            const simulados = await Simulado.aggregate([
-                { $unwind: "$conteudos" },
-                { $unwind: "$conteudos.resultados" },
-                {
-                    $match: {
-                        "conteudos.resultados.aluno_id": new ObjectId(alunoId)
-                    }
-                },
-                {
-                    $group: {
-                        _id: "$bimestre",
-                        media: { $avg: "$conteudos.resultados.nota" }
-                    }
-                },
-                { $sort: { _id: 1 } }
-            ]);
+            if (ano) {
+                matchSimulado["turma.ano"] = Number(ano);
+            }
 
-            const desempenho = [1, 2, 3, 4].map(bi => {
-                const d = simulados.find(s => s._id === bi);
-                return {
-                    bimestre: bi,
-                    media: d?.media ?? 0
-                };
-            });
+            if (bimestre) {
+                matchSimulado.bimestre = Number(bimestre);
+            }
 
-            return res.status(200).json({
-                alunoNome: aluno.nome,
-                turmaNome,
-                desempenho
-            });
+        const simulados = await Simulado.aggregate([
+            {
+                $lookup: {
+                    from: "turmas",
+                    localField: "turma_id",
+                    foreignField: "_id",
+                    as: "turma"
+                }
+            },
+            { $unwind: "$turma" },
+            { $unwind: "$conteudos" },
+            { $unwind: "$conteudos.resultados" },
+            { $match: matchSimulado },
+            {
+                $group: {
+                    _id: "$bimestre",
+                    media: { $avg: "$conteudos.resultados.nota" }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        const desempenho = [1, 2, 3, 4].map(bi => {
+            const d = simulados.find(s => s._id === bi);
+            return { bimestre: bi, media: d?.media ?? 0 };
+        });
+
+        return res.status(200).json({
+            alunoNome: aluno.nome,
+            turmaNome,
+            turmasDoAluno: turmasAluno.map(t => ({
+                id: t._id,
+                serie: t.serie,
+                ano: t.ano
+            })),
+            desempenho
+        });
 
         } catch (error) {
+            console.error(error);
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }
