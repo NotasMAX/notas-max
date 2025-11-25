@@ -17,6 +17,7 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
   };
 
   const tooltipRef = useRef(null);
+  const tooltipRef2 = useRef(null)
   const isEditable =
     Date.now() - new Date(simulado.createdAt).getTime() <
     16 * 24 * 60 * 60 * 1000;
@@ -24,6 +25,7 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
   return (
     <div className="flex w-[49%] h-1/3 items-center justify-between rounded-lg border border-gray-300 bg-white px-8 py-3">
       <Tooltip target={tooltipRef} position="top"/>
+      <Tooltip target={tooltipRef2} position="top"/>
 
       <p className="w-1/3 flex gap-3 justify-start">
         Simulado {simulado.numero}
@@ -35,7 +37,7 @@ export default function CardSimulado({ simulado, onView, onEdit }) {
 
       <div className="w-1/3 flex gap-3 justify-end">
         <button
-          ref={tooltipRef}
+          ref={tooltipRef2}
           data-pr-tooltip={
             isEditable
               ? `Editar simulado Nº ${simulado.numero}`

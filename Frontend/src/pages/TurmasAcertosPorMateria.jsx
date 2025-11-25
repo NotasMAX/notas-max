@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Chart from "react-apexcharts";
 import { getDesempenhoMaterias } from "../api/turmasapi";
+import StyleTitle from '../styles/Title.module.css';
+
 
 export default function TurmaAcertosPorMateria() {
   const { id } = useParams();
@@ -58,7 +60,7 @@ export default function TurmaAcertosPorMateria() {
   return (
     <div className="p-6 max-2xl mx-auto">
 
-      <h1 className="text-2xl font-bold mb-1">Acertos da turma por matéria</h1>
+      <h1 className={StyleTitle.titlePage}>Acertos da turma por matéria</h1>
 
       <p className="text-gray-600 mb-4">
         Turma:{" "}

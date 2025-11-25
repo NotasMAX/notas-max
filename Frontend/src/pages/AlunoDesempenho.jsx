@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Chart from "react-apexcharts";
 import { getDesempenhoAluno } from "../api/usuariosapi";
+import StyleTitle from '../styles/Title.module.css';
+import StyleButton from '../styles/ButtonGroup.module.css';
+
 
 export default function AlunoDesempenho() {
   const { id } = useParams();
@@ -24,8 +27,8 @@ export default function AlunoDesempenho() {
         const res = await getDesempenhoAluno(id);
 
         setAlunoInfo({
-            nome: res.data.alunoNome ?? "Desconhecido",
-            turma: res.data.turmaNome ?? "Não informado"
+          nome: res.data.alunoNome ?? "Desconhecido",
+          turma: res.data.turmaNome ?? "Não informado"
         });
 
         const desempenho = res.data.desempenho ?? [];
@@ -71,13 +74,14 @@ export default function AlunoDesempenho() {
 
   return (
     <div className="p-6 max-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-1">Desempenho do aluno por bimestre</h1>
 
-        <p className="text-gray-600 mb-4">
-            Aluno: <strong>{alunoInfo?.nome ?? "..."}</strong>  
-            &nbsp;&nbsp;
-            Turma: <strong>{alunoInfo?.turma}</strong>
-        </p>
+      <h1 className={StyleTitle.titlePage}>Desempenho do aluno por bimestre</h1>
+
+      <p className={StyleTitle.subtitlePage}>
+        Aluno: <strong>{alunoInfo?.nome ?? "..."}</strong>
+        &nbsp;&nbsp;
+        Turma: <strong>{alunoInfo?.turma}</strong>
+      </p>
 
       <div className="flex justify-between items-center mb-4">
         <div></div>
@@ -103,7 +107,7 @@ export default function AlunoDesempenho() {
 
       <div className="mt-6 flex justify-end">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className={StyleButton.buttonPrimary}
           onClick={() => navigate(-1)}
         >
           Voltar

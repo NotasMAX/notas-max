@@ -9,7 +9,7 @@ export default function BimestreSections({ simulados }) {
     navigate(`/Turmas/Simulado/Aluno/${id}`);
   };
 
-  const handleEdit = async (id) => {
+  const handleEdit = async (id, numero) => {
     navigate(`/Simulado/Editar/${id}`);
   };
 
