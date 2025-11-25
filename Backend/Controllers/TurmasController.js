@@ -27,8 +27,8 @@ export default class TurmasController {
             return res.status(422).json({ message: "O ano deve ser um número." });
         }
         const currentYear = new Date().getFullYear();
-        if (ano < currentYear - 50 || ano > currentYear + 1) {
-            return res.status(422).json({ message: `Insira um ano entre ${currentYear - 50} e ${currentYear + 1}.`, campo: "ano" });
+        if (ano < 1950 || ano > currentYear + 1) {
+            return res.status(422).json({ message: `Insira um ano entre 1950 e ${currentYear + 1}.`, campo: "ano" });
         }
         try {
             const turmaExists = await Turmas.findOne({ serie, ano });
@@ -215,20 +215,17 @@ export default class TurmasController {
             if (turmaComAluno) {
                 return res.status(422).json({ message: `Aluno já está matriculado em outra turma no ano ${turma.ano}.` });
             }
-
             const aluno = await UsuariosController.findUsuarioById(alunoId);
 
             if (!aluno) {
                 return res.status(404).json({ message: "Aluno não encontrado." });
             }
-
+            console.log("passo 5");
             if (aluno.tipo_usuario !== "aluno") {
                 return res.status(422).json({ message: "O usuário informado não é um aluno." });
             }
-
             turma.alunos.push(alunoId);
             await turma.save();
-
             res.status(200).json({ message: "Aluno adicionado com sucesso", turma });
         } catch (error) {
             res.status(500).json({ message: "Erro ao adicionar aluno na turma", error });
@@ -255,7 +252,7 @@ export default class TurmasController {
                 return res.status(422).json({ message: "Aluno não está nesta turma." });
             }
 
-            const simuladosComAluno = await SimuladosController.findSimuladoByAlunoId(aluno_id);
+            const simuladosComAluno = await SimuladosController.findSimuladoByAlunoId(aluno_id, turma_id);
             if (!simuladosComAluno || simuladosComAluno.length > 0) {
                 return res.status(422).json({
                     message: "Não é possível remover o aluno pois ele possui resultados em simulados."
@@ -272,44 +269,44 @@ export default class TurmasController {
     }
 
     static async getDesempenhoByTurma(req, res) {
-    const turmaId = req.params.id;
-    const ObjectId = Types.ObjectId;
+        const turmaId = req.params.id;
+        const ObjectId = Types.ObjectId;
 
-    if (!ObjectId.isValid(turmaId))
-      return res.status(422).json({ message: "ID da turma inválido" });
+        if (!ObjectId.isValid(turmaId))
+            return res.status(422).json({ message: "ID da turma inválido" });
 
-    try {
-      const turma = await Turmas.findById(turmaId);
-      if (!turma) return res.status(404).json({ message: "Turma não encontrada" });
+        try {
+            const turma = await Turmas.findById(turmaId);
+            if (!turma) return res.status(404).json({ message: "Turma não encontrada" });
 
-      const medias = await Simulado.aggregate([
-        { $match: { turma_id: new ObjectId(turmaId) } },
-        { $unwind: "$conteudos" },
-        { $unwind: "$conteudos.resultados" },
-        {
-          $group: {
-            _id: "$bimestre",
-            media: { $avg: "$conteudos.resultados.nota" }
-          }
-        },
-        { $sort: { _id: 1 } }
-      ]);
+            const medias = await Simulado.aggregate([
+                { $match: { turma_id: new ObjectId(turmaId) } },
+                { $unwind: "$conteudos" },
+                { $unwind: "$conteudos.resultados" },
+                {
+                    $group: {
+                        _id: "$bimestre",
+                        media: { $avg: "$conteudos.resultados.nota" }
+                    }
+                },
+                { $sort: { _id: 1 } }
+            ]);
 
-      const desempenho = [1, 2, 3, 4].map(bi => {
-        const f = medias.find(m => m._id === bi);
-        return {
-          bimestre: bi,
-          media: f?.media ?? 0
-        };
-      });
+            const desempenho = [1, 2, 3, 4].map(bi => {
+                const f = medias.find(m => m._id === bi);
+                return {
+                    bimestre: bi,
+                    media: f?.media ?? 0
+                };
+            });
 
-      res.status(200).json({
-        turma: {
-          ano: turma.ano,
-          serie: turma.serie
-        },
-        desempenho
-      });
+            res.status(200).json({
+                turma: {
+                    ano: turma.ano,
+                    serie: turma.serie
+                },
+                desempenho
+            });
 
     } catch (error) {
       console.log(error);
@@ -385,6 +382,14 @@ export default class TurmasController {
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: "Erro interno", error: err });
+        }
+    }
+
+    static async BuscarTurma(id) {
+        try {
+            return await Turmas.findById(id);
+        } catch (error) {
+            throw error;
         }
     }
 }

@@ -84,7 +84,11 @@ export default function SimuladosDisciplinaForm({ initialData, onSubmit, toast, 
                     {(!Disciplinas || Disciplinas.length === 0 || Disciplinas[0]?._id == null) ? (
                         <span className={Style.SimuladosDisciplinaFormAlert}>Nenhuma disciplina encontrada.</span>
                     ) : (
-                        Disciplinas.map(disciplina => (
+                        [...Disciplinas].sort((a, b) => {
+                            const nomeA = (a.materia?.nome || '').toLowerCase();
+                            const nomeB = (b.materia?.nome || '').toLowerCase();
+                            return nomeA.localeCompare(nomeB);
+                        }).map(disciplina => (
                             <div
                                 key={disciplina._id}
                                 className={Style.SimuladosDisciplinaFormListItem}

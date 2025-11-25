@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, use } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { getTurmaById } from '../api/turmasapi';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmDialog } from 'primereact/confirmdialog';
@@ -21,6 +21,9 @@ export default function TurmasEditar() {
     const opAluno = useRef(null);
     const opDisciplina = useRef(null);
     const toast = useRef(null);
+    const toastShown = useRef(false);
+    const location = useLocation();
+
 
     const fetch = async () => {
         try {
@@ -33,6 +36,17 @@ export default function TurmasEditar() {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        if (location.state && location.state.message) {
+            const { message, type } = location.state;
+            if (toast && toast.current && !toastShown.current) {
+                toast.current.show({ severity: type, summary: 'Sucesso', detail: message, life: 3000 });
+                toastShown.current = true;
+            }
+            window.history.replaceState({}, '')
+        }
+    }, [location.state]);
 
     useEffect(() => {
         document.title = 'NotasMAX - Editar Turma';

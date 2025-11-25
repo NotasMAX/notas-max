@@ -1,0 +1,32 @@
+.SimuladosHeader {
+     @apply text-[2.125rem] font-bold font-inter;
+}
+
+.SimuladosAlert {
+     @apply font-medium font-inter text-[1.25rem];
+}
+
+.SimuladosContainer {
+     @apply flex justify-between mb-6 lg:flex-row flex-col lg:items-center;
+}
+.SimuladosInfo {
+    @apply rounded-md h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none mt-3 flex items-center justify-center float-right text-[#727272] px-[1.5rem];
+}
+
+.ContainerHeader {
+     @apply border px-[1.3125rem] py-[0.59375rem] border-solid border-[#E5E5E5] rounded-[0.4375rem] shadow-sm grid grid-cols-4 items-center gap-[1rem] mb-1 bg-[#F5F5F5] rounded-b-none mt-[1rem];
+     grid-template-columns: 1fr 1fr 1fr 3rem;
+}
+
+.SimuladosHeader{
+  @apply text-[#043666];
+}
+
+.SubHeaderContainer{
+     @apply flex justify-between items-center lg:flex-row flex-col lg:items-end mt-[0rem];
+}
+
+.SimuladosSubHeader{
+     @apply text-[1.5rem] font-inter  text-[#404040];
+}
+

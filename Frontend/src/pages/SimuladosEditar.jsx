@@ -4,8 +4,9 @@ import SimuladosEditarForm from '../components/SimuladosEditarForm';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Style from '../styles/SimuladosCadastrar.module.css';
-import { getOne, updateSimulado } from '../api/simuladoApi';
+import { getOneSimple as getOne, updateSimulado } from '../api/simuladoApi';
 import { getOne as getOneTurma } from '../api/turmasapi';
+import Simulado from '../../../Backend/Models/Simulado';
 
 
 export default function SimuladosEditar() {
@@ -18,27 +19,37 @@ export default function SimuladosEditar() {
 
     const navigate = useNavigate();
     const [response, setResponse] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 
     const fetchSimulado = async () => {
         try {
             const result = await getOne(id);
-            setSimulado(result.data.simulado);
+            const simulado = result.data.simulado;
+            const isEditable = (Date.now() - new Date(simulado.createdAt).getTime()) < (16 * 24 * 60 * 60 * 1000);
+            if (!isEditable) {
+                navigate(`/Simulados/`, { replace: true });
+                setLoading(false);
+                return;
+            }
+
+            setSimulado(simulado);
         } catch (error) {
-            setResponse(
-                error.response?.data?.message || 'Erro ao carregar simulado'
-            );
+            navigate(`/Simulados/`, { replace: true });
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
+        setLoading(true);
         fetchSimulado();
     }, [id]);
 
-    const handleCreate = async (formData) => {
+    const handleEdit = async (formData) => {
         try {
             const result = await updateSimulado(id, formData);
-            const turma = await getOneTurma(formData.turma_id);
+            const turma = await getOneTurma(simulado.turma_id);
             navigate(`/Simulados/${formData.bimestre}/${turma.data.turma.ano}/${turma.data.turma.serie}`, { state: { message: result.data?.message || 'Simulado atualizado com sucesso', type: 'success' } });
         } catch (error) {
             setResponse({
@@ -49,9 +60,11 @@ export default function SimuladosEditar() {
     };
 
     return (
-        <div className={Style.SimuladosCadastrarContainer}>
-            <h2 className={Style.SimuladosHeader} >Editar Simulado</h2>
-            <SimuladosEditarForm onSubmit={handleCreate} response={response} simulado={simulado} />
-        </div>
+        loading ? <p>Carregando...</p> :
+            !simulado ? <p>Simulado não encontrado ou expirou...</p> :
+                <div className={Style.SimuladosCadastrarContainer}>
+                    <h2 className={Style.SimuladosHeader} >Editar Simulado</h2>
+                    <SimuladosEditarForm onSubmit={handleEdit} response={response} simulado={simulado} />
+                </div>
     );
 }

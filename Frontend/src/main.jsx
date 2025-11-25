@@ -10,8 +10,6 @@ import 'primeicons/primeicons.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
     <App />
-    </BrowserRouter>
   </StrictMode>,
 )

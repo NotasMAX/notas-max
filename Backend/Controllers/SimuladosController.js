@@ -1,6 +1,7 @@
 import Simulado from '../Models/Simulado.js';
-import Turmas from "../Models/Turma.js";
+import './TurmasController.js';
 import { Types } from 'mongoose';
+import TurmasController from './TurmasController.js';
 
 export default class SimuladosController {
     static async create(req, res) {
@@ -31,7 +32,7 @@ export default class SimuladosController {
             if (!conteudos || conteudos.length <= 0)
                 return res.status(422).json({ message: "Informe as disciplinas." });
 
-            const turmaExists = await Turmas.exists({ _id: turma_id });
+            const turmaExists = await TurmasController.BuscarTurma({ _id: turma_id });
             if (!turmaExists)
                 return res.status(422).json({ message: "Turma não encontrada" });
 
@@ -63,52 +64,285 @@ export default class SimuladosController {
 
     }
 
-    static async getOne(req, res) {
+    static async getOneSimple(req, res) {
+        const id = req.params.id;
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
         try {
-            const id = req.params.id;
-            const ObjectId = Types.ObjectId;
-
-            if (!ObjectId.isValid(id))
-                return res.status(422).json({ message: "Id de simulado invalido", id });
-
             const simulado = await Simulado.findById(id);
-
             if (!simulado)
-                return res.status(404).json({ message: 'Simulado não encontrado...' });
-
+                return res.status(404).json({ message: 'Simulado não encontrado' });
             res.status(200).json({ simulado });
-
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar simulado', error });
         }
     }
 
-    static async getTurma(req, res) {
+
+    static async getOne(req, res) {
+        const id = req.params.id;
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+
         try {
-            const id = req.params.id;
-            const ObjectId = Types.ObjectId;
+            const simulado = await Simulado.aggregate([
+                { $match: { _id: new ObjectId(id) } },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: { path: "$turma", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField:
+                            'turma.alunos',
+                        foreignField: '_id',
+                        as: 'turma.alunosDetalhes'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$conteudos", preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
+                    }
+                },
+                { $unwind: { path: "$conteudos.turma_disciplina", preserveNullAndEmptyArrays: true } },
+                {
+                    $group: {
+                        _id: { simulado_id: "$_id", conteudo_id: "$conteudos._id" },
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudo: {
+                            $first: {
+                                _id: "$conteudos._id",
+                                turma_disciplina_id: "$conteudos.turma_disciplina_id",
+                                turma_disciplina: {
+                                    _id: "$conteudos.turma_disciplina._id",
+                                    turma_id: "$conteudos.turma_disciplina.turma_id",
+                                    professor_id: "$conteudos.turma_disciplina.professor_id",
+                                    materia_id: "$conteudos.turma_disciplina.materia_id"
+                                },
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                peso: "$conteudos.peso",
+                                resultados: "$conteudos.resultados"
+                            }
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id.simulado_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudos: { $push: "$conteudo" }
+                    }
+                },
+                {
+                    $addFields: {
+                        "turma.alunos": {
+                            $map: {
+                                input: "$turma.alunosDetalhes",
+                                as: "aluno",
+                                in: {
+                                    _id: "$$aluno._id",
+                                    nome: "$$aluno.nome",
+                                    email: "$$aluno.email",
+                                    resultados: {
+                                        $map: {
+                                            input: "$conteudos",
+                                            as: "conteudo",
+                                            in: {
+                                                conteudo_id: "$$conteudo._id",
+                                                disciplina: "$$conteudo.turma_disciplina.materia_id", // ou outro campo se quiser nome depois de outro lookup
+                                                quantidade_questoes: "$$conteudo.quantidade_questoes",
+                                                resultado: {
+                                                    $arrayElemAt: [
+                                                        {
+                                                            $filter: {
+                                                                input: "$$conteudo.resultados",
+                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
+                                                            }
+                                                        },
+                                                        0
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        numero: 1,
+                        tipo: 1,
+                        bimestre: 1,
+                        data_realizacao: 1,
+                        turma: { _id: 1, ano: 1, serie: 1, alunos: 1 },
+                        conteudos: 1,
+                        createdAt: 1
+                    }
+                }
+            ]);
 
-            if (!ObjectId.isValid(id))
-                return res.status(422).json({ message: "Id de simulado invalido", id });
+            if (!simulado || simulado.length === 0)
+                return res.status(404).json({ message: 'Simulado não encontrado' });
 
-            // pega o simulado só com turma_id
-            const simulado = await Simulado.findById(id).select('turma_id');
-            if (!simulado)
-                return res.status(404).json({ message: 'Simulado não encontrado...' });
-
-            // busca a turma e retorna apenas os alunos
-            const turma = await Turmas.findById(simulado.turma_id).select('alunos');
-            if (!turma)
-                return res.status(404).json({ message: 'Turma não encontrada...' });
-
-            return res.status(200).json({ alunos: turma.alunos });
+            res.status(200).json({ simulado: simulado[0] });
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao buscar turma', error });
+            console.error('Erro:', error);
+            res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
     }
 
-    static async findSimuladoByAlunoId(id) {
+    static async getByTurma(req, res) {
+
+        const id = req.params.turma_id;
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de simulado invalido", id });
+
+        try {
+
+            const simulados = await Simulado.find({ turma_id: id });
+            res.status(200).json({ simulados });
+
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar simulado por turma', error });
+        }
+    }
+
+    static async getByAlunoAndBimestre(req, res) {
+        const id = req.params.aluno_id;
+        const bimestre = Number(req.params.bimestre);
+        const ObjectId = Types.ObjectId;
+
+        if (!ObjectId.isValid(id))
+            return res.status(422).json({ message: "Id de Aluno inválido", id });
+
+        try {
+            const simulados = await Simulado.aggregate([
+                {
+                    $match: {
+                        "conteudos.resultados.aluno_id": new ObjectId(id),
+                        bimestre: bimestre
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: '$turma' },
+                { $unwind: '$conteudos' },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'conteudos.turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.materia'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.materia', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.turma_disciplina.professor_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.professor'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.professor', preserveNullAndEmptyArrays: true } },
+                {
+                    $addFields: {
+                        "conteudos.resultado_aluno": {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: "$conteudos.resultados",
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(id)] }
+                                    }
+                                },
+                                0
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudos: {
+                            $push: {
+                                turma_disciplina: {
+                                    _id: "$conteudos.turma_disciplina._id",
+                                    turma_id: "$conteudos.turma_disciplina.turma_id",
+                                    professor_id: "$conteudos.turma_disciplina.professor_id",
+                                    professor: "$conteudos.turma_disciplina.professor.nome",
+                                    materia_id: "$conteudos.turma_disciplina.materia_id",
+                                    materia: "$conteudos.turma_disciplina.materia.nome",
+                                },
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                peso: "$conteudos.peso",
+                                resultado: "$conteudos.resultado_aluno"
+                            }
+                        }
+                    }
+                },
+                { $sort: { data_realizacao: -1, numero: -1 } }
+            ]);
+
+            res.status(200).json({ simulados });
+        } catch (error) {
+            console.error('Erro ao buscar simulados do aluno:', error);
+            res.status(500).json({ message: 'Erro ao buscar simulado por aluno', error: error.message });
+        }
+    }
+
+    static async findSimuladoByAlunoId(id, turma_id) {
         return await Simulado.find({
+            turma_id: turma_id,
             "conteudos.resultados.aluno_id": id
         });;
     }
@@ -183,6 +417,12 @@ export default class SimuladosController {
             if (!existingSimulado) {
                 return res.status(422).json({ message: "Simulado não existe" });
             }
+
+            const existingSimuladoNumero = await Simulado.findOne({ numero, bimestre, turma_id });
+            if (existingSimuladoNumero && existingSimuladoNumero._id.toString() !== req.params.id) {
+                return res.status(422).json({ message: "Já existe um simulado com este número e bimestre para a turma" });
+            }
+
             if (!conteudos || conteudos.length <= 0)
                 return res.status(422).json({ message: "Informe as disciplinas." });
 
@@ -200,5 +440,52 @@ export default class SimuladosController {
         } catch (error) {
             res.status(500).json({ message: 'erro ao atualizar simulado', error });
         }
+    }
+
+    static async getSimuladosByTurma(req, res) {
+        try {
+            const id = req.params.id;
+            const ObjectId = Types.ObjectId;
+
+            if (!ObjectId.isValid(id))
+                return res.status(422).json({ message: "Id da turma invalido", id });
+
+            const turmaExists = await TurmasController.BuscarTurma({ _id: id });
+
+            if (!turmaExists)
+                return res.status(422).json({ message: "Turma não encontrada" });
+
+            const simulados = await Simulado.find().where({ turma_id: id });
+
+            if (!simulados || simulados.length === 0)
+                return res.status(404).json({ message: 'Simulados não encontrados.' });
+
+            res.status(200).json({ simulados });
+
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar simulado', error });
+        }
+    }
+
+    static async atualizarConteudos(req, res) {
+        const { conteudos } = req.body;
+
+        if (!conteudos || conteudos.length <= 0)
+            return res.status(422).json({ message: "Informe os conteúdos com os resultados." });
+        try {
+            const simulado = await Simulado.findById(req.params.id);
+            if (!simulado)
+                return res.status(404).json({ message: 'Simulado não encontrado...' });
+
+            const simuladoAtualizado = await Simulado.findByIdAndUpdate(req.params.id, {
+                conteudos: conteudos
+            }, { new: true });
+
+            res.status(200).json({ message: 'Notas atualizadas com sucesso', simulado: simuladoAtualizado });
+
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao adicionar resultados', error });
+        }
+
     }
 }

@@ -14,7 +14,7 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma, ov
     useEffect(() => {
         setLoading(true);
         getAlunos().then(response => {
-            setAlunos(response.data.alunos);
+            setAlunos(response.data);
         }).catch(error => {
             console.error("Erro ao buscar alunos:", error);
         }).finally(() => {
@@ -33,6 +33,7 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma, ov
                 setAlunos(response.data.alunos);
             })
                 .catch(error => {
+                    console.error("Erro ao buscar alunos:", error);
                     if (toast && toast.current) {
                         toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao buscar aluno"}`, life: 3000 });
                     }

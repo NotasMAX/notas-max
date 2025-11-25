@@ -8,7 +8,6 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import SimuladosDisciplinaItem from "./SimuladosDisciplinaItem";
 import SimuladosDisciplinaForm from "./SimuladosDisciplinaForm";
 import { Tooltip } from "primereact/tooltip";
-import Turma from "../../../Backend/Models/Turma";
 
 export default function SimuladosForm({ initialData, onSubmit, response, simulado }) {
     const [formData, setFormData] = useState(initialData || {
@@ -68,8 +67,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
                         });
                     }
                 });
-            });
-
+            }); 
             setFormData({
                 numero: simulado.numero || 0,
                 tipo: simulado.tipo || "",
@@ -188,10 +186,10 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
                 error = true;
                 return;
             }
-            if (element.value > 10) {
+            if (element.value > 100) {
                 element.reportValidity();
                 element.focus();
-                element.setCustomValidity("A quantidade de questões não pode ser maior que 10.");
+                element.setCustomValidity("A quantidade de questões não pode ser maior que 100.");
                 error = true;
                 return;
             }
@@ -258,7 +256,19 @@ export default function SimuladosForm({ initialData, onSubmit, response, simulad
                 data_realizacao: dataCorrigida.toISOString()
             };
 
-            onSubmit(dataSubmit);
+            if (simulado?.conteudos?.some(conteudo => conteudo.resultados?.length > 0)) {
+                confirmDialog({
+                    message: 'Este simulado já possui resultados. Editá-lo apagará todos os dados registrados. Deseja continuar?',
+                    header: 'Aviso',
+                    icon: <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none"><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M12 7v6" /><circle cx="12" cy="16" r="1" fill="#ee4544" /><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M9.216 3c1.18-.667 1.954-1 2.784-1c1.114 0 2.128.6 4.157 1.802l.686.406c2.029 1.202 3.043 1.803 3.6 2.792c.557.99.557 2.19.557 4.594v.812c0 2.403 0 3.605-.557 4.594c-.557.99-1.571 1.59-3.6 2.791l-.686.407C14.128 21.399 13.114 22 12 22c-1.114 0-2.128-.6-4.157-1.802l-.686-.407c-2.029-1.2-3.043-1.802-3.6-2.791C3 16.01 3 14.81 3 12.406v-.812C3 9.19 3 7.989 3.557 7C3.996 6.22 4.719 5.682 6 4.9" /></g></svg>,
+                    acceptLabel: 'Continuar',
+                    rejectLabel: 'Cancelar',
+                    accept: () => onSubmit(dataSubmit),
+                    reject: () => toast.current.show({ severity: 'info', summary: 'Cancelado', detail: 'Atualização cancelada', life: 3000 })
+                });
+            } else {
+                onSubmit(dataSubmit);
+            }
         }
     };
 
