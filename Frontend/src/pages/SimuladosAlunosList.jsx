@@ -183,7 +183,8 @@ export default function SimuladosAlunosList() {
           </svg>
           Editar Simulado
         </button>
-        <button className={ButtonStyle.buttonSecondarySmall}>
+        <button className={ButtonStyle.buttonSecondarySmall}
+        onClick={() => navigate(`/Turma/${simulado.turma._id}/desempenho-materias`)}>
           <svg
             width="24"
             height="24"

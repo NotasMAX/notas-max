@@ -135,7 +135,7 @@ export default function SimuladoNotasPorSimulado({}) {
                 </button> */}
         <button
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => navigate()}
+          onClick={() => navigate(`/Usuarios/Aluno/${alunoId}/desempenho`)}
         >
           <svg
             width="24"
@@ -169,7 +169,7 @@ export default function SimuladoNotasPorSimulado({}) {
               fill="#4b5563"
             />
           </svg>
-          Média Materia
+          Média Bimestral
         </button>
         <button
           className={ButtonStyle.buttonSecondarySmall}
