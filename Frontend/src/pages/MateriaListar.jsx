@@ -3,8 +3,12 @@ import { listarMaterias } from '../api/materiaApi';
 import { useNavigate } from 'react-router-dom';
 import Style from '../styles/MateriaListar.module.css';
 import Pagination from '../components/Pagination';
+import { Toast } from 'primereact/toast';
+import { useToast } from '../hooks/useToast';
 
 export default function MateriaListar() {
+	const { toast } = useToast(); // Adiciona o hook para mostrar toast de redirect
+	
 	useEffect(() => {
 		document.title = 'NotasMAX - Listar Matérias';
 	}, []);
@@ -54,6 +58,7 @@ export default function MateriaListar() {
 
 	return (
 		<div className={Style.pageContainer}>
+			<Toast ref={toast} />
 			<h2 className={Style.MateriaListarHeader}>Materias</h2>
 
 			<div className={Style.MateriaListarContainer}>
