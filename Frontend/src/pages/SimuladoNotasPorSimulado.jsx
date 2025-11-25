@@ -101,7 +101,7 @@ export default function SimuladoNotasPorSimulado({}) {
       <div className="flex gap-3">
         <button
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => navigate()}
+          onClick={() => navigate(`/Turmas/${simulados[0]?.turma._id}/Aluno/${alunoId}/Simulado/${simuladoId}/Notas/`)}
         >
           <svg
             width="24"

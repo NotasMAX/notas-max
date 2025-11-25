@@ -31,18 +31,19 @@ import TurmaDesempenho from "./pages/TurmaDesempenho";
 import TurmasAcertosPorMateria from "./pages/TurmasAcertosPorMateria";
 import NotFound from "./pages/NotFound";
 import SimuladosNotas from "./pages/SimuladosNotas";
+import SimuladosNotasIndividual from "./pages/SimuladosNotasIndividual";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div>Carregando...</div>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/Login" replace />;
   return children;
 };
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div>Carregando...</div>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/Login" replace />;
   if (user && user.tipo_usuario !== 'administrador') return <div>Acesso negado.</div>;
   return children;
 };
@@ -140,6 +141,12 @@ function App() {
             </AdminRoute>
           } />
 
+          <Route path="Turmas/:turma/Aluno/:aluno/Simulado/:simulado/Notas/" element={
+            <Layout>
+              <SimuladosNotasIndividual />
+            </Layout>
+          } />
+
 
           <Route path="Turmas/Simulado/Aluno/:id" element={
             <Layout>
@@ -170,8 +177,7 @@ function App() {
               </Layout>
             </AdminRoute>
           } />
-
-
+          
           <Route path="/Simulados/Cadastrar" element={
             <AdminRoute>
               <Layout>
