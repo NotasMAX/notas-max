@@ -208,8 +208,9 @@ export default function SimuladosNotas() {
         onSubmit={handleFormSubmit}
         aluno={Aluno}
         proximoAluno={proximoAluno}
-        AlunoAnterior={anteriorAluno}
+        anteriorAluno={anteriorAluno}
         quantidadeAlunos={Turma ? Turma.alunos.length : 0}
+        turma_id={Turma ? Turma._id : null}
         alunoAtual={
           Turma ? Turma.alunos.findIndex((a) => a._id === alunoURL) + 1 : 0
         }

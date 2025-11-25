@@ -31,7 +31,7 @@ export default function BimestreAtual({ bimestre, ano }) {
   const bimestreAtual = bimestre || getBimester(now, 2, 1);
 
   return (
-    <div className="border border-gray-500 rounded-md px-4 py-2 inline-block text-gray-500">
+    <div className="border border-[#D9D9D9] rounded-md px-4 py-2 inline-block text-gray-500 w-[180px] text-center">
       {bimestreAtual}º Bimestre - {anoAtual}
     </div>
   );

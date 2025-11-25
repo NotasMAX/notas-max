@@ -7,7 +7,7 @@ import SimuladosNotaItem from "./SimuladosNotaItem";
 import StyleButton from "../styles/ButtonGroup.module.css";
 
 
-export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, simulado_id, bimestre }) {
+export default function SimuladosForm({ initialData, onSubmit, response, conteudosRecebidos, aluno, simulado_id, bimestre, alunoAtual, proximoAluno, anteriorAluno, turma_id, quantidadeAlunos }) {
     const [formData, setFormData] = useState(initialData || {
         conteudos: conteudosRecebidos
     });
@@ -102,27 +102,36 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
 
                     </div>
                     <div className={Style.ContainerCol}>
-                        {String(NumeroAcertos).padStart(2, '0')}
+                        {(NumeroAcertos || 0).toString().padStart(2, '0')}
                     </div>
                     <div className={Style.ContainerColAcoes}>
-                        / {String(NumeroQuestoes).padStart(2, '0')}
+                        / {(NumeroQuestoes || 0).toString().padStart(2, '0')}
                     </div>
                 </div>
                 <div className={Style.ContainerButtons}>
+
+                    <div className={Style.AlunosInfo}>
+                        {alunoAtual.toString().padStart(2, '0')} / {quantidadeAlunos.toString().padStart(2, '0')}
+                    </div>
+
                     <div className={Style.buttonGroup}>
                         <button
                             type="button"
                             className={StyleButton.buttonSecondary}
                             onClick={() => {
                                 confirmDialog({
-                                    message: `Deseja realmente cancelar as alterações? As alterações não serão salvas.`,
+                                    message: !anteriorAluno ? `Deseja realmente cancelar as alterações? As alterações não serão salvas.` : `Deseja realmente cancelar as alterações e voltar para o aluno anterior? As alterações não serão salvas.`,
                                     header: 'Confirmação',
                                     icon: <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem" viewBox="0 0 24 24"><g fill="none"><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M12 7v6" /><circle cx="12" cy="16" r="1" fill="#ee4544" /><path stroke="#ee4544" strokeLinecap="round" strokeWidth="1.5" d="M9.216 3c1.18-.667 1.954-1 2.784-1c1.114 0 2.128.6 4.157 1.802l.686.406c2.029 1.202 3.043 1.803 3.6 2.792c.557.99.557 2.19.557 4.594v.812c0 2.403 0 3.605-.557 4.594c-.557.99-1.571 1.59-3.6 2.791l-.686.407C14.128 21.399 13.114 22 12 22c-1.114 0-2.128-.6-4.157-1.802l-.686-.407c-2.029-1.2-3.043-1.802-3.6-2.791C3 16.01 3 14.81 3 12.406v-.812C3 9.19 3 7.989 3.557 7C3.996 6.22 4.719 5.682 6 4.9" /></g></svg>,
                                     acceptClassName: 'p-button-danger',
                                     acceptLabel: 'Sim',
                                     rejectLabel: 'Não',
                                     accept: () => {
-                                        navigate(`/Simulados/Notas/${simulado_id}/${bimestre}/${aluno._id}`);
+                                        if (!anteriorAluno) {
+                                            navigate(`/Turmas/Info/${turma_id}`);
+                                            return;
+                                        }
+                                        navigate(`/Simulados/Notas/${simulado_id}/${bimestre}/${anteriorAluno._id}`);
                                     },
                                     reject: () => {
                                         if (toast && toast.current) {
@@ -137,7 +146,7 @@ export default function SimuladosForm({ initialData, onSubmit, response, conteud
                             disabled={loading}
                             type="submit"
                             className={StyleButton.buttonPrimary}>
-                            Salvar e finalizar
+                                {!proximoAluno ? 'Salvar e finalizar' : 'Salvar e próximo'}
                         </button>
                     </div>
                 </div>
