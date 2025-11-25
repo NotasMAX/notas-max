@@ -37,7 +37,7 @@ export default function AlunoVisualizar() {
     if (!aluno) return <div className="p-4">Aluno não encontrado.</div>;
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
             <h2 className={Style.pageTitle}>Informações Aluno</h2>
 
             <div className={Style.form}>

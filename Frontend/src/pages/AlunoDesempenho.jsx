@@ -81,7 +81,7 @@ export default function AlunoDesempenho() {
   const series = [{ name: "Média", data: valores }];
 
   return (
-    <div className="p-6 max-2xl mx-auto">
+    <div>
       <h1 className={StyleTitle.titlePage}>Desempenho do aluno por bimestre</h1>
 
       <p className={StyleTitle.subtitlePage}>

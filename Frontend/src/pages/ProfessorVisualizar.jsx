@@ -37,7 +37,7 @@ export default function ProfessorVisualizar() {
     if (!professor) return <div className="p-4">Professor não encontrado.</div>;
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
             <h2 className={Style.pageTitle}>Informações Professor</h2>
 
             <div className={Style.form}>

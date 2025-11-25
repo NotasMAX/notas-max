@@ -52,7 +52,7 @@ export default function ProfessorEditar() {
     if (error) return <div className="p-4 text-red-600">{error}</div>;
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
             <Toast ref={toast} />
             <h2 className={Style.pageTitle}>Editar Professor</h2>
             {professor && <ProfessorForm initialData={professor} onSubmit={handleUpdate} />}

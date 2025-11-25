@@ -67,7 +67,7 @@ export default function MateriaEditar() {
     if (error) return <div className="p-4 text-red-600">{error}</div>;
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
             <Toast ref={toast} />
             <h2 className={Style.pageTitle}>Editar Matéria</h2>
             {initialData ? (

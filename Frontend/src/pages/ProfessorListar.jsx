@@ -61,7 +61,7 @@ export default function ProfessorListar() {
 	const currentProfessores = sortedProfessores.slice(startIndex, endIndex);
 
 	return (
-		<div className={Style.pageContainer}>
+		<div>
 			<Toast ref={toast} />
 			<h2 className={Style.pageHeader}>Professores</h2>
 

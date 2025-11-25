@@ -27,7 +27,7 @@ export default function ProfessorCadastrar() {
     };
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
             <Toast ref={toast} />
             <h2 className={Style.pageTitle}>Cadastrar Professor</h2>
             <ProfessorForm onSubmit={handleCreate} />
