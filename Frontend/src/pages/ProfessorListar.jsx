@@ -27,7 +27,6 @@ export default function ProfessorListar() {
 		const fetchProfessores = async () => {
 			try {
 				const res = await getProfessores();
-				console.log('Resposta da API:', res.data); // Debug
 				// A API retorna um array direto, não um objeto com propriedade professores
 				if (mounted) setProfessores(Array.isArray(res.data) ? res.data : []);
 			} catch (err) {
@@ -44,12 +43,6 @@ export default function ProfessorListar() {
 
 	const navigate = useNavigate();
 
-	// Cálculos da paginação
-	const totalPages = Math.ceil(professores.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
-	const endIndex = startIndex + itemsPerPage;
-	const currentProfessores = professores.slice(startIndex, endIndex);
-
 	const handlePageChange = (page) => {
 		setCurrentPage(page);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,6 +50,15 @@ export default function ProfessorListar() {
 
 	if (loading) return <div className="p-4">Carregando professores...</div>;
 	if (error) return <div className="p-4 text-red-600">{error}</div>;
+
+	const sortedProfessores = [...professores].sort((a, b) => 
+		a.nome.localeCompare(b.nome)
+	);
+
+	const totalPages = Math.ceil(sortedProfessores.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const currentProfessores = sortedProfessores.slice(startIndex, endIndex);
 
 	return (
 		<div className={Style.pageContainer}>
