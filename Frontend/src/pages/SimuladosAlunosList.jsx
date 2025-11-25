@@ -85,7 +85,9 @@ export default function SimuladosAlunosList() {
         <button
           ref={tooltipRef}
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => navigate()}
+          onClick={() => navigate(
+            `/Turmas/${simulado.turma._id}/Simulados/${simulado._id}/Notas/`
+          )}
           data-pr-tooltip={"Realizar o lançamentos de notas"}
         >
           <svg
