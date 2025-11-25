@@ -31,7 +31,7 @@ export default function SimuladosNotasPesquisarForm({ onSubmit, simulados, simul
                 acceptLabel: 'Sim',
                 rejectLabel: 'Não',
                 accept: () => {
-                    navigate(`/Turmas/${turma_id}/Simulados/${value}/Notas/`, { replace: true, state: { message: 'Simulado alterado com sucesso', type: 'warn' } });
+                    navigate(`/Turmas/${turma_id}/Simulados/${value}/Notas/`, { replace: true, state: { message: 'Simulado alterado com sucesso', type: 'success' } });
                 },
                 reject: () => {
                 }

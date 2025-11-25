@@ -61,7 +61,7 @@ export default function SimuladosNotas() {
             const simuladoResponse = await getOneSimulado(simuladoURL);
             setSimulado(simuladoResponse.data.simulado || []);
         } catch (error) {
-            console.error("Erro ao buscar simulados:", error);
+            navigate("/404");
         }
     }
 
@@ -70,7 +70,7 @@ export default function SimuladosNotas() {
             const simuladosResponse = await getSimuladosByTurma(id);
             setSimulados(simuladosResponse.data.simulados || []);
         } catch (error) {
-            console.error("Erro ao buscar simulados da turma:", error);
+            navigate("/404");
         }
     }
 
@@ -79,7 +79,7 @@ export default function SimuladosNotas() {
             const alunoResponse = await getOneAluno(alunoURL);
             setAluno(alunoResponse.data || []);
         } catch (error) {
-            console.error("Erro ao buscar aluno:", error);
+            navigate("/404");
         }
     }
 
@@ -88,8 +88,7 @@ export default function SimuladosNotas() {
             const turmaResponse = await getOneTurma(id);
             setTurma(turmaResponse.data.turma || []);
         } catch (error) {
-            console.error("Erro ao buscar turma:", error);
-            return null;
+            navigate("/404");
         }
     }
 
