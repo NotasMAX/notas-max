@@ -71,6 +71,7 @@ export const forgotPassword = async (req, res) => {
     const usuario = await Usuario.findOne({ email });
 
     if (!usuario) {
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 3000));
       return res.status(200).json({
         message: "Se o e-mail informado for válido, um token de recuperação de senha será enviado para sua caixa de entrada."
       });
