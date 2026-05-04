@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Style from "../styles/TurmasAlunoForm.module.css";
 import { confirmDialog } from 'primereact/confirmdialog';
 import { InputText } from 'primereact/inputtext';
-import { getAlunos,  buscarAlunosPorNomeOuEmail } from '../api/usuariosapi';
+import { getAlunos, buscarAlunosPorNomeOuEmail } from '../api/usuariosapi';
 import { addAluno } from '../api/turmasapi';
 export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma, overlayRef }) {
     const [formData, setFormData] = useState(initialData || {
@@ -31,24 +31,23 @@ export default function TurmaAlunoForm({ initialData, onSubmit, toast, turma, ov
         if (event.target.value.trim() !== "") {
             await buscarAlunosPorNomeOuEmail(event.target.value).then(response => {
                 setAlunos(response.data.alunos);
-            })
-                .catch(error => {
-                    console.error("Erro ao buscar alunos:", error);
-                    if (toast && toast.current) {
-                        toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao buscar aluno"}`, life: 3000 });
-                    }
-                    else {
-                        alert("Erro ao buscar aluno.");
-                    }
-                });
-        }
-        else {
-            getAlunos().then(response => {
-                setAlunos(response.data.alunos);
             }).catch(error => {
                 console.error("Erro ao buscar alunos:", error);
+                if (toast && toast.current) {
+                    toast.current.show({ severity: 'error', summary: 'Erro', detail: `${error.response.data.message || "Falha ao buscar aluno"}`, life: 3000 });
+                }
+                else {
+                    alert("Erro ao buscar aluno.");
+                }
             });
+            return;
         }
+        getAlunos().then(response => {
+            setAlunos(response.data);
+        }).catch(error => {
+            console.error("Erro ao buscar alunos:", error);
+        });
+
     }
 
     const handleClick = (e) => {

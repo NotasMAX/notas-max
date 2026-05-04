@@ -27,7 +27,6 @@ export default function AlunoListar() {
 		const fetchAlunos = async () => {
 			try {
 				const res = await getAlunos();
-				console.log('Resposta da API:', res.data); // Debug
 				// A API retorna um array direto, não um objeto com propriedade alunos
 				if (mounted) setAlunos(Array.isArray(res.data) ? res.data : []);
 			} catch (err) {
@@ -59,7 +58,7 @@ export default function AlunoListar() {
 	if (error) return <div className="p-4 text-red-600">{error}</div>;
 
 	return (
-		<div className={Style.pageContainer}>
+		<div>
 			<Toast ref={toast} />
 			<h2 className={Style.pageHeader}>Alunos</h2>
 

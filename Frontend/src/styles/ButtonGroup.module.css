@@ -28,16 +28,15 @@
 }
 
 .formSelectContainer {
-    @apply relative mt-4 lg:mr-[2.5rem] lg:mt-0;
+      @apply relative lg:mr-[2.5rem] w-fit;
 }
 
 .formSelect {
-    @apply rounded-md lg:pr-12 h-[3.0625rem] bg-white border border-gray-300 text-lg font-medium font-inter appearance-none pl-4;
-
+    @apply rounded-md h-[3.0625rem] bg-white border border-gray-300 text-[1.25rem] font-medium font-inter appearance-none pl-4 pr-[3rem];
 }
 
 .formOption {
-    @apply text-[1.25rem] w-[7.1875rem] font-medium font-inter mb-6 text-[#404040] text-left;
+    @apply text-[1.25rem] font-medium font-inter mb-6 text-[#404040] text-left;
 }
 
 .formSelectArrow {
@@ -45,9 +44,9 @@
 }
 
 .formSelectArrowRight {
-    @apply h-[1.5rem] w-auto fill-[#404040] absolute left-[8rem] top-[0.75rem] pointer-events-none;
+    @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
 }
 
 .formSelectArrowRightLarge {
-    @apply h-[1.5rem] w-auto fill-[#404040] absolute left-[14rem] top-[0.75rem] pointer-events-none;
+    @apply h-[1.5rem] w-auto fill-[#404040] absolute right-[1rem] top-[0.75rem] pointer-events-none;
 }

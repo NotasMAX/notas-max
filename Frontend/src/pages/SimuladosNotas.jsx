@@ -67,42 +67,41 @@ export default function SimuladosNotas() {
     }
   }, [simuladoURL, alunoURL]);
 
-  const fetchSimulado = async () => {
-    try {
-      const simuladoResponse = await getOneSimulado(simuladoURL);
-      setSimulado(simuladoResponse.data.simulado || []);
-    } catch (error) {
-      console.error("Erro ao buscar simulados:", error);
+    const fetchSimulado = async () => {
+        try {
+            const simuladoResponse = await getOneSimulado(simuladoURL);
+            setSimulado(simuladoResponse.data.simulado || []);
+        } catch (error) {
+            navigate("/404");
+        }
     }
-  };
 
-  const fetchSimuladosByTurma = async (id) => {
-    try {
-      const simuladosResponse = await getSimuladosByTurma(id);
-      setSimulados(simuladosResponse.data.simulados || []);
-    } catch (error) {
-      console.error("Erro ao buscar simulados da turma:", error);
+    const fetchSimuladosByTurma = async (id) => {
+        try {
+            const simuladosResponse = await getSimuladosByTurma(id);
+            setSimulados(simuladosResponse.data.simulados || []);
+        } catch (error) {
+            navigate("/404");
+        }
     }
-  };
 
-  const fetchAluno = async () => {
-    try {
-      const alunoResponse = await getOneAluno(alunoURL);
-      setAluno(alunoResponse.data || []);
-    } catch (error) {
-      console.error("Erro ao buscar aluno:", error);
+    const fetchAluno = async () => {
+        try {
+            const alunoResponse = await getOneAluno(alunoURL);
+            setAluno(alunoResponse.data || []);
+        } catch (error) {
+            navigate("/404");
+        }
     }
-  };
 
-  const fetchTurma = async (id) => {
-    try {
-      const turmaResponse = await getOneTurma(id);
-      setTurma(turmaResponse.data.turma || []);
-    } catch (error) {
-      console.error("Erro ao buscar turma:", error);
-      return null;
+    const fetchTurma = async (id) => {
+        try {
+            const turmaResponse = await getOneTurma(id);
+            setTurma(turmaResponse.data.turma || []);
+        } catch (error) {
+            navigate("/404");
+        }
     }
-  };
 
   useEffect(() => {
     if (!Turma) return;
@@ -209,8 +208,9 @@ export default function SimuladosNotas() {
         onSubmit={handleFormSubmit}
         aluno={Aluno}
         proximoAluno={proximoAluno}
-        AlunoAnterior={anteriorAluno}
+        anteriorAluno={anteriorAluno}
         quantidadeAlunos={Turma ? Turma.alunos.length : 0}
+        turma_id={Turma ? Turma._id : null}
         alunoAtual={
           Turma ? Turma.alunos.findIndex((a) => a._id === alunoURL) + 1 : 0
         }

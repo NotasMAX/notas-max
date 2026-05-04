@@ -42,7 +42,7 @@ export default function SimuladoNotasPorSimulado({}) {
 
     const loadSimulados = async () => {
       try {
-        const res = await getByAlunoAndBimestre(alunoId, bimestre);
+        const res = await getByAlunoAndBimestre(alunoId, bimestre, simuladoIdParams);
         setSimulados(res.data.simulados || []);
         setLoading(false);
       } catch (e) {
@@ -100,7 +100,7 @@ export default function SimuladoNotasPorSimulado({}) {
       <div className="flex gap-3">
         <button
           className={ButtonStyle.buttonSecondarySmall}
-          onClick={() => navigate()}
+          onClick={() => navigate(`/Turmas/${simulados[0]?.turma._id}/Aluno/${alunoId}/Simulado/${simuladoId}/Notas/`)}
         >
           <svg
             width="24"

@@ -31,7 +31,8 @@ export default function TurmasEditar() {
             const res = await getTurmaById(id);
             setTurma(res.data.turma);
         } catch (err) {
-            setError(err.message || 'Erro ao buscar turma');
+            navigate("/404");
+            setError('Erro ao carregar a turma.');
         } finally {
             setLoading(false);
         }

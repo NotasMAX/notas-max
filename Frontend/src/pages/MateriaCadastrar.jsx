@@ -33,7 +33,7 @@ export default function MateriasCadastrar() {
     };
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
             <Toast ref={toast} />
             <h2 className={Style.pageTitle}>Cadastrar Materia</h2>
             <MateriasForm onSubmit={handleCreate} />

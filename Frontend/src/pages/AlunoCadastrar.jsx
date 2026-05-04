@@ -28,7 +28,7 @@ export default function AlunoCadastrar() {
     };
 
     return (
-        <div className={Style.pageContainer}>
+        <div>
 
             <Toast ref={toast} />
             <h2 className={StyleTitle.titlePage}>Cadastrar Aluno</h2>
