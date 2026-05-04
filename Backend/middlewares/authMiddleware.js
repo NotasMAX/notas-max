@@ -27,11 +27,14 @@ export const authenticateToken = (req, res, next) => {
     }
 };
 
-export const authorizeAdmin = (req, res, next) => {
-   
-    if (!req.user || req.user.tipo_usuario !== 'administrador') {
-        console.log("Usuário sem permissão de admin:", req.user?.tipo_usuario);
-        return res.status(403).json({ message: 'Proibido. Apenas administradores podem realizar esta ação.' });
+// Metodo generio para fazer a validação do tipo de usuario
+export const authorizeRoles = (...roles) => (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.tipo_usuario)) {
+        return res.status(403).json({ message: 'Acesso negado.' });
     }
     next();
 };
+
+// Metodos para validação do tipo de usuario definido
+export const authorizeAdmin = authorizeRoles('administrador');
+export const authorizeProfessor = authorizeRoles('administrador, professor');

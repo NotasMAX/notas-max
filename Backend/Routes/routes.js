@@ -3,7 +3,7 @@ import TurmasController from "../Controllers/TurmasController.js";
 import TurmaDisciplinasController from "../Controllers/TurmaDisciplinasController.js";
 import UsuariosController from "../Controllers/UsuariosController.js";
 import MateriasController from "../Controllers/MateriasController.js";
-import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
+import { authenticateToken, authorizeAdmin, authorizeProfessor } from "../middlewares/authMiddleware.js";
 import SimuladosController from '../Controllers/SimuladosController.js';
 
 

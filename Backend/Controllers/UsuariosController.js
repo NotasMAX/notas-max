@@ -165,7 +165,7 @@ export default class UsuariosController {
         const id = req.params.id;
         const ObjectId = Types.ObjectId;
         if (!ObjectId.isValid(id)) {
-            return res.status(422).json({ message: "Id do aluno inválido" });
+            return res.status(422).json({ message: "ID do aluno inválido" });
         }
         try {
             const aluno = await Usuario.findById(id);
