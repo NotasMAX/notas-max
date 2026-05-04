@@ -14,18 +14,18 @@ export const login = async (req, res) => {
 
     const usuario = await Usuario.findOne({ email }).select("+senha");
     if (!usuario) {
-      return res.status(401).json({ message: "Credenciais Inválidas." });
+      return res.status(401).json({ message: "Usuario não encontrado, verifique se E-mail ou Senha estão incorretos." });
     }
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
     if (!senhaCorreta) {
-      return res.status(401).json({ message: "Credenciais Inválidas." });
+      return res.status(401).json({ message: "Usuario não encontrado, verifique se E-mail ou Senha estão incorretos." });
     }
 
     const token = jwt.sign(
       { id: usuario._id, nome: usuario.nome, email: usuario.email, tipo_usuario: usuario.tipo_usuario },
       JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     // Definir cookie com o token
@@ -33,7 +33,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: false, // Mude para true em produção com HTTPS
       sameSite: "lax",
-      maxAge: 3600000 // 1 hora em ms
+      maxAge:  24 * 60 * 60 * 1000  // 24 hora em ms
     });
 
     return res.status(200).json({

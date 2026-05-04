@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 async function main(){
     await mongoose.connect("mongodb://127.0.0.1:27017/NotasMax");
-    console.log("Conectou mongodb");
+    console.log("Conectou-se ao mongodb");
 }
 main().catch((err)=>console.log(err));
 export default mongoose;
