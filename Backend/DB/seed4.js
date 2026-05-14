@@ -32,16 +32,21 @@ const seedDatabase = async () => {
 
         // 15 alunos (5 por turma) — cada aluno só em uma turma
         const alunos = [];
+        const nomesAlunos = [
+            "Lucas Santos", "Sofia Oliveira", "Mateus Costa", "Isabela Pereira", "Gustavo Almeida",
+            "Camila Rodrigues", "Rafael Lima", "Larissa Souza", "Bruno Fernandes", "Mariana Gomes",
+            "Thiago Ribeiro", "Julia Carvalho", "Felipe Silva", "Amanda Torres", "Leonardo Mendes"
+        ];
         const responsaveis = [
-            "Sr. Paulo Silva", "Sra. Carla Costa", "Sr. Roberto Ferreira", "Sra. Fernanda Mendes", "Sr. Guilherme Rocha",
-            "Sra. Helena Gomes", "Sr. Marcos Lima", "Sra. Patrícia Alves", "Sr. Eduardo Torres", "Sra. Luciana Mendes",
-            "Sr. André Souza", "Sra. Daniela Ribeiro", "Sr. Felipe Santos", "Sra. Aline Sousa", "Sr. Renato Barros"
+            "Paulo Silva", "Carla Costa", "Roberto Ferreira", "Fernanda Mendes", "Guilherme Rocha",
+            "Helena Gomes", "Marcos Lima", "Patrícia Alves", "Eduardo Torres", "Luciana Mendes",
+            "André Souza", "Daniela Ribeiro", "Felipe Santos", "Aline Sousa", "Renato Barros"
         ];
 
         for (let i = 0; i < 15; i++) {
             const aluno = {
-                nome: `Aluno ${i + 1}`,
-                email: `aluno${i + 1}@student.com`,
+                nome: nomesAlunos[ i ],
+                email: `${nomesAlunos[ i ].toLowerCase().replace(/\s+/g, '.')}@student.com`,
                 telefone_contato: `1198000${String(100 + i).slice(-3)}`,
                 senha: senhaHash,
                 tipo_usuario: "aluno",
