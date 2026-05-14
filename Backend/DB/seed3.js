@@ -132,17 +132,17 @@ const seedDatabase = async () => {
         const turmasData = [
             {
                 serie: 1,
-                ano: 2025,
+                ano: 2026,
                 alunos: alunosIds.slice(0, 5) // Ana, Bruno, Camila, Diego, Carolina
             },
             {
                 serie: 2,
-                ano: 2025,
+                ano: 2026,
                 alunos: alunosIds.slice(5, 10) // Felipe e mais 4 alunos
             },
             {
                 serie: 3,
-                ano: 2025,
+                ano: 2026,
                 alunos: alunosIds.slice(3, 8) // Alguns alunos
             }
         ];
@@ -156,46 +156,46 @@ const seedDatabase = async () => {
         const turmaDisciplinasData = [
             // Turma 1º EM
             {
-                turma_id: turmas[0]._id,
-                professor_id: professorIds[0], // João
-                materia_id: materias[0]._id // Matemática
+                turma_id: turmas[ 0 ]._id,
+                professor_id: professorIds[ 0 ], // João
+                materia_id: materias[ 0 ]._id // Matemática
             },
             {
-                turma_id: turmas[0]._id,
-                professor_id: professorIds[1], // Maria
-                materia_id: materias[1]._id // Português
+                turma_id: turmas[ 0 ]._id,
+                professor_id: professorIds[ 1 ], // Maria
+                materia_id: materias[ 1 ]._id // Português
             },
             {
-                turma_id: turmas[0]._id,
-                professor_id: professorIds[2], // Carlos
-                materia_id: materias[4]._id // Física
+                turma_id: turmas[ 0 ]._id,
+                professor_id: professorIds[ 2 ], // Carlos
+                materia_id: materias[ 4 ]._id // Física
             },
             // Turma 2º EM
             {
-                turma_id: turmas[1]._id,
-                professor_id: professorIds[0], // João
-                materia_id: materias[0]._id // Matemática
+                turma_id: turmas[ 1 ]._id,
+                professor_id: professorIds[ 0 ], // João
+                materia_id: materias[ 0 ]._id // Matemática
             },
             {
-                turma_id: turmas[1]._id,
-                professor_id: professorIds[1], // Maria
-                materia_id: materias[1]._id // Português
+                turma_id: turmas[ 1 ]._id,
+                professor_id: professorIds[ 1 ], // Maria
+                materia_id: materias[ 1 ]._id // Português
             },
             {
-                turma_id: turmas[1]._id,
-                professor_id: professorIds[2], // Carlos
-                materia_id: materias[5]._id // Química
+                turma_id: turmas[ 1 ]._id,
+                professor_id: professorIds[ 2 ], // Carlos
+                materia_id: materias[ 5 ]._id // Química
             },
             // Turma 3º EM
             {
-                turma_id: turmas[2]._id,
-                professor_id: professorIds[0], // João
-                materia_id: materias[0]._id // Matemática
+                turma_id: turmas[ 2 ]._id,
+                professor_id: professorIds[ 0 ], // João
+                materia_id: materias[ 0 ]._id // Matemática
             },
             {
-                turma_id: turmas[2]._id,
-                professor_id: professorIds[1], // Maria
-                materia_id: materias[2]._id // História
+                turma_id: turmas[ 2 ]._id,
+                professor_id: professorIds[ 1 ], // Maria
+                materia_id: materias[ 2 ]._id // História
             }
         ];
 
@@ -210,27 +210,27 @@ const seedDatabase = async () => {
                 numero: 1,
                 tipo: "objetivo",
                 bimestre: 1,
-                data_realizacao: new Date("2025-02-15"),
-                turma_id: turmas[0]._id,
+                data_realizacao: new Date("2026-02-15"),
+                turma_id: turmas[ 0 ]._id,
                 conteudos: [
                     {
-                        turma_disciplina_id: turmaDisciplinas[0]._id, // Matemática - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 0 ]._id, // Matemática - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 7, nota: (notaMaxima / quantidade_questoes) * 7, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 7, nota: (notaMaxima / quantidade_questoes) * 7, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" }
                         ]
                     },
                     {
-                        turma_disciplina_id: turmaDisciplinas[1]._id, // Português - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 1 ]._id, // Português - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 8, nota: (notaMaxima / quantidade_questoes) * 8, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 8, nota: (notaMaxima / quantidade_questoes) * 8, notificacao_pendente: "pendente" }
                         ]
                     }
                 ]
@@ -239,85 +239,85 @@ const seedDatabase = async () => {
                 numero: 1,
                 tipo: "objetivo",
                 bimestre: 2,
-                data_realizacao: new Date("2025-02-15"),
-                turma_id: turmas[0]._id,
+                data_realizacao: new Date("2026-02-15"),
+                turma_id: turmas[ 0 ]._id,
                 conteudos: [
                     {
-                        turma_disciplina_id: turmaDisciplinas[0]._id, // Matemática - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 0 ]._id, // Matemática - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 5, nota: (notaMaxima / quantidade_questoes) * 5, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 5, nota: (notaMaxima / quantidade_questoes) * 5, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" }
                         ]
                     },
                     {
-                        turma_disciplina_id: turmaDisciplinas[1]._id, // Português - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 1 ]._id, // Português - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 8, nota: (notaMaxima / quantidade_questoes) * 8, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 7, nota: (notaMaxima / quantidade_questoes) * 7, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 8, nota: (notaMaxima / quantidade_questoes) * 8, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 7, nota: (notaMaxima / quantidade_questoes) * 7, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" }
                         ]
                     }
                 ]
             },
-                        {
+            {
                 numero: 1,
                 tipo: "objetivo",
                 bimestre: 3,
-                data_realizacao: new Date("2025-02-15"),
-                turma_id: turmas[0]._id,
+                data_realizacao: new Date("2026-02-15"),
+                turma_id: turmas[ 0 ]._id,
                 conteudos: [
                     {
-                        turma_disciplina_id: turmaDisciplinas[0]._id, // Matemática - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 0 ]._id, // Matemática - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" }
                         ]
                     },
                     {
-                        turma_disciplina_id: turmaDisciplinas[1]._id, // Português - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 1 ]._id, // Português - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" }
                         ]
                     }
                 ]
             },
-                        {
+            {
                 numero: 1,
                 tipo: "objetivo",
                 bimestre: 4,
-                data_realizacao: new Date("2025-02-15"),
-                turma_id: turmas[0]._id,
+                data_realizacao: new Date("2026-02-15"),
+                turma_id: turmas[ 0 ]._id,
                 conteudos: [
                     {
-                        turma_disciplina_id: turmaDisciplinas[0]._id, // Matemática - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 0 ]._id, // Matemática - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 3, nota: (notaMaxima / quantidade_questoes) * 3, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 9, nota: (notaMaxima / quantidade_questoes) * 9, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 3, nota: (notaMaxima / quantidade_questoes) * 3, notificacao_pendente: "pendente" }
                         ]
                     },
                     {
-                        turma_disciplina_id: turmaDisciplinas[1]._id, // Português - Turma 1
+                        turma_disciplina_id: turmaDisciplinas[ 1 ]._id, // Português - Turma 1
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[0], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[1], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[2], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 0 ], acertos: 10, nota: (notaMaxima / quantidade_questoes) * 10, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 1 ], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 2 ], acertos: 6, nota: (notaMaxima / quantidade_questoes) * 6, notificacao_pendente: "pendente" }
                         ]
                     }
                 ]
@@ -326,15 +326,15 @@ const seedDatabase = async () => {
                 numero: 2,
                 tipo: "objetivo",
                 bimestre: 1,
-                data_realizacao: new Date("2025-03-10"),
-                turma_id: turmas[1]._id,
+                data_realizacao: new Date("2026-03-10"),
+                turma_id: turmas[ 1 ]._id,
                 conteudos: [
                     {
-                        turma_disciplina_id: turmaDisciplinas[3]._id, // Matemática - Turma 2
+                        turma_disciplina_id: turmaDisciplinas[ 3 ]._id, // Matemática - Turma 2
                         quantidade_questoes: quantidade_questoes,
                         peso: 100.0,
                         resultados: [
-                            { aluno_id: alunosIds[5], acertos: 8, nota: (notaMaxima / quantidade_questoes) * 8, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 5 ], acertos: 8, nota: (notaMaxima / quantidade_questoes) * 8, notificacao_pendente: "pendente" }
                         ]
                     }
                 ]
@@ -343,16 +343,16 @@ const seedDatabase = async () => {
                 numero: 1,
                 tipo: "dissertativo",
                 bimestre: 2,
-                data_realizacao: new Date("2025-05-20"),
-                turma_id: turmas[2]._id,
+                data_realizacao: new Date("2026-05-20"),
+                turma_id: turmas[ 2 ]._id,
                 conteudos: [
                     {
-                        turma_disciplina_id: turmaDisciplinas[6]._id, // Matemática - Turma 3
+                        turma_disciplina_id: turmaDisciplinas[ 6 ]._id, // Matemática - Turma 3
                         quantidade_questoes: quantidade_questoes,
                         peso: 2.0,
                         resultados: [
-                            { aluno_id: alunosIds[3], acertos: 3, nota: (notaMaxima / quantidade_questoes) * 3, notificacao_pendente: "pendente" },
-                            { aluno_id: alunosIds[4], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" }
+                            { aluno_id: alunosIds[ 3 ], acertos: 3, nota: (notaMaxima / quantidade_questoes) * 3, notificacao_pendente: "pendente" },
+                            { aluno_id: alunosIds[ 4 ], acertos: 4, nota: (notaMaxima / quantidade_questoes) * 4, notificacao_pendente: "pendente" }
                         ]
                     }
                 ]

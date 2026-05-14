@@ -181,7 +181,7 @@ export default class SimuladosController {
                                                         {
                                                             $filter: {
                                                                 input: "$$conteudo.resultados",
-                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
+                                                                cond: { $eq: [ "$$this.aluno_id", "$$aluno._id" ] }
                                                             }
                                                         },
                                                         0
@@ -212,7 +212,7 @@ export default class SimuladosController {
             if (!simulado || simulado.length === 0)
                 return res.status(404).json({ message: 'Simulado não encontrado' });
 
-            res.status(200).json({ simulado: simulado[0] });
+            res.status(200).json({ simulado: simulado[ 0 ] });
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
@@ -307,7 +307,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
+                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
                                     }
                                 },
                                 0
@@ -496,4 +496,113 @@ export default class SimuladosController {
         }
 
     }
+
+    static async getByDisciplina(req, res) {
+        const disciplina_id = req.params.disciplina;
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(disciplina_id))
+            return res.status(422).json({ message: "Id de disciplina invalido", disciplina_id });
+
+        try {
+            // Etapa 1: Buscar todos os simulados da disciplina com notas
+            const simulados = await Simulado.aggregate([
+                { $match: { "conteudos.turma_disciplina_id": new ObjectId(disciplina_id) } },
+                { $unwind: "$conteudos" },
+                { $match: { "conteudos.turma_disciplina_id": new ObjectId(disciplina_id) } },
+                { $unwind: "$conteudos.resultados" },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.resultados.aluno_id',
+                        foreignField: '_id',
+                        as: 'aluno_info'
+                    }
+                },
+                { $unwind: { path: "$aluno_info", preserveNullAndEmptyArrays: true } },
+                {
+                    $project: {
+                        simulado_id: "$_id",
+                        numero: "$numero",
+                        aluno_id: "$conteudos.resultados.aluno_id",
+                        aluno_nome: "$aluno_info.nome",
+                        nota: "$conteudos.resultados.nota"
+                    }
+                }
+            ]);
+
+            if (!simulados || simulados.length === 0)
+                return res.status(404).json({ message: 'Simulados não encontrados' });
+
+            // Processar dados para formato final
+            const mapaAlunos = {};
+            const mapaSimuladoMedia = {};
+            const todasAsNotas = [];
+
+            simulados.forEach(doc => {
+                const alunoId = doc.aluno_id.toString();
+                const simuladoId = doc.simulado_id.toString();
+
+                // Acumular notas dos alunos
+                if (!mapaAlunos[ alunoId ]) {
+                    mapaAlunos[ alunoId ] = {
+                        id: doc.aluno_id,
+                        nome: doc.aluno_nome,
+                        notas: []
+                    };
+                }
+                mapaAlunos[ alunoId ].notas.push(doc.nota);
+                todasAsNotas.push(doc.nota);
+
+                // Acumular notas por simulado
+                if (!mapaSimuladoMedia[ simuladoId ]) {
+                    mapaSimuladoMedia[ simuladoId ] = {
+                        simulado_id: doc.simulado_id,
+                        numero_simulado: doc.numero,
+                        notas: []
+                    };
+                }
+                mapaSimuladoMedia[ simuladoId ].notas.push(doc.nota);
+            });
+
+            // Calcular médias dos alunos
+            const alunos = Object.values(mapaAlunos).map(aluno => ({
+                id: aluno.id,
+                nome: aluno.nome,
+                media: aluno.notas.reduce((a, b) => a + b, 0) / aluno.notas.length
+            }));
+
+            // Calcular médias dos simulados
+            const notasSimulados = Object.values(mapaSimuladoMedia).map(sim => ({
+                simulado_id: sim.simulado_id,
+                numero_simulado: sim.numero_simulado,
+                média: sim.notas.reduce((a, b) => a + b, 0) / sim.notas.length
+            }));
+
+            // Calcular média geral
+            const mediaGeral = todasAsNotas.length > 0 ? todasAsNotas.reduce((a, b) => a + b, 0) / todasAsNotas.length : 0;
+
+            // Calcular distribuição
+            const mediasAlunos = alunos.map(a => a.media);
+            const distribuicao = [
+                { faixa: "<5", quantidade: mediasAlunos.filter(m => m < 5).length },
+                { faixa: "5-7", quantidade: mediasAlunos.filter(m => m >= 5 && m < 7).length },
+                { faixa: ">7", quantidade: mediasAlunos.filter(m => m >= 7).length }
+            ];
+
+            const resposta = {
+                alunos,
+                simulados: {
+                    media: mediaGeral,
+                    notas: notasSimulados
+                },
+                distribuicao
+            };
+
+            res.status(200).json(resposta);
+
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
+        }
+    }
+
 }
