@@ -138,47 +138,42 @@ const seedDatabase = async () => {
             const turma = turmas[ i ];
             const turmaDiscIds = turmaDisciplinas.filter(td => td.turma_id.toString() === turma._id.toString()).map(td => td._id);
             const turmaAlunoIds = turma.alunos;
+            const pesoIgual = 100.0 / turmaDiscIds.length; // Distribuir peso igualmente entre todas as disciplinas
 
             // 3 realizados
             for (let b = 1; b <= 3; b++) {
+                const conteudos = turmaDiscIds.map(discId => ({
+                    turma_disciplina_id: discId,
+                    quantidade_questoes,
+                    peso: pesoIgual,
+                    resultados: gerarResultados(turmaAlunoIds, true)
+                }));
+
                 simuladosData.push({
                     numero: b,
                     tipo: b % 2 === 0 ? "dissertativo" : "objetivo",
                     bimestre: b,
                     data_realizacao: new Date(`2026-0${2 + i}-${10 + b}`),
                     turma_id: turma._id,
-                    conteudos: [
-                        {
-                            turma_disciplina_id: turmaDiscIds[ 0 ],
-                            quantidade_questoes,
-                            peso: 50.0,
-                            resultados: gerarResultados(turmaAlunoIds, true)
-                        },
-                        {
-                            turma_disciplina_id: turmaDiscIds[ 1 % turmaDiscIds.length ],
-                            quantidade_questoes,
-                            peso: 50.0,
-                            resultados: gerarResultados(turmaAlunoIds, true)
-                        }
-                    ]
+                    conteudos
                 });
             }
 
             // 1 marcado (futuro) — sem resultados
+            const conteudosAgendado = turmaDiscIds.map(discId => ({
+                turma_disciplina_id: discId,
+                quantidade_questoes,
+                peso: pesoIgual,
+                resultados: []
+            }));
+
             simuladosData.push({
                 numero: 99 + i, // identificar como agendado
                 tipo: "objetivo",
                 bimestre: 0,
                 data_realizacao: new Date(`2026-12-${10 + i}`),
                 turma_id: turma._id,
-                conteudos: [
-                    {
-                        turma_disciplina_id: turmaDiscIds[ 2 % turmaDiscIds.length ],
-                        quantidade_questoes,
-                        peso: 100.0,
-                        resultados: []
-                    }
-                ]
+                conteudos: conteudosAgendado
             });
         }
 

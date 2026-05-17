@@ -53,7 +53,7 @@ routes.get('/Simulado/Simple/:id', authenticateToken, authorizeAdmin, SimuladosC
 
 // Mobilie routes
 routes.get("/Turmas/ano=:ano/professor=:professor", TurmasController.getByAnoAndProfessor);
-routes.get('/Simulado/Disciplina/id=:disciplina', SimuladosController.getByDisciplina);
+routes.get('/Simulado/Disciplina/id=:disciplina', SimuladosController.getDesempenhoByDisciplina);
 
 export default routes;
 

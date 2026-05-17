@@ -497,7 +497,7 @@ export default class SimuladosController {
 
     }
 
-    static async getByDisciplina(req, res) {
+    static async getDesempenhoByDisciplina(req, res) {
         const disciplina_id = req.params.disciplina;
         const ObjectId = Types.ObjectId;
         if (!ObjectId.isValid(disciplina_id))
@@ -575,7 +575,7 @@ export default class SimuladosController {
             const notasSimulados = Object.values(mapaSimuladoMedia).map(sim => ({
                 simulado_id: sim.simulado_id,
                 numero_simulado: sim.numero_simulado,
-                média: sim.notas.reduce((a, b) => a + b, 0) / sim.notas.length
+                media: sim.notas.reduce((a, b) => a + b, 0) / sim.notas.length
             }));
 
             // Calcular média geral
