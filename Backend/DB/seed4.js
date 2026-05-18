@@ -133,14 +133,18 @@ const seedDatabase = async () => {
             });
         };
 
-        // Para cada turma: 3 realizados (datas passadas) + 1 marcado (data futura)
+        // Para cada turma: criar simulados (passados e futuros), depois numerar em ordem cronológica por turma
+        const agora = new Date();
         for (let i = 0; i < turmas.length; i++) {
-            const turma = turmas[ i ];
+            const turma = turmas[i];
             const turmaDiscIds = turmaDisciplinas.filter(td => td.turma_id.toString() === turma._id.toString()).map(td => td._id);
             const turmaAlunoIds = turma.alunos;
             const pesoIgual = 100.0 / turmaDiscIds.length; // Distribuir peso igualmente entre todas as disciplinas
 
-            // 3 realizados
+            // montar lista temporária de simulados desta turma
+            const turmaSimulados = [];
+
+            // 3 realizados: datas relativas no passado
             for (let b = 1; b <= 3; b++) {
                 const conteudos = turmaDiscIds.map(discId => ({
                     turma_disciplina_id: discId,
@@ -149,17 +153,20 @@ const seedDatabase = async () => {
                     resultados: gerarResultados(turmaAlunoIds, true)
                 }));
 
-                simuladosData.push({
-                    numero: b,
+                const dataPassada = new Date(agora);
+                dataPassada.setDate(agora.getDate() - (10 * b + i));
+
+                turmaSimulados.push({
+                    // numero será atribuído depois com base na ordem de data_realizacao
                     tipo: b % 2 === 0 ? "dissertativo" : "objetivo",
                     bimestre: b,
-                    data_realizacao: new Date(`2026-0${2 + i}-${10 + b}`),
+                    data_realizacao: dataPassada,
                     turma_id: turma._id,
                     conteudos
                 });
             }
 
-            // 1 marcado (futuro) — sem resultados
+            // 2 agendados (futuros) — sem resultados
             const conteudosAgendado = turmaDiscIds.map(discId => ({
                 turma_disciplina_id: discId,
                 quantidade_questoes,
@@ -167,14 +174,34 @@ const seedDatabase = async () => {
                 resultados: []
             }));
 
-            simuladosData.push({
-                numero: 99 + i, // identificar como agendado
+            // agendar dois simulados futuros em datas diferentes
+            const dataFutura1 = new Date(agora);
+            dataFutura1.setDate(agora.getDate() + 7 + i);
+            const dataFutura2 = new Date(agora);
+            dataFutura2.setDate(agora.getDate() + 14 + i);
+
+            turmaSimulados.push({
                 tipo: "objetivo",
                 bimestre: 0,
-                data_realizacao: new Date(`2026-12-${10 + i}`),
+                data_realizacao: dataFutura1,
                 turma_id: turma._id,
                 conteudos: conteudosAgendado
             });
+
+            turmaSimulados.push({
+                tipo: "objetivo",
+                bimestre: 0,
+                data_realizacao: dataFutura2,
+                turma_id: turma._id,
+                conteudos: conteudosAgendado
+            });
+
+            // ordenar por data_realizacao (cronológico crescente) e numerar 1..N por turma
+            turmaSimulados.sort((a, b) => new Date(a.data_realizacao).getTime() - new Date(b.data_realizacao).getTime());
+            turmaSimulados.forEach((s, idx) => { s.numero = idx + 1; });
+
+            // anexar ao array global
+            simuladosData.push(...turmaSimulados);
         }
 
         const simulados = await Simulado.insertMany(simuladosData);

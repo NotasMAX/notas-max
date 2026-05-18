@@ -167,6 +167,7 @@ export default class TurmasController {
         try {
             const ano = req.params.ano;
             const professor = req.params.professor;
+            const dataAtual = new Date();
 
             if (!ano) {
                 return res.status(422).json({ message: "Ano é obrigatório." });
@@ -220,7 +221,7 @@ export default class TurmasController {
             });
 
             const mediasPorTurma = await Simulado.aggregate([
-                { $match: { turma_id: { $in: turmas.map(turma => turma._id) } } },
+                { $match: { turma_id: { $in: turmas.map(turma => turma._id) }, data_realizacao: { $lt: dataAtual } } },
                 { $unwind: "$conteudos" },
                 { $unwind: "$conteudos.resultados" },
                 {

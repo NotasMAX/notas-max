@@ -505,9 +505,10 @@ export default class SimuladosController {
             return res.status(422).json({ message: "Id de disciplina invalido", disciplina_id });
 
         try {
+            const dataAtual = new Date();
             // Etapa 1: Buscar todos os simulados da disciplina com notas
             const simulados = await Simulado.aggregate([
-                { $match: { "conteudos.turma_disciplina_id": new ObjectId(disciplina_id) } },
+                { $match: { "conteudos.turma_disciplina_id": new ObjectId(disciplina_id), data_realizacao: { $lt: dataAtual } } },
                 { $unwind: "$conteudos" },
                 { $match: { "conteudos.turma_disciplina_id": new ObjectId(disciplina_id) } },
                 { $unwind: "$conteudos.resultados" },
@@ -616,6 +617,7 @@ export default class SimuladosController {
             return res.status(422).json({ message: "Informe um ano válido (número positivo)", ano });
 
         try {
+            const dataAtual = new Date();
             const turmas = await Turmas.find({ ano: Number(ano) });
             if (!turmas || turmas.length === 0) {
                 return res.status(200).json({
@@ -627,7 +629,7 @@ export default class SimuladosController {
             const turmaIds = turmas.map(turma => turma._id);
 
             const simulados = await Simulado.aggregate([
-                { $match: { turma_id: { $in: turmaIds } } },
+                { $match: { turma_id: { $in: turmaIds }, data_realizacao: { $lt: dataAtual } } },
                 { $unwind: "$conteudos" },
                 { $unwind: "$conteudos.resultados" },
                 { $match: { "conteudos.resultados.aluno_id": new ObjectId(aluno_id) } },
@@ -708,6 +710,62 @@ export default class SimuladosController {
                 materias,
                 simulados: simuladosResult
             });
+
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar desempenho", error });
+        }
+    }
+    static async getSimuladosByAnoAndAluno(req, res) {
+        const aluno_id = req.params.aluno;
+        const ano = req.params.ano;
+
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de aluno invalido", aluno_id });
+        if (!ano || isNaN(Number(ano)) || Number(ano) <= 0)
+            return res.status(422).json({ message: "Informe um ano válido (número positivo)", ano });
+
+        try {
+            // 1. Encontrar a turma do aluno no ano especificado
+            const turmaDoAluno = await Turmas.findOne({ 
+                ano: Number(ano), 
+                alunos: new ObjectId(aluno_id)
+            });
+
+            if (!turmaDoAluno) {
+                return res.status(200).json({ simulados: [] });
+            }
+
+            // 2. Buscar todos os simulados cadastrados nessa turma
+            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id }).sort("data_realizacao");
+
+            // 3. Calcular a média do aluno para cada simulado
+            const resultado = simulados.map(sim => {
+                const notasAluno = [];
+                
+                if (Array.isArray(sim.conteudos)) {
+                    sim.conteudos.forEach(conteudo => {
+                        if (Array.isArray(conteudo.resultados)) {
+                            conteudo.resultados.forEach(r => {
+                                if (r.aluno_id && r.aluno_id.toString() === aluno_id.toString()) {
+                                    if (typeof r.nota === 'number') notasAluno.push(r.nota);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                const media = notasAluno.length > 0 ? (notasAluno.reduce((a, b) => a + b, 0) / notasAluno.length) : 0;
+
+                return {
+                    id: sim._id,
+                    numero: sim.numero,
+                    data_realizacao: sim.data_realizacao,
+                    media: Number(media.toFixed(2))
+                };
+            });
+
+            return res.status(200).json({ simulados: resultado });
 
         } catch (error) {
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
