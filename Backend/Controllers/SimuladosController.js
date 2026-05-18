@@ -1,4 +1,5 @@
 import Simulado from '../Models/Simulado.js';
+import Turmas from '../Models/Turma.js';
 import './TurmasController.js';
 import { Types } from 'mongoose';
 import TurmasController from './TurmasController.js';
@@ -604,5 +605,112 @@ export default class SimuladosController {
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
     }
+    static async getDesempenhoByAnoAndAluno(req, res) {
+        const aluno_id = req.params.aluno;
+        const ano = req.params.ano;
 
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de aluno invalido", aluno_id });
+        if (!ano || isNaN(Number(ano)) || Number(ano) <= 0)
+            return res.status(422).json({ message: "Informe um ano válido (número positivo)", ano });
+
+        try {
+            const turmas = await Turmas.find({ ano: Number(ano) });
+            if (!turmas || turmas.length === 0) {
+                return res.status(200).json({
+                    materias: [],
+                    simulados: []
+                });
+            }
+
+            const turmaIds = turmas.map(turma => turma._id);
+
+            const simulados = await Simulado.aggregate([
+                { $match: { turma_id: { $in: turmaIds } } },
+                { $unwind: "$conteudos" },
+                { $unwind: "$conteudos.resultados" },
+                { $match: { "conteudos.resultados.aluno_id": new ObjectId(aluno_id) } },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'turma_disciplina'
+                    }
+                },
+                { $unwind: { path: "$turma_disciplina", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'materia'
+                    }
+                },
+                { $unwind: { path: "$materia", preserveNullAndEmptyArrays: true } },
+                {
+                    $project: {
+                        simulado_id: "$_id",
+                        numero: "$numero",
+                        data: "$data_realizacao",
+                        materia_id: "$materia._id",
+                        materia_nome: "$materia.nome",
+                        nota: "$conteudos.resultados.nota"
+                    }
+                }
+            ]);
+
+            if (!simulados || simulados.length === 0) {
+                return res.status(200).json({
+                    materias: [],
+                    simulados: []
+                });
+            }
+
+            const materiasMap = {};
+            const simuladosMap = {};
+
+            simulados.forEach(item => {
+                const materiaId = item.materia_id ? item.materia_id.toString() : 'unknown';
+                const simuladoId = item.simulado_id.toString();
+
+                if (!materiasMap[ materiaId ]) {
+                    materiasMap[ materiaId ] = {
+                        nome: item.materia_nome || 'Desconhecida',
+                        notas: []
+                    };
+                }
+                materiasMap[ materiaId ].notas.push(item.nota);
+
+                if (!simuladosMap[ simuladoId ]) {
+                    simuladosMap[ simuladoId ] = {
+                        numero: item.numero,
+                        data: item.data,
+                        notas: []
+                    };
+                }
+                simuladosMap[ simuladoId ].notas.push(item.nota);
+            });
+
+            const materias = Object.values(materiasMap).map(m => ({
+                nome: m.nome,
+                media: Number((m.notas.reduce((a, b) => a + b, 0) / m.notas.length).toFixed(2))
+            }));
+
+            const simuladosResult = Object.values(simuladosMap).map(s => ({
+                numero: s.numero,
+                media: Number((s.notas.reduce((a, b) => a + b, 0) / s.notas.length).toFixed(2)),
+                data: s.data
+            }));
+
+            return res.status(200).json({
+                materias,
+                simulados: simuladosResult
+            });
+
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar desempenho", error });
+        }
+    }
 }
