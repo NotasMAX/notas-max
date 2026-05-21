@@ -866,5 +866,89 @@ export default class SimuladosController {
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }
+     static async getSimuladosByAnoAndAluno(req, res) {
+        const aluno_id = req.params.aluno;
+        const ano = req.params.ano;
+
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de aluno invalido", aluno_id });
+        if (!ano || isNaN(Number(ano)) || Number(ano) <= 0)
+            return res.status(422).json({ message: "Informe um ano válido (número positivo)", ano });
+
+        try {
+            // 1. Encontrar a turma do aluno no ano especificado
+            const turmaDoAluno = await Turmas.findOne({
+                ano: Number(ano),
+                alunos: new ObjectId(aluno_id)
+            });
+
+            if (!turmaDoAluno) {
+                return res.status(200).json({ simulados: [] });
+            }
+
+            // 2. Buscar todos os simulados cadastrados nessa turma
+            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id }).sort("data_realizacao");
+
+            // 3. Calcular a média do aluno para cada simulado
+            const resultado = simulados.map(sim => {
+                const notasAluno = [];
+
+                if (Array.isArray(sim.conteudos)) {
+                    sim.conteudos.forEach(conteudo => {
+                        if (Array.isArray(conteudo.resultados)) {
+                            conteudo.resultados.forEach(r => {
+                                if (r.aluno_id && r.aluno_id.toString() === aluno_id.toString()) {
+                                    if (typeof r.nota === 'number') notasAluno.push(r.nota);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                const media = notasAluno.length > 0 ? (notasAluno.reduce((a, b) => a + b, 0) / notasAluno.length) : 0;
+
+                return {
+                    id: sim._id,
+                    numero: sim.numero,
+                    data_realizacao: sim.data_realizacao,
+                    media: Number(media.toFixed(2))
+                };
+            });
+
+            return res.status(200).json({ simulados: resultado });
+
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar desempenho", error });
+        }
+    }
+    static async getCalendarioByAluno(req, res) {
+        const aluno_id = req.params.aluno;
+        const anoAtual = new Date().getFullYear();
+
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de aluno invalido", aluno_id });
+
+        try {
+            const turmaDoAluno = await Turmas.findOne({
+                ano: anoAtual,
+                alunos: new ObjectId(aluno_id)
+            });
+
+            if (!turmaDoAluno) {
+                return res.status(200).json({ simulados: [] });
+            }
+
+            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id })
+                .sort({ data_realizacao: 1, numero: 1 })
+                .select({ numero: 1, data_realizacao: 1, tipo: 1, _id: 0 });
+
+            return res.status(200).json({ simulados });
+
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar calendário do aluno", error: error.message });
+        }
+    }
 
 }

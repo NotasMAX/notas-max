@@ -57,5 +57,6 @@ routes.get('/Simulado/Disciplina/id=:disciplina', SimuladosController.getDesempe
 routes.get('/Desempenho/ano=:ano/aluno=:aluno', SimuladosController.getDesempenhoByAnoAndAluno);
 routes.get('/Simulados/ano=:ano/aluno=:aluno', SimuladosController.getSimuladosByAnoAndAluno);
 routes.get('/Desempenho/aluno=:aluno/simulado=:simulado', SimuladosController.getDesempenhoAlunoBySimulado);
+routes.get('/Calendario/aluno=:aluno', SimuladosController.getCalendarioByAluno);
 export default routes;
 
