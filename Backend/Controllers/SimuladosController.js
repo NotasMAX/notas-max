@@ -727,8 +727,8 @@ export default class SimuladosController {
 
         try {
             // 1. Encontrar a turma do aluno no ano especificado
-            const turmaDoAluno = await Turmas.findOne({ 
-                ano: Number(ano), 
+            const turmaDoAluno = await Turmas.findOne({
+                ano: Number(ano),
                 alunos: new ObjectId(aluno_id)
             });
 
@@ -742,7 +742,7 @@ export default class SimuladosController {
             // 3. Calcular a média do aluno para cada simulado
             const resultado = simulados.map(sim => {
                 const notasAluno = [];
-                
+
                 if (Array.isArray(sim.conteudos)) {
                     sim.conteudos.forEach(conteudo => {
                         if (Array.isArray(conteudo.resultados)) {
@@ -771,4 +771,100 @@ export default class SimuladosController {
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }
+    static async getDesempenhoAlunoBySimulado(req, res) {
+        const simulado_id = req.params.simulado;
+        const aluno_id = req.params.aluno;
+
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(simulado_id))
+            return res.status(422).json({ message: "Id de simulado invalido", simulado_id });
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de aluno invalido", aluno_id });
+
+        try {
+            const simulado = await Simulado.aggregate([
+                { $match: { _id: new ObjectId(simulado_id) } },
+                {
+                    $unwind: {
+                        path: "$conteudos",
+                        includeArrayIndex: "conteudo_index"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'turma_disciplina'
+                    }
+                },
+                { $unwind: { path: "$turma_disciplina", preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'materia'
+                    }
+                },
+                { $unwind: { path: "$materia", preserveNullAndEmptyArrays: true } },
+                {
+                    $addFields: {
+                        resultado_aluno: {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: "$conteudos.resultados",
+                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
+                                    }
+                                },
+                                0
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        numero: { $first: "$numero" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        disciplinas: {
+                            $push: {
+                                ordem: "$conteudo_index",
+                                materia_nome: "$materia.nome",
+                                nota: "$resultado_aluno.nota"
+                            }
+                        }
+                    }
+                }
+            ]);
+
+            if (!simulado || simulado.length === 0) {
+                return res.status(404).json({ message: 'Simulado não encontrado' });
+            }
+
+            const disciplinas = simulado[ 0 ].disciplinas
+                .filter(item => item.materia_nome !== undefined && item.nota !== undefined && item.nota !== null)
+                .sort((a, b) => a.ordem - b.ordem)
+                .map(item => ({
+                    materia_nome: item.materia_nome,
+                    nota: item.nota
+                }));
+
+            const media = disciplinas.length > 0
+                ? disciplinas.reduce((soma, disciplina) => soma + disciplina.nota, 0) / disciplinas.length
+                : 0;
+
+            return res.status(200).json({
+                numero: simulado[ 0 ].numero,
+                data_realizacao: simulado[ 0 ].data_realizacao,
+                media: Number(media.toFixed(2)),
+                disciplinas
+            });
+
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar desempenho", error });
+        }
+    }
+
 }

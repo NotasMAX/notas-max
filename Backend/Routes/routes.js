@@ -51,10 +51,11 @@ routes.patch('/Simulado/AtualizarConteudos/:id', authenticateToken, authorizeAdm
 routes.get('/Simulado/Simple/:id', authenticateToken, authorizeAdmin, SimuladosController.getOneSimple);
 
 
-// Mobilie routes
+// Mobile routes
 routes.get("/Turmas/ano=:ano/professor=:professor", TurmasController.getByAnoAndProfessor);
 routes.get('/Simulado/Disciplina/id=:disciplina', SimuladosController.getDesempenhoByDisciplina);
 routes.get('/Desempenho/ano=:ano/aluno=:aluno', SimuladosController.getDesempenhoByAnoAndAluno);
 routes.get('/Simulados/ano=:ano/aluno=:aluno', SimuladosController.getSimuladosByAnoAndAluno);
+routes.get('/Desempenho/aluno=:aluno/simulado=:simulado', SimuladosController.getDesempenhoAlunoBySimulado);
 export default routes;
 
