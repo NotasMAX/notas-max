@@ -496,4 +496,104 @@ export default class SimuladosController {
         }
 
     }
+
+    static async getByAluno(req, res){
+        const aluno_id = req.params.aluno; 
+
+        const ObjectId = Types.ObjectId;  
+        
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de Aluno inválido", aluno_id });
+
+        try {
+            const simulados = await Simulado.aggregate([
+                {
+                    $match: {
+                        "conteudos.resultados.aluno_id": new ObjectId(aluno_id),
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: '$turma' },
+                { $unwind: '$conteudos' },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'conteudos.turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.materia'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.materia', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.turma_disciplina.professor_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.professor'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.professor', preserveNullAndEmptyArrays: true } },
+                {
+                    $addFields: {
+                        "conteudos.resultado_aluno": {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: "$conteudos.resultados",
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
+                                    }
+                                },
+                                0
+                            ]
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        turma: { $first: "$turma" },
+                        conteudos: {
+                            $push: {
+                                turma_disciplina: {
+                                    _id: "$conteudos.turma_disciplina._id",
+                                    turma_id: "$conteudos.turma_disciplina.turma_id",
+                                    professor_id: "$conteudos.turma_disciplina.professor_id",
+                                    professor: "$conteudos.turma_disciplina.professor.nome",
+                                    materia_id: "$conteudos.turma_disciplina.materia_id",
+                                    materia: "$conteudos.turma_disciplina.materia.nome",
+                                },
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                peso: "$conteudos.peso",
+                                resultados: "$conteudos.resultado_aluno"
+                            }
+                        }
+                    }
+                },
+                { $sort: { data_realizacao: -1, numero: -1 } }
+            ]);
+            res.status(200).json({ simulados });
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar notas do aluno', error: error.message })
+        }
+    }
 }

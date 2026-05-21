@@ -24,7 +24,7 @@ routes.get("/Turmas/Disciplinas/:turma_disciplina_id",authenticateToken, authori
 routes.get("/Usuarios/Professores",authenticateToken, authorizeAdmin, UsuariosController.listarProfessores);
 routes.get("/Usuarios/Alunos",authenticateToken, authorizeAdmin, UsuariosController.listarAlunos);
 routes.get("/Usuarios/Aluno/:id/desempenho", authenticateToken, authorizeAdmin, UsuariosController.getDesempenhoByAluno);
-routes.get("/Usuarios/Detalhes/:id",authenticateToken, authorizeAdmin, UsuariosController.getUsuario);
+routes.get("/Usuarios/Detalhes/:id",authenticateToken, UsuariosController.getUsuario); // removido authorizeAdmin - utilizado para acessar as informações do usuario
 routes.put("/Usuarios/Editar/:id",authenticateToken, authorizeAdmin, UsuariosController.atualizarUsuario);
 routes.post("/Usuarios/Professor",authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
 routes.post("/Usuarios/Aluno",authenticateToken, authorizeAdmin, UsuariosController.cadastrarAluno);
@@ -50,5 +50,7 @@ routes.get('/Simulados/Turma/:id',authenticateToken, authorizeAdmin, SimuladosCo
 routes.patch('/Simulado/AtualizarConteudos/:id',authenticateToken, authorizeAdmin, SimuladosController.atualizarConteudos);
 routes.get('/Simulado/Simple/:id', authenticateToken, authorizeAdmin, SimuladosController.getOneSimple);
 
-export default routes;
+// Metodos mobile
+routes.get('/Simulados/getByAluno/:aluno', authenticateToken, SimuladosController.getByAluno);
 
+export default routes;
