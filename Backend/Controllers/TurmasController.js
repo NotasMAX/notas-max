@@ -156,11 +156,110 @@ export default class TurmasController {
             if (!turma || turma.length === 0) {
                 return res.status(404).json({ message: "Turma não encontrada." });
             }
-            const turmaData = turma[0];
+            const turmaData = turma[ 0 ];
             res.status(200).json({ turma: turmaData });
         } catch (error) {
             res.status(500).json({ message: "Erro ao buscar a Turma", error });
         }
+    }
+
+    static async getByAnoAndProfessor(req, res) {
+        try {
+            const ano = req.params.ano;
+            const professor = req.params.professor;
+            const dataAtual = new Date();
+
+            if (!ano) {
+                return res.status(422).json({ message: "Ano é obrigatório." });
+            }
+            if (!professor) {
+                return res.status(422).json({ message: "Id do professor é obrigatório." });
+            }
+
+            const turmasDoAno = await Turmas.find({ ano }).sort("serie");
+            if (!turmasDoAno || turmasDoAno.length === 0) {
+                return res.status(404).json({ message: "Nenhuma turma encontrada para o ano especificado." });
+            }
+
+            const disciplinas = await TurmaDisciplina.find({
+                professor_id: professor,
+                turma_id: { $in: turmasDoAno.map(turma => turma._id) }
+            });
+
+            if (!disciplinas || disciplinas.length === 0) {
+                return res.status(200).json({
+                    total_alunos: 0,
+                    total_turmas: 0,
+                    turmas: []
+                });
+            }
+
+            const turmasComProfessorIds = [
+                ...new Set(disciplinas.map(d => d.turma_id.toString()))
+            ];
+
+            const turmas = turmasDoAno.filter(turma => turmasComProfessorIds.includes(turma._id.toString()));
+            const materias = await Materia.find({ _id: { $in: disciplinas.map(d => d.materia_id) } });
+
+            const materiaMap = {};
+            materias.forEach(materia => {
+                materiaMap[ materia._id.toString() ] = materia.nome;
+            });
+
+            const disciplinasPorTurma = {};
+            disciplinas.forEach(disciplina => {
+                const turmaId = disciplina.turma_id.toString();
+                if (!disciplinasPorTurma[ turmaId ]) {
+                    disciplinasPorTurma[ turmaId ] = [];
+                }
+
+                disciplinasPorTurma[ turmaId ].push({
+                    disciplinaId: disciplina._id,
+                    materiaId: disciplina.materia_id,
+                    materiaNome: materiaMap[ disciplina.materia_id.toString() ] || null
+                });
+            });
+
+            const mediasPorTurma = await Simulado.aggregate([
+                { $match: { turma_id: { $in: turmas.map(turma => turma._id) }, data_realizacao: { $lt: dataAtual } } },
+                { $unwind: "$conteudos" },
+                { $unwind: "$conteudos.resultados" },
+                {
+                    $group: {
+                        _id: "$turma_id",
+                        media: { $avg: "$conteudos.resultados.nota" }
+                    }
+                }
+            ]);
+
+            const mediaPorTurmaMap = {};
+            mediasPorTurma.forEach(item => {
+                mediaPorTurmaMap[ item._id.toString() ] = item.media;
+            });
+
+            const totalAlunos = new Set();
+            const turmasResumo = turmas.map(turma => {
+                const alunos = Array.isArray(turma.alunos) ? turma.alunos : [];
+                alunos.forEach(aluno => totalAlunos.add(aluno.toString()));
+
+                return {
+                    turmaId: turma._id,
+                    serie: turma.serie,
+                    quantidade_alunos: new Set(alunos.map(aluno => aluno.toString())).size,
+                    media: Number((mediaPorTurmaMap[ turma._id.toString() ] || 0).toFixed(2)),
+                    disciplinas: disciplinasPorTurma[ turma._id.toString() ] || []
+                };
+            });
+
+            return res.status(200).json({
+                total_alunos: totalAlunos.size,
+                total_turmas: turmasResumo.length,
+                turmas: turmasResumo
+            });
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao buscar resumo por professor", error });
+        }
+
     }
 
     static async getByAno(req, res) {
@@ -291,7 +390,7 @@ export default class TurmasController {
                 { $sort: { _id: 1 } }
             ]);
 
-            const desempenho = [1, 2, 3, 4].map(bi => {
+            const desempenho = [ 1, 2, 3, 4 ].map(bi => {
                 const f = medias.find(m => m._id === bi);
                 return {
                     bimestre: bi,
@@ -307,75 +406,75 @@ export default class TurmasController {
                 desempenho
             });
 
-    } catch (error) {
-      res.status(500).json({ message: "Erro ao buscar desempenho da turma", error });
-    }
-  }
-
-  static async getDesempenhoMaterias(req, res) {
-    const { id } = req.params; 
-    const bimestre = Number(req.query.bimestre) || 1;
-
-    if (!Types.ObjectId.isValid(id)) {
-        return res.status(422).json({ message: "Id da turma inválido" });
+        } catch (error) {
+            res.status(500).json({ message: "Erro ao buscar desempenho da turma", error });
+        }
     }
 
-    try {
-        const turma = await Turmas.findById(id);
-        if (!turma) {
-            return res.status(404).json({ message: "Turma não encontrada." });
+    static async getDesempenhoMaterias(req, res) {
+        const { id } = req.params;
+        const bimestre = Number(req.query.bimestre) || 1;
+
+        if (!Types.ObjectId.isValid(id)) {
+            return res.status(422).json({ message: "Id da turma inválido" });
         }
 
-        const disciplinas = await TurmaDisciplina.find({ turma_id: id });
+        try {
+            const turma = await Turmas.findById(id);
+            if (!turma) {
+                return res.status(404).json({ message: "Turma não encontrada." });
+            }
 
-        if (disciplinas.length === 0) {
-            return res.status(200).json({
-                turma,
-                materias: []
+            const disciplinas = await TurmaDisciplina.find({ turma_id: id });
+
+            if (disciplinas.length === 0) {
+                return res.status(200).json({
+                    turma,
+                    materias: []
+                });
+            }
+
+            const disciplinaToMateria = {};
+            for (const d of disciplinas) {
+                const materia = await Materia.findById(d.materia_id);
+                disciplinaToMateria[ d._id.toString() ] = materia?.nome || "Sem nome";
+            }
+
+            const simulados = await Simulado.find({
+                turma_id: id,
+                bimestre
             });
-        }
 
-        const disciplinaToMateria = {};
-        for (const d of disciplinas) {
-            const materia = await Materia.findById(d.materia_id);
-            disciplinaToMateria[d._id.toString()] = materia?.nome || "Sem nome";
-        }
+            const materiasData = {};
 
-        const simulados = await Simulado.find({
-            turma_id: id,
-            bimestre
-        });
+            for (const sim of simulados) {
+                for (const conteudo of sim.conteudos) {
 
-        const materiasData = {};
+                    const td_id = conteudo.turma_disciplina_id.toString();
 
-        for (const sim of simulados) {
-            for (const conteudo of sim.conteudos) {
-                
-                const td_id = conteudo.turma_disciplina_id.toString();
+                    if (!materiasData[ td_id ]) {
+                        materiasData[ td_id ] = { soma: 0, qtd: 0 };
+                    }
 
-                if (!materiasData[td_id]) {
-                    materiasData[td_id] = { soma: 0, qtd: 0 };
-                }
-
-                for (const r of conteudo.resultados) {
-                    materiasData[td_id].soma += r.nota;
-                    materiasData[td_id].qtd += 1;
+                    for (const r of conteudo.resultados) {
+                        materiasData[ td_id ].soma += r.nota;
+                        materiasData[ td_id ].qtd += 1;
+                    }
                 }
             }
-        }
 
-        const materiasFinal = Object.keys(materiasData).map(td_id => {
-            const { soma, qtd } = materiasData[td_id];
-            return {
-                nome: disciplinaToMateria[td_id] || "Desconhecida",
-                media: qtd > 0 ? Number((soma / qtd).toFixed(2)) : 0
-            };
-        });
+            const materiasFinal = Object.keys(materiasData).map(td_id => {
+                const { soma, qtd } = materiasData[ td_id ];
+                return {
+                    nome: disciplinaToMateria[ td_id ] || "Desconhecida",
+                    media: qtd > 0 ? Number((soma / qtd).toFixed(2)) : 0
+                };
+            });
 
-        return res.status(200).json({
-            turma,
-            materias: materiasFinal
-        });
+            return res.status(200).json({
+                turma,
+                materias: materiasFinal
+            });
 
         } catch (err) {
             return res.status(500).json({ message: "Erro interno", error: err });
@@ -389,4 +488,5 @@ export default class TurmasController {
             throw error;
         }
     }
+
 }
