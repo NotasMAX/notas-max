@@ -46,6 +46,8 @@ export const login = async (req, res) => {
         nome: usuario.nome,
         email: usuario.email,
         tipo_usuario: usuario.tipo_usuario,
+        nome_responsavel: usuario.nome_responsavel,
+        telefone_responsavel: usuario.telefone_responsavel
       },
     });
   } catch (error) {
