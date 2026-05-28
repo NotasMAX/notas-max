@@ -182,7 +182,7 @@ export default class SimuladosController {
                                                         {
                                                             $filter: {
                                                                 input: "$$conteudo.resultados",
-                                                                cond: { $eq: [ "$$this.aluno_id", "$$aluno._id" ] }
+                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
                                                             }
                                                         },
                                                         0
@@ -213,7 +213,7 @@ export default class SimuladosController {
             if (!simulado || simulado.length === 0)
                 return res.status(404).json({ message: 'Simulado não encontrado' });
 
-            res.status(200).json({ simulado: simulado[ 0 ] });
+            res.status(200).json({ simulado: simulado[0] });
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
@@ -308,7 +308,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
                                 },
                                 0
@@ -499,200 +499,201 @@ export default class SimuladosController {
     }
 
     static async getByAluno(req, res) {
-    const aluno_id = req.params.aluno;
-    const ObjectId = Types.ObjectId;
+        const aluno_id = req.params.aluno;
+        const ObjectId = Types.ObjectId;
 
-    if (!ObjectId.isValid(aluno_id))
-        return res.status(422).json({ message: "Id de Aluno inválido", aluno_id });
+        if (!ObjectId.isValid(aluno_id))
+            return res.status(422).json({ message: "Id de Aluno inválido", aluno_id });
 
-    try {
-        const simulados = await Simulado.aggregate([
-            {
-                $match: {
-                    "conteudos.resultados.aluno_id": new ObjectId(aluno_id),
-                }
-            },
-            { $unwind: '$conteudos' },
-            {
-                $lookup: {
-                    from: 'turmadisciplinas',
-                    localField: 'conteudos.turma_disciplina_id',
-                    foreignField: '_id',
-                    as: 'conteudos.turma_disciplina'
-                }
-            },
-            { $unwind: { path: '$conteudos.turma_disciplina', preserveNullAndEmptyArrays: true } },
-            {
-                $lookup: {
-                    from: 'materias',
-                    localField: 'conteudos.turma_disciplina.materia_id',
-                    foreignField: '_id',
-                    as: 'conteudos.turma_disciplina.materia'
-                }
-            },
-            { $unwind: { path: '$conteudos.turma_disciplina.materia', preserveNullAndEmptyArrays: true } },
-            {
-                $lookup: {
-                    from: 'usuarios',
-                    localField: 'conteudos.turma_disciplina.professor_id',
-                    foreignField: '_id',
-                    as: 'conteudos.turma_disciplina.professor'
-                }
-            },
-            { $unwind: { path: '$conteudos.turma_disciplina.professor', preserveNullAndEmptyArrays: true } },
-            // Extrai apenas o resultado do aluno solicitado
-            {
-                $addFields: {
-                    "conteudos.resultado_aluno": {
-                        $arrayElemAt: [
-                            {
-                                $filter: {
-                                    input: "$conteudos.resultados",
-                                    cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
-                                }
-                            },
-                            0
-                        ]
+        try {
+            const simulados = await Simulado.aggregate([
+                {
+                    $match: {
+                        "conteudos.resultados.aluno_id": new ObjectId(aluno_id),
                     }
-                }
-            },
-            // Remonta cada simulado agrupando as matérias já formatadas
-            {
-                $group: {
-                    _id: "$_id",
-                    numero: { $first: "$numero" },
-                    tipo: { $first: "$tipo" },
-                    bimestre: { $first: "$bimestre" },
-                    data_realizacao: { $first: "$data_realizacao" },
-                    materias: {
-                        $push: {
-                            materia_id: "$conteudos.turma_disciplina.materia_id",
-                            materia: "$conteudos.turma_disciplina.materia.nome",
-                            professor: "$conteudos.turma_disciplina.professor.nome",
-                            quantidade_questoes: "$conteudos.quantidade_questoes",
-                            acertos: "$conteudos.resultado_aluno.acertos",
-                            nota: "$conteudos.resultado_aluno.nota"
-                        }
+                },
+                { $unwind: '$conteudos' },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
                     }
-                }
-            },
-            // Calcula a média do simulado (média simples das notas das matérias)
-            {
-                $addFields: {
-                    media_simulado: { $avg: "$materias.nota" }
-                }
-            },
-            { $sort: { bimestre: 1, numero: 1 } },
-            // Agrupa tudo em um único documento para calcular médias gerais
-            {
-                $group: {
-                    _id: null,
-                    simulados: {
-                        $push: {
-                            id: "$_id",
-                            numero: "$numero",
-                            tipo: "$tipo",
-                            bimestre: "$bimestre",
-                            data_realizacao: "$data_realizacao",
-                            media_simulado: "$media_simulado",
-                            materias: "$materias"
-                        }
-                    },
-                    // Junta todas as notas de todos os simulados para calcular médias por matéria
-                    todas_materias: { $push: "$materias" }
-                }
-            },
-            // Desconstrói o array de arrays em array plano para calcular média por matéria
-            {
-                $addFields: {
-                    todas_materias: {
-                        $reduce: {
-                            input: "$todas_materias",
-                            initialValue: [],
-                            in: { $concatArrays: ["$$value", "$$this"] }
-                        }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'conteudos.turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.materia'
                     }
-                }
-            },
-            // Agrupa por matéria para calcular média individual
-            {
-                $addFields: {
-                    media_por_materia: {
-                        $map: {
-                            input: {
-                                $reduce: {
-                                    input: "$todas_materias",
-                                    initialValue: [],
-                                    in: {
-                                        $cond: [
-                                            { $in: ["$$this.materia_id", "$$value.materia_id"] },
-                                            "$$value",
-                                            { $concatArrays: ["$$value", ["$$this"]] }
-                                        ]
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.materia', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.turma_disciplina.professor_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina.professor'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina.professor', preserveNullAndEmptyArrays: true } },
+                // Extrai apenas o resultado do aluno solicitado
+                {
+                    $addFields: {
+                        "conteudos.resultado_aluno": {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: "$conteudos.resultados",
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
-                                }
-                            },
-                            as: "mat_unica",
-                            in: {
-                                materia_id: "$$mat_unica.materia_id",
-                                materia: "$$mat_unica.materia",
-                                professor: "$$mat_unica.professor",
-                                simulados_realizados: {
-                                    $size: {
-                                        $filter: {
-                                            input: "$todas_materias",
-                                            cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
+                                },
+                                0
+                            ]
+                        }
+                    }
+                },
+                // Remonta cada simulado agrupando as matérias já formatadas
+                {
+                    $group: {
+                        _id: "$_id",
+                        numero: { $first: "$numero" },
+                        tipo: { $first: "$tipo" },
+                        bimestre: { $first: "$bimestre" },
+                        data_realizacao: { $first: "$data_realizacao" },
+                        materias: {
+                            $push: {
+                                materia_id: "$conteudos.turma_disciplina.materia_id",
+                                materia: "$conteudos.turma_disciplina.materia.nome",
+                                professor: "$conteudos.turma_disciplina.professor.nome",
+                                quantidade_questoes: "$conteudos.quantidade_questoes",
+                                acertos: "$conteudos.resultado_aluno.acertos",
+                                nota: "$conteudos.resultado_aluno.nota"
+                            }
+                        }
+                    }
+                },
+                // Calcula a média do simulado (média simples das notas das matérias)
+                {
+                    $addFields: {
+                        media_simulado: { $avg: "$materias.nota" }
+                    }
+                },
+                { $sort: { bimestre: 1, numero: 1 } },
+                // Agrupa tudo em um único documento para calcular médias gerais
+                {
+                    $group: {
+                        _id: null,
+                        simulados: {
+                            $push: {
+                                id: "$_id",
+                                numero: "$numero",
+                                tipo: "$tipo",
+                                bimestre: "$bimestre",
+                                data_realizacao: "$data_realizacao",
+                                media_simulado: "$media_simulado",
+                                materias: "$materias"
+                            }
+                        },
+                        // Junta todas as notas de todos os simulados para calcular médias por matéria
+                        todas_materias: { $push: "$materias" }
+                    }
+                },
+                // Desconstrói o array de arrays em array plano para calcular média por matéria
+                {
+                    $addFields: {
+                        todas_materias: {
+                            $reduce: {
+                                input: "$todas_materias",
+                                initialValue: [],
+                                in: { $concatArrays: ["$$value", "$$this"] }
+                            }
+                        }
+                    }
+                },
+                // Agrupa por matéria para calcular média individual
+                {
+                    $addFields: {
+                        media_por_materia: {
+                            $map: {
+                                input: {
+                                    $reduce: {
+                                        input: "$todas_materias",
+                                        initialValue: [],
+                                        in: {
+                                            $cond: [
+                                                { $in: ["$$this.materia_id", "$$value.materia_id"] },
+                                                "$$value",
+                                                { $concatArrays: ["$$value", ["$$this"]] }
+                                            ]
                                         }
                                     }
                                 },
-                                media: {
-                                    $avg: {
-                                        $map: {
-                                            input: {
-                                                $filter: {
-                                                    input: "$todas_materias",
-                                                    cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
-                                                }
-                                            },
-                                            as: "r",
-                                            in: "$$r.nota"
+                                as: "mat_unica",
+                                in: {
+                                    materia_id: "$$mat_unica.materia_id",
+                                    materia: "$$mat_unica.materia",
+                                    professor: "$$mat_unica.professor",
+                                    simulados_realizados: {
+                                        $size: {
+                                            $filter: {
+                                                input: "$todas_materias",
+                                                cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
+                                            }
+                                        }
+                                    },
+                                    media: {
+                                        $avg: {
+                                            $map: {
+                                                input: {
+                                                    $filter: {
+                                                        input: "$todas_materias",
+                                                        cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
+                                                    }
+                                                },
+                                                as: "r",
+                                                in: "$$r.nota"
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                },
+                // Calcula a média geral (média de todas as notas de todos os simulados)
+                {
+                    $addFields: {
+                        media_geral: { $avg: "$todas_materias.nota" }
+                    }
+                },
+                // Formata o documento final
+                {
+                    $project: {
+                        _id: 0,
+                        aluno_id: { $toString: new ObjectId(aluno_id) },
+                        media_geral: { $round: ["$media_geral", 2] },
+                        media_por_materia: 1,
+                        simulados: 1
+                    }
                 }
-            },
-            // Calcula a média geral (média de todas as notas de todos os simulados)
-            {
-                $addFields: {
-                    media_geral: { $avg: "$todas_materias.nota" }
-                }
-            },
-            // Formata o documento final
-            {
-                $project: {
-                    _id: 0,
-                    aluno_id: { $toString: new ObjectId(aluno_id) },
-                    media_geral: { $round: ["$media_geral", 2] },
-                    media_por_materia: 1,
-                    simulados: 1
-                }
-            }
-        ]);
+            ]);
 
-        const result = simulados[0] ?? {
-            aluno_id,
-            media_geral: 0,
-            media_por_materia: [],
-            simulados: []
-        };
+            const result = simulados[0] ?? {
+                aluno_id,
+                media_geral: 0,
+                media_por_materia: [],
+                simulados: []
+            };
 
-        res.status(200).json(result);
+            res.status(200).json(result);
 
-    } catch (error) {
-        res.status(500).json({ message: 'Erro ao buscar notas do aluno', error: error.message });
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar notas do aluno', error: error.message });
+        }
     }
 
     static async getDesempenhoByDisciplina(req, res) {
@@ -742,25 +743,25 @@ export default class SimuladosController {
                 const simuladoId = doc.simulado_id.toString();
 
                 // Acumular notas dos alunos
-                if (!mapaAlunos[ alunoId ]) {
-                    mapaAlunos[ alunoId ] = {
+                if (!mapaAlunos[alunoId]) {
+                    mapaAlunos[alunoId] = {
                         id: doc.aluno_id,
                         nome: doc.aluno_nome,
                         notas: []
                     };
                 }
-                mapaAlunos[ alunoId ].notas.push(doc.nota);
+                mapaAlunos[alunoId].notas.push(doc.nota);
                 todasAsNotas.push(doc.nota);
 
                 // Acumular notas por simulado
-                if (!mapaSimuladoMedia[ simuladoId ]) {
-                    mapaSimuladoMedia[ simuladoId ] = {
+                if (!mapaSimuladoMedia[simuladoId]) {
+                    mapaSimuladoMedia[simuladoId] = {
                         simulado_id: doc.simulado_id,
                         numero_simulado: doc.numero,
                         notas: []
                     };
                 }
-                mapaSimuladoMedia[ simuladoId ].notas.push(doc.nota);
+                mapaSimuladoMedia[simuladoId].notas.push(doc.nota);
             });
 
             // Calcular médias dos alunos
@@ -803,6 +804,7 @@ export default class SimuladosController {
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
     }
+
     static async getDesempenhoByAnoAndAluno(req, res) {
         const aluno_id = req.params.aluno;
         const ano = req.params.ano;
@@ -874,22 +876,22 @@ export default class SimuladosController {
                 const materiaId = item.materia_id ? item.materia_id.toString() : 'unknown';
                 const simuladoId = item.simulado_id.toString();
 
-                if (!materiasMap[ materiaId ]) {
-                    materiasMap[ materiaId ] = {
+                if (!materiasMap[materiaId]) {
+                    materiasMap[materiaId] = {
                         nome: item.materia_nome || 'Desconhecida',
                         notas: []
                     };
                 }
-                materiasMap[ materiaId ].notas.push(item.nota);
+                materiasMap[materiaId].notas.push(item.nota);
 
-                if (!simuladosMap[ simuladoId ]) {
-                    simuladosMap[ simuladoId ] = {
+                if (!simuladosMap[simuladoId]) {
+                    simuladosMap[simuladoId] = {
                         numero: item.numero,
                         data: item.data,
                         notas: []
                     };
                 }
-                simuladosMap[ simuladoId ].notas.push(item.nota);
+                simuladosMap[simuladoId].notas.push(item.nota);
             });
 
             const materias = Object.values(materiasMap).map(m => ({
@@ -912,6 +914,7 @@ export default class SimuladosController {
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }
+
     static async getSimuladosByAnoAndAluno(req, res) {
         const aluno_id = req.params.aluno;
         const ano = req.params.ano;
@@ -1012,7 +1015,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
                                 },
                                 0
@@ -1040,7 +1043,7 @@ export default class SimuladosController {
                 return res.status(404).json({ message: 'Simulado não encontrado' });
             }
 
-            const disciplinas = simulado[ 0 ].disciplinas
+            const disciplinas = simulado[0].disciplinas
                 .filter(item => item.materia_nome !== undefined && item.nota !== undefined && item.nota !== null)
                 .sort((a, b) => a.ordem - b.ordem)
                 .map(item => ({
@@ -1053,8 +1056,8 @@ export default class SimuladosController {
                 : 0;
 
             return res.status(200).json({
-                numero: simulado[ 0 ].numero,
-                data_realizacao: simulado[ 0 ].data_realizacao,
+                numero: simulado[0].numero,
+                data_realizacao: simulado[0].data_realizacao,
                 media: Number(media.toFixed(2)),
                 disciplinas
             });
@@ -1063,7 +1066,7 @@ export default class SimuladosController {
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
         }
     }
-     static async getSimuladosByAnoAndAluno(req, res) {
+    static async getSimuladosByAnoAndAluno(req, res) {
         const aluno_id = req.params.aluno;
         const ano = req.params.ano;
 
