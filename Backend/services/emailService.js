@@ -323,3 +323,118 @@ export const sendPasswordResetEmail = async (toEmail, token) => {
     });
 };
 
+/**
+ * Envia um email de redefinicao com token para uso exclusivo no aplicativo mobile.
+ * @param toEmail O email do destinatario.
+ * @param token O token de redefinicao nao hasheado.
+ */
+export const sendPasswordResetEmailMobile = async (toEmail, token) => {
+    if (!transporter) {
+        console.log(`[DESENVOLVIMENTO] Email de redefinicao mobile para ${toEmail}`);
+        console.log(`Codigo de redefinicao (mobile): ${token}`);
+        return;
+    }
+
+    const supportEmail = ADMIN_CONTACT_EMAIL;
+
+    await transporter.sendMail({
+        from: `"NotasMax" <${EMAIL_USER}>`,
+        to: toEmail,
+        subject: "Redefinição de Senha Solicitada (Mobile)",
+        html: `
+        <html lang="pt-BR">
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Recuperação de senha - NotasMax Mobile</title>
+            </head>
+            <body style="background-color:#85a4cd;margin:0;padding:0;-webkit-text-size-adjust:none;text-size-adjust:none;">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#85a4cd;">
+                    <tr>
+                        <td>
+                            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#f9f9f9;">
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="color:#000000;width:650px;margin:0 auto;" width="650">
+                                            <tr>
+                                                <td width="33.33%" style="padding:5px 0;vertical-align:top;">
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                                        <tr>
+                                                            <td style="width:100%;padding:0;">
+                                                                <div align="right" style="padding-right:10px;">
+                                                                    <img src="https://ec235cd76d.imgdist.com/pub/bfra/vvmttxno/4l7/808/5h7/logo%203d.png" width="65" alt="Colégio Max Beny Macena" style="display:block;height:auto;border:0;width:100%;max-width:65px;" />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td width="66.67%" style="padding:5px 0;vertical-align:top;">
+                                                    <h1 style="margin:0;color:#243a51;font-family:'Lato',Tahoma,Verdana,Segoe,sans-serif;font-size:38px;font-weight:700;letter-spacing:4px;line-height:1.5;text-align:left;">&nbsp; NOTASMAX</h1>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#85a3cc;">
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="color:#000000;width:650px;margin:0 auto;" width="650">
+                                            <tr>
+                                                <td style="padding:5px 0;vertical-align:top;">
+                                                    <div style="height:40px;line-height:40px;font-size:1px;">&#8202;</div>
+                                                    <h1 style="margin:0 0 10px;color:#ffffff;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:30px;letter-spacing:2px;line-height:1.2;text-align:center;"><strong>Esqueceu sua senha?</strong></h1>
+                                                    <div align="center" style="width:100%;">
+                                                        <img src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/3856/GIF_password.gif" width="500" alt="Animação recuperação de senha" style="display:block;height:auto;border:0;width:100%;max-width:500px;" />
+                                                    </div>
+                                                    <div style="height:20px;line-height:20px;font-size:1px;">&#8202;</div>
+                                                    <p style="margin:0;text-align:center;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:20px;line-height:1.2;">Não se preocupe!</p>
+                                                    <p style="margin:8px 0 0;text-align:center;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:22px;line-height:1.2;">Use o código abaixo no aplicativo mobile.</p>
+                                                    <div style="height:20px;line-height:20px;font-size:1px;">&#8202;</div>
+
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                                        <tr>
+                                                            <td style="padding:0 24px;">
+                                                                <div style="background-color:#ffffff;border:2px solid #3F4D75;border-radius:10px;padding:14px 16px;text-align:center;">
+                                                                    <p style="margin:0;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:1px;">CÓDIGO DE RECUPERAÇÃO</p>
+                                                                    <p style="margin:8px 0 0;color:#243a51;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;word-break:break-all;">${token}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <div style="height:20px;line-height:20px;font-size:1px;">&#8202;</div>
+                                                    <p style="margin:0;padding:0 24px;text-align:center;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.3;">Este código expira em 1 hora e deve ser usado apenas no aplicativo mobile.</p>
+                                                    <p style="margin:10px 0 0;padding:0 24px;text-align:center;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.3;">Se você não solicitou a alteração da senha, ignore este e-mail.</p>
+                                                    <div style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#c4d6ec;">
+                                <tr>
+                                    <td>
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="color:#000000;width:650px;margin:0 auto;" width="650">
+                                            <tr>
+                                                <td style="padding:20px 10px;text-align:center;">
+                                                    <p style="margin:0;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;">Se continuar com problemas, entre em contato com o suporte:</p>
+                                                    <p style="margin:4px 0 0;color:#3f4d75;font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;"><a href="mailto:${supportEmail}" style="text-decoration:underline;color:#ffffff;" rel="noopener">${supportEmail}</a></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+        `,
+    });
+};
+

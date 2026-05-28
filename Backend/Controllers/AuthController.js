@@ -2,7 +2,10 @@ import Usuario from "../Models/Usuario.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { sendPasswordResetEmail } from "../services/emailService.js";
+import {
+  sendPasswordResetEmail,
+  sendPasswordResetEmailMobile,
+} from "../services/emailService.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "chave-secreta-super-segura";
 
@@ -46,6 +49,8 @@ export const login = async (req, res) => {
         nome: usuario.nome,
         email: usuario.email,
         tipo_usuario: usuario.tipo_usuario,
+        nome_responsavel: usuario.nome_responsavel,
+        telefone_responsavel: usuario.telefone_responsavel
       },
     });
   } catch (error) {
@@ -144,5 +149,62 @@ export const resetPassword = async (req, res) => {
     });
   } catch (error) {
       return res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+};
+
+export const forgotPasswordMobile = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "O email é obrigatório." });
+  }
+
+  const genericMessage =
+    "Se o e-mail informado for válido, um código de recuperação será enviado para uso no aplicativo mobile.";
+
+  try {
+    const usuario = await Usuario.findOne({ email });
+
+    if (!usuario) {
+      await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000));
+      return res.status(200).json({ message: genericMessage });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = await bcrypt.hash(resetToken, 10);
+    const resetTokenExpiry = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hora
+
+    await Usuario.updateOne(
+      { _id: usuario._id },
+      {
+        resetToken: hashedToken,
+        resetTokenExpiry,
+      }
+    );
+
+    try {
+      await sendPasswordResetEmailMobile(usuario.email, resetToken);
+    } catch (emailError) {
+      if (
+        emailError.code === "ESOCKET" ||
+        emailError.code === "EHOSTUNREACH" ||
+        emailError.code === "ENOTFOUND" ||
+        emailError.code === "EDNS"
+      ) {
+        return res.status(503).json({
+          message: "Erro de conexão com a internet. Verifique sua conexão e tente novamente.",
+          errorType: "CONNECTION_ERROR",
+        });
+      }
+
+      return res.status(500).json({
+        message: "Erro ao enviar email de redefinição. Tente novamente mais tarde.",
+        errorType: "EMAIL_ERROR",
+      });
+    }
+
+    return res.status(200).json({ message: genericMessage });
+  } catch (error) {
+    return res.status(500).json({ message: "Erro interno do servidor." });
   }
 };
