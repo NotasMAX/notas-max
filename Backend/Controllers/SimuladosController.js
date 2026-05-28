@@ -182,7 +182,7 @@ export default class SimuladosController {
                                                         {
                                                             $filter: {
                                                                 input: "$$conteudo.resultados",
-                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
+                                                                cond: { $eq: [ "$$this.aluno_id", "$$aluno._id" ] }
                                                             }
                                                         },
                                                         0
@@ -213,7 +213,7 @@ export default class SimuladosController {
             if (!simulado || simulado.length === 0)
                 return res.status(404).json({ message: 'Simulado não encontrado' });
 
-            res.status(200).json({ simulado: simulado[0] });
+            res.status(200).json({ simulado: simulado[ 0 ] });
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
@@ -308,7 +308,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
+                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
                                     }
                                 },
                                 0
@@ -548,7 +548,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
+                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
                                     }
                                 },
                                 0
@@ -609,7 +609,7 @@ export default class SimuladosController {
                             $reduce: {
                                 input: "$todas_materias",
                                 initialValue: [],
-                                in: { $concatArrays: ["$$value", "$$this"] }
+                                in: { $concatArrays: [ "$$value", "$$this" ] }
                             }
                         }
                     }
@@ -625,9 +625,9 @@ export default class SimuladosController {
                                         initialValue: [],
                                         in: {
                                             $cond: [
-                                                { $in: ["$$this.materia_id", "$$value.materia_id"] },
+                                                { $in: [ "$$this.materia_id", "$$value.materia_id" ] },
                                                 "$$value",
-                                                { $concatArrays: ["$$value", ["$$this"]] }
+                                                { $concatArrays: [ "$$value", [ "$$this" ] ] }
                                             ]
                                         }
                                     }
@@ -641,7 +641,7 @@ export default class SimuladosController {
                                         $size: {
                                             $filter: {
                                                 input: "$todas_materias",
-                                                cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
+                                                cond: { $eq: [ "$$this.materia_id", "$$mat_unica.materia_id" ] }
                                             }
                                         }
                                     },
@@ -651,7 +651,7 @@ export default class SimuladosController {
                                                 input: {
                                                     $filter: {
                                                         input: "$todas_materias",
-                                                        cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
+                                                        cond: { $eq: [ "$$this.materia_id", "$$mat_unica.materia_id" ] }
                                                     }
                                                 },
                                                 as: "r",
@@ -675,14 +675,14 @@ export default class SimuladosController {
                     $project: {
                         _id: 0,
                         aluno_id: { $toString: new ObjectId(aluno_id) },
-                        media_geral: { $round: ["$media_geral", 2] },
+                        media_geral: { $round: [ "$media_geral", 2 ] },
                         media_por_materia: 1,
                         simulados: 1
                     }
                 }
             ]);
 
-            const result = simulados[0] ?? {
+            const result = simulados[ 0 ] ?? {
                 aluno_id,
                 media_geral: 0,
                 media_por_materia: [],
@@ -743,25 +743,25 @@ export default class SimuladosController {
                 const simuladoId = doc.simulado_id.toString();
 
                 // Acumular notas dos alunos
-                if (!mapaAlunos[alunoId]) {
-                    mapaAlunos[alunoId] = {
+                if (!mapaAlunos[ alunoId ]) {
+                    mapaAlunos[ alunoId ] = {
                         id: doc.aluno_id,
                         nome: doc.aluno_nome,
                         notas: []
                     };
                 }
-                mapaAlunos[alunoId].notas.push(doc.nota);
+                mapaAlunos[ alunoId ].notas.push(doc.nota);
                 todasAsNotas.push(doc.nota);
 
                 // Acumular notas por simulado
-                if (!mapaSimuladoMedia[simuladoId]) {
-                    mapaSimuladoMedia[simuladoId] = {
+                if (!mapaSimuladoMedia[ simuladoId ]) {
+                    mapaSimuladoMedia[ simuladoId ] = {
                         simulado_id: doc.simulado_id,
                         numero_simulado: doc.numero,
                         notas: []
                     };
                 }
-                mapaSimuladoMedia[simuladoId].notas.push(doc.nota);
+                mapaSimuladoMedia[ simuladoId ].notas.push(doc.nota);
             });
 
             // Calcular médias dos alunos
@@ -876,22 +876,22 @@ export default class SimuladosController {
                 const materiaId = item.materia_id ? item.materia_id.toString() : 'unknown';
                 const simuladoId = item.simulado_id.toString();
 
-                if (!materiasMap[materiaId]) {
-                    materiasMap[materiaId] = {
+                if (!materiasMap[ materiaId ]) {
+                    materiasMap[ materiaId ] = {
                         nome: item.materia_nome || 'Desconhecida',
                         notas: []
                     };
                 }
-                materiasMap[materiaId].notas.push(item.nota);
+                materiasMap[ materiaId ].notas.push(item.nota);
 
-                if (!simuladosMap[simuladoId]) {
-                    simuladosMap[simuladoId] = {
+                if (!simuladosMap[ simuladoId ]) {
+                    simuladosMap[ simuladoId ] = {
                         numero: item.numero,
                         data: item.data,
                         notas: []
                     };
                 }
-                simuladosMap[simuladoId].notas.push(item.nota);
+                simuladosMap[ simuladoId ].notas.push(item.nota);
             });
 
             const materias = Object.values(materiasMap).map(m => ({
@@ -909,63 +909,6 @@ export default class SimuladosController {
                 materias,
                 simulados: simuladosResult
             });
-
-        } catch (error) {
-            return res.status(500).json({ message: "Erro ao buscar desempenho", error });
-        }
-    }
-
-    static async getSimuladosByAnoAndAluno(req, res) {
-        const aluno_id = req.params.aluno;
-        const ano = req.params.ano;
-
-        const ObjectId = Types.ObjectId;
-        if (!ObjectId.isValid(aluno_id))
-            return res.status(422).json({ message: "Id de aluno invalido", aluno_id });
-        if (!ano || isNaN(Number(ano)) || Number(ano) <= 0)
-            return res.status(422).json({ message: "Informe um ano válido (número positivo)", ano });
-
-        try {
-            // 1. Encontrar a turma do aluno no ano especificado
-            const turmaDoAluno = await Turmas.findOne({
-                ano: Number(ano),
-                alunos: new ObjectId(aluno_id)
-            });
-
-            if (!turmaDoAluno) {
-                return res.status(200).json({ simulados: [] });
-            }
-
-            // 2. Buscar todos os simulados cadastrados nessa turma
-            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id }).sort("data_realizacao");
-
-            // 3. Calcular a média do aluno para cada simulado
-            const resultado = simulados.map(sim => {
-                const notasAluno = [];
-
-                if (Array.isArray(sim.conteudos)) {
-                    sim.conteudos.forEach(conteudo => {
-                        if (Array.isArray(conteudo.resultados)) {
-                            conteudo.resultados.forEach(r => {
-                                if (r.aluno_id && r.aluno_id.toString() === aluno_id.toString()) {
-                                    if (typeof r.nota === 'number') notasAluno.push(r.nota);
-                                }
-                            });
-                        }
-                    });
-                }
-
-                const media = notasAluno.length > 0 ? (notasAluno.reduce((a, b) => a + b, 0) / notasAluno.length) : 0;
-
-                return {
-                    id: sim._id,
-                    numero: sim.numero,
-                    data_realizacao: sim.data_realizacao,
-                    media: Number(media.toFixed(2))
-                };
-            });
-
-            return res.status(200).json({ simulados: resultado });
 
         } catch (error) {
             return res.status(500).json({ message: "Erro ao buscar desempenho", error });
@@ -1015,7 +958,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
+                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
                                     }
                                 },
                                 0
@@ -1043,7 +986,7 @@ export default class SimuladosController {
                 return res.status(404).json({ message: 'Simulado não encontrado' });
             }
 
-            const disciplinas = simulado[0].disciplinas
+            const disciplinas = simulado[ 0 ].disciplinas
                 .filter(item => item.materia_nome !== undefined && item.nota !== undefined && item.nota !== null)
                 .sort((a, b) => a.ordem - b.ordem)
                 .map(item => ({
@@ -1056,8 +999,8 @@ export default class SimuladosController {
                 : 0;
 
             return res.status(200).json({
-                numero: simulado[0].numero,
-                data_realizacao: simulado[0].data_realizacao,
+                numero: simulado[ 0 ].numero,
+                data_realizacao: simulado[ 0 ].data_realizacao,
                 media: Number(media.toFixed(2)),
                 disciplinas
             });
@@ -1087,8 +1030,8 @@ export default class SimuladosController {
                 return res.status(200).json({ simulados: [] });
             }
 
-            // 2. Buscar todos os simulados cadastrados nessa turma
-            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id }).sort("data_realizacao");
+            // 2. Buscar todos os simulados cadastrados nessa turma (incluindo futuros)
+            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id }).sort({ data_realizacao: 1, numero: 1 });
 
             // 3. Calcular a média do aluno para cada simulado
             const resultado = simulados.map(sim => {
@@ -1152,4 +1095,4 @@ export default class SimuladosController {
     }
 
 }
-}
+
