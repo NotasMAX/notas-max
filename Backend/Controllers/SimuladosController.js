@@ -1033,8 +1033,16 @@ export default class SimuladosController {
             }
 
             // 2. Buscar todos os simulados cadastrados nessa turma (incluindo futuros)
-            const simulados = await Simulado.find({ turma_id: turmaDoAluno._id }).sort({ data_realizacao: 1, numero: 1 });
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
 
+            const simulados = await Simulado.find({
+                turma_id: turmaDoAluno._id,
+                data_realizacao: { $lt: hoje }
+            }).sort({
+                data_realizacao: 1,
+                numero: 1
+            });
             // 3. Calcular a média do aluno para cada simulado
             const resultado = simulados.map(sim => {
                 const notasAluno = [];
@@ -1179,7 +1187,7 @@ export default class SimuladosController {
     }
 
     static async getByProfessor(req, res) {
-        
+
         const professor_id = req.params.professor;
 
         const ObjectId = Types.ObjectId;
@@ -1473,7 +1481,7 @@ export default class SimuladosController {
                         // Clamp acertos between 0 and quantidadeQuestoes
                         const acertosValidos = Math.min(Math.max(0, aluno.acertos), quantidadeQuestoes);
                         resultado.acertos = acertosValidos;
-                        
+
                         // Recalculate and update the grade based on clamped acertos
                         if (quantidadeQuestoes > 0) {
                             resultado.nota = Math.round(((acertosValidos / quantidadeQuestoes) * 10) * 100) / 100;
