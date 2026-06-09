@@ -182,7 +182,7 @@ export default class SimuladosController {
                                                         {
                                                             $filter: {
                                                                 input: "$$conteudo.resultados",
-                                                                cond: { $eq: [ "$$this.aluno_id", "$$aluno._id" ] }
+                                                                cond: { $eq: ["$$this.aluno_id", "$$aluno._id"] }
                                                             }
                                                         },
                                                         0
@@ -213,7 +213,7 @@ export default class SimuladosController {
             if (!simulado || simulado.length === 0)
                 return res.status(404).json({ message: 'Simulado não encontrado' });
 
-            res.status(200).json({ simulado: simulado[ 0 ] });
+            res.status(200).json({ simulado: simulado[0] });
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar simulado', error: error.message });
         }
@@ -308,7 +308,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
                                 },
                                 0
@@ -548,7 +548,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
                                 },
                                 0
@@ -609,7 +609,7 @@ export default class SimuladosController {
                             $reduce: {
                                 input: "$todas_materias",
                                 initialValue: [],
-                                in: { $concatArrays: [ "$$value", "$$this" ] }
+                                in: { $concatArrays: ["$$value", "$$this"] }
                             }
                         }
                     }
@@ -625,9 +625,9 @@ export default class SimuladosController {
                                         initialValue: [],
                                         in: {
                                             $cond: [
-                                                { $in: [ "$$this.materia_id", "$$value.materia_id" ] },
+                                                { $in: ["$$this.materia_id", "$$value.materia_id"] },
                                                 "$$value",
-                                                { $concatArrays: [ "$$value", [ "$$this" ] ] }
+                                                { $concatArrays: ["$$value", ["$$this"]] }
                                             ]
                                         }
                                     }
@@ -641,7 +641,7 @@ export default class SimuladosController {
                                         $size: {
                                             $filter: {
                                                 input: "$todas_materias",
-                                                cond: { $eq: [ "$$this.materia_id", "$$mat_unica.materia_id" ] }
+                                                cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
                                             }
                                         }
                                     },
@@ -651,7 +651,7 @@ export default class SimuladosController {
                                                 input: {
                                                     $filter: {
                                                         input: "$todas_materias",
-                                                        cond: { $eq: [ "$$this.materia_id", "$$mat_unica.materia_id" ] }
+                                                        cond: { $eq: ["$$this.materia_id", "$$mat_unica.materia_id"] }
                                                     }
                                                 },
                                                 as: "r",
@@ -675,14 +675,14 @@ export default class SimuladosController {
                     $project: {
                         _id: 0,
                         aluno_id: { $toString: new ObjectId(aluno_id) },
-                        media_geral: { $round: [ "$media_geral", 2 ] },
+                        media_geral: { $round: ["$media_geral", 2] },
                         media_por_materia: 1,
                         simulados: 1
                     }
                 }
             ]);
 
-            const result = simulados[ 0 ] ?? {
+            const result = simulados[0] ?? {
                 aluno_id,
                 media_geral: 0,
                 media_por_materia: [],
@@ -697,6 +697,7 @@ export default class SimuladosController {
     }
 
     static async getDesempenhoByDisciplina(req, res) {
+        // existing method unchanged
         const disciplina_id = req.params.disciplina;
         const ObjectId = Types.ObjectId;
         if (!ObjectId.isValid(disciplina_id))
@@ -743,25 +744,25 @@ export default class SimuladosController {
                 const simuladoId = doc.simulado_id.toString();
 
                 // Acumular notas dos alunos
-                if (!mapaAlunos[ alunoId ]) {
-                    mapaAlunos[ alunoId ] = {
+                if (!mapaAlunos[alunoId]) {
+                    mapaAlunos[alunoId] = {
                         id: doc.aluno_id,
                         nome: doc.aluno_nome,
                         notas: []
                     };
                 }
-                mapaAlunos[ alunoId ].notas.push(doc.nota);
+                mapaAlunos[alunoId].notas.push(doc.nota);
                 todasAsNotas.push(doc.nota);
 
                 // Acumular notas por simulado
-                if (!mapaSimuladoMedia[ simuladoId ]) {
-                    mapaSimuladoMedia[ simuladoId ] = {
+                if (!mapaSimuladoMedia[simuladoId]) {
+                    mapaSimuladoMedia[simuladoId] = {
                         simulado_id: doc.simulado_id,
                         numero_simulado: doc.numero,
                         notas: []
                     };
                 }
-                mapaSimuladoMedia[ simuladoId ].notas.push(doc.nota);
+                mapaSimuladoMedia[simuladoId].notas.push(doc.nota);
             });
 
             // Calcular médias dos alunos
@@ -876,22 +877,22 @@ export default class SimuladosController {
                 const materiaId = item.materia_id ? item.materia_id.toString() : 'unknown';
                 const simuladoId = item.simulado_id.toString();
 
-                if (!materiasMap[ materiaId ]) {
-                    materiasMap[ materiaId ] = {
+                if (!materiasMap[materiaId]) {
+                    materiasMap[materiaId] = {
                         nome: item.materia_nome || 'Desconhecida',
                         notas: []
                     };
                 }
-                materiasMap[ materiaId ].notas.push(item.nota);
+                materiasMap[materiaId].notas.push(item.nota);
 
-                if (!simuladosMap[ simuladoId ]) {
-                    simuladosMap[ simuladoId ] = {
+                if (!simuladosMap[simuladoId]) {
+                    simuladosMap[simuladoId] = {
                         numero: item.numero,
                         data: item.data,
                         notas: []
                     };
                 }
-                simuladosMap[ simuladoId ].notas.push(item.nota);
+                simuladosMap[simuladoId].notas.push(item.nota);
             });
 
             const materias = Object.values(materiasMap).map(m => ({
@@ -958,7 +959,7 @@ export default class SimuladosController {
                                 {
                                     $filter: {
                                         input: "$conteudos.resultados",
-                                        cond: { $eq: [ "$$this.aluno_id", new ObjectId(aluno_id) ] }
+                                        cond: { $eq: ["$$this.aluno_id", new ObjectId(aluno_id)] }
                                     }
                                 },
                                 0
@@ -986,7 +987,7 @@ export default class SimuladosController {
                 return res.status(404).json({ message: 'Simulado não encontrado' });
             }
 
-            const disciplinas = simulado[ 0 ].disciplinas
+            const disciplinas = simulado[0].disciplinas
                 .filter(item => item.materia_nome !== undefined && item.nota !== undefined && item.nota !== null)
                 .sort((a, b) => a.ordem - b.ordem)
                 .map(item => ({
@@ -999,8 +1000,8 @@ export default class SimuladosController {
                 : 0;
 
             return res.status(200).json({
-                numero: simulado[ 0 ].numero,
-                data_realizacao: simulado[ 0 ].data_realizacao,
+                numero: simulado[0].numero,
+                data_realizacao: simulado[0].data_realizacao,
                 media: Number(media.toFixed(2)),
                 disciplinas
             });
@@ -1093,6 +1094,183 @@ export default class SimuladosController {
             return res.status(500).json({ message: "Erro ao buscar calendário do aluno", error: error.message });
         }
     }
+    // New route: Get professor data for current year
+    static async getProfessorDataCurrentYear(req, res) {
+        const professorId = req.params.professor;
+        const ObjectId = Types.ObjectId;
+        const currentYear = new Date().getFullYear();
+        const startOfYear = new Date(`${currentYear}-01-01T00:00:00.000Z`);
+        const endOfYear = new Date(`${currentYear}-12-31T23:59:59.999Z`);
 
+        if (!ObjectId.isValid(professorId)) {
+            return res.status(422).json({ message: "Id de professor inválido", professorId });
+        }
+
+        try {
+            const data = await Simulado.aggregate([
+                { $match: { data_realizacao: { $gte: startOfYear, $lte: new Date() } } },
+                {
+                    $lookup: {
+                        from: 'turmas',
+                        localField: 'turma_id',
+                        foreignField: '_id',
+                        as: 'turma'
+                    }
+                },
+                { $unwind: { path: '$turma', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'turmadisciplinas',
+                        localField: 'conteudos.turma_disciplina_id',
+                        foreignField: '_id',
+                        as: 'conteudos.turma_disciplina'
+                    }
+                },
+                { $unwind: { path: '$conteudos.turma_disciplina', preserveNullAndEmptyArrays: true } },
+                { $match: { 'conteudos.turma_disciplina.professor_id': new ObjectId(professorId) } },
+                {
+                    $lookup: {
+                        from: 'materias',
+                        localField: 'conteudos.turma_disciplina.materia_id',
+                        foreignField: '_id',
+                        as: 'materia'
+                    }
+                },
+                { $unwind: { path: '$materia', preserveNullAndEmptyArrays: true } },
+                {
+                    $group: {
+                        _id: {
+                            turma_id: '$turma._id',
+                            turma_serie: '$turma.serie',
+                            disciplina_id: '$conteudos.turma_disciplina._id',
+                            materia_nome: '$materia.nome'
+                        },
+                        simulados: { $push: { id: '$_id', numero: '$numero' } }
+                    }
+                },
+                {
+                    $group: {
+                        _id: { turma_id: '$_id.turma_id', turma_serie: '$_id.turma_serie' },
+                        disciplinas: {
+                            $push: {
+                                id: '$_id.disciplina_id',
+                                materia_nome: '$_id.materia_nome',
+                                simulados: '$simulados'
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        id: '$_id.turma_id',
+                        serie: '$_id.turma_serie',
+                        disciplinas: 1
+                    }
+                }
+            ]);
+            return res.status(200).json({ turmas: data });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Erro ao buscar dados do professor', error: error.message });
+        }
+    }
+
+
+
+    static async getSimuladoDisciplinaAlunos(req, res) {
+        const simulado_id = req.params.simulado_id;
+        const disciplina_id = req.params.disciplina_id;
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(simulado_id))
+            return res.status(422).json({ message: "Id de simulado invalido", simulado_id });
+        if (!ObjectId.isValid(disciplina_id))
+            return res.status(422).json({ message: "Id de disciplina invalido", disciplina_id });
+        try {
+            const result = await Simulado.aggregate([
+                { $match: { _id: new ObjectId(simulado_id), "conteudos.turma_disciplina_id": new ObjectId(disciplina_id) } },
+                { $unwind: "$conteudos" },
+                { $match: { "conteudos.turma_disciplina_id": new ObjectId(disciplina_id) } },
+                { $unwind: "$conteudos.resultados" },
+                {
+                    $lookup: {
+                        from: 'usuarios',
+                        localField: 'conteudos.resultados.aluno_id',
+                        foreignField: '_id',
+                        as: 'aluno_info'
+                    }
+                },
+                { $unwind: { path: '$aluno_info', preserveNullAndEmptyArrays: true } },
+                {
+                    $group: {
+                        _id: null,
+                        simulado_id: { $first: '$_id' },
+                        turma_disciplina_id: { $first: '$conteudos.turma_disciplina_id' },
+                        alunos: {
+                            $push: {
+                                id: '$aluno_info._id',
+                                nome: '$aluno_info.nome',
+                                acertos: '$conteudos.resultados.acertos',
+                                nota: '$conteudos.resultados.nota',
+                                quantidade_questoes: '$conteudos.quantidade_questoes'
+                            }
+                        }
+                    }
+                },
+                { $project: { _id: 0 } }
+            ]);
+            if (!result || result.length === 0) return res.status(404).json({ message: 'Dados não encontrados' });
+            res.status(200).json(result[0]);
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar dados', error: error.message });
+        }
+    }
+
+    // Save edited notes for a specific discipline within a simulado
+    static async salvarNotas(req, res) {
+        const simuladoId = req.params.simuladoId;
+        const disciplinaId = req.params.disciplinaId;
+        const alunos = req.body;
+
+        const ObjectId = Types.ObjectId;
+        if (!ObjectId.isValid(simuladoId))
+            return res.status(422).json({ message: "Id de simulado invalido", simuladoId });
+        if (!ObjectId.isValid(disciplinaId))
+            return res.status(422).json({ message: "Id de disciplina invalido", disciplinaId });
+
+        try {
+            const simulado = await Simulado.findOne({ _id: new ObjectId(simuladoId), "conteudos.turma_disciplina_id": new ObjectId(disciplinaId) });
+            if (!simulado) return res.status(404).json({ message: "Simulado ou disciplina não encontrado" });
+
+            const conteudo = simulado.conteudos.find(c => c.turma_disciplina_id?.toString() === disciplinaId);
+            if (!conteudo) return res.status(404).json({ message: "Disciplina não encontrada no simulado" });
+
+            const quantidadeQuestoes = conteudo.quantidade_questoes || 0;
+
+            for (const aluno of alunos) {
+                const resultado = conteudo.resultados.find(r => r.aluno_id?.toString() === aluno.id);
+                if (resultado) {
+                    if (typeof aluno.acertos !== "undefined") {
+                        // Clamp acertos between 0 and quantidadeQuestoes
+                        const acertosValidos = Math.min(Math.max(0, aluno.acertos), quantidadeQuestoes);
+                        resultado.acertos = acertosValidos;
+                        
+                        // Recalculate and update the grade based on clamped acertos
+                        if (quantidadeQuestoes > 0) {
+                            resultado.nota = Math.round(((acertosValidos / quantidadeQuestoes) * 10) * 100) / 100;
+                        } else {
+                            resultado.nota = 0;
+                        }
+                    }
+                }
+            }
+
+            conteudo.markModified('resultados');
+            await simulado.save();
+
+            return res.status(200).json({ message: "Notas salvas com sucesso", simulado });
+        } catch (error) {
+            return res.status(500).json({ message: "Erro ao salvar notas", error: error.message });
+        }
+    }
 }
-

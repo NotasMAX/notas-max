@@ -24,10 +24,10 @@ routes.get("/Turmas/Disciplinas/:turma_disciplina_id", authenticateToken, author
 routes.get("/Usuarios/Professores", authenticateToken, authorizeAdmin, UsuariosController.listarProfessores);
 routes.get("/Usuarios/Alunos", authenticateToken, authorizeAdmin, UsuariosController.listarAlunos);
 routes.get("/Usuarios/Aluno/:id/desempenho", authenticateToken, authorizeAdmin, UsuariosController.getDesempenhoByAluno);
-routes.get("/Usuarios/Detalhes/:id",authenticateToken, UsuariosController.getUsuario); // removido authorizeAdmin - utilizado para acessar as informações do usuario
-routes.put("/Usuarios/Editar/:id",authenticateToken, authorizeAdmin, UsuariosController.atualizarUsuario);
-routes.post("/Usuarios/Professor",authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
-routes.post("/Usuarios/Aluno",authenticateToken, authorizeAdmin, UsuariosController.cadastrarAluno);
+routes.get("/Usuarios/Detalhes/:id", authenticateToken, UsuariosController.getUsuario); // removido authorizeAdmin - utilizado para acessar as informações do usuario
+routes.put("/Usuarios/Editar/:id", authenticateToken, authorizeAdmin, UsuariosController.atualizarUsuario);
+routes.post("/Usuarios/Professor", authenticateToken, authorizeAdmin, UsuariosController.cadastrarProfessor);
+routes.post("/Usuarios/Aluno", authenticateToken, authorizeAdmin, UsuariosController.cadastrarAluno);
 
 routes.get("/Usuarios/Buscar/Alunos", authenticateToken, authorizeAdmin, UsuariosController.getAlunoByNameOrEmail);
 routes.get("/Usuarios/Buscar/Professores", authenticateToken, authorizeAdmin, UsuariosController.getProfessorByNameOrEmail);
@@ -51,13 +51,16 @@ routes.patch('/Simulado/AtualizarConteudos/:id', authenticateToken, authorizeAdm
 routes.get('/Simulado/Simple/:id', authenticateToken, authorizeAdmin, SimuladosController.getOneSimple);
 
 // Metodos mobile
+routes.post('/Simulado/:simuladoId/Disciplina/:disciplinaId/SalvarNotas', SimuladosController.salvarNotas);
 routes.get('/Simulados/getByAluno/:aluno', authenticateToken, SimuladosController.getByAluno);
 
 
 routes.get("/Turmas/ano=:ano/professor=:professor", TurmasController.getByAnoAndProfessor);
 routes.get('/Simulado/Disciplina/id=:disciplina', SimuladosController.getDesempenhoByDisciplina);
+routes.get('/Simulado/:simulado_id/Disciplina/:disciplina_id', SimuladosController.getSimuladoDisciplinaAlunos);
 routes.get('/Desempenho/ano=:ano/aluno=:aluno', SimuladosController.getDesempenhoByAnoAndAluno);
 routes.get('/Simulados/ano=:ano/aluno=:aluno', SimuladosController.getSimuladosByAnoAndAluno);
 routes.get('/Desempenho/aluno=:aluno/simulado=:simulado', SimuladosController.getDesempenhoAlunoBySimulado);
+routes.get('/Professor/:professor/data/anoAtual', SimuladosController.getProfessorDataCurrentYear);
 routes.get('/Calendario/aluno=:aluno', SimuladosController.getCalendarioByAluno);
 export default routes;
