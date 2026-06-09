@@ -52,6 +52,7 @@ routes.get('/Simulado/Simple/:id', authenticateToken, authorizeAdmin, SimuladosC
 
 // Metodos mobile
 routes.get('/Simulados/getByAluno/:aluno', authenticateToken, SimuladosController.getByAluno);
+routes.get('/Simulados/getByProfessor/:professor', authenticateToken, SimuladosController.getByProfessor);
 
 
 routes.get("/Turmas/ano=:ano/professor=:professor", TurmasController.getByAnoAndProfessor);
